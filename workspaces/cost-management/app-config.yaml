@@ -1,0 +1,12 @@
+app:
+  title: cost-management
+
+backend:
+  baseUrl: http://localhost:3000
+
+proxy:
+  endpoints:
+    '/cost-management/v1':
+      target: https://console.redhat.com/api/cost-management/v1
+      headers:
+        Authorization: Bearer ${OCM_AUTH_TOKEN}
