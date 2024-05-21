@@ -1,2 +1,1 @@
-
-export const pluginId = "Cost Management";
+export const pluginId = 'ROS OCP Backend API';
