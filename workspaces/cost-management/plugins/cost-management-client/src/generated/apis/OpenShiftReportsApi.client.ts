@@ -754,5 +754,4 @@ export class OpenShiftReportsApiClient {
     }
 
 }
-
 export type OpenShiftReportsApi = InstanceType<typeof OpenShiftReportsApiClient>;

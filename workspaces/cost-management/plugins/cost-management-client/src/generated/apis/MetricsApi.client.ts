@@ -9,7 +9,7 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { UserAccessListPagination } from '../models/UserAccessListPagination.model';
+import { Metrics } from '../models/Metrics.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -33,7 +33,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class UserAccessApiClient {
+export class MetricsApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -46,24 +46,19 @@ export class UserAccessApiClient {
     }
 
     /**
-     * Returns user permission status.
-     * @param type String to identify user access permission type (i.e. AWS, cost_model).
+     * Obtain Metrics
      */
-    public async listUserAccess(
+    public async getMetrics(
         // @ts-ignore
         request: {
-            query: {
-                type?: string,
-            },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<UserAccessListPagination >> {
+    ): Promise<TypedResponse<Metrics >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/user-access/{?type}`;
+        const uriTemplate = `/metrics/`;
 
         const uri = parser.parse(uriTemplate).expand({
-            ...request.query,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -77,5 +72,4 @@ export class UserAccessApiClient {
     }
 
 }
-
-export type UserAccessApi = InstanceType<typeof UserAccessApiClient>;
+export type MetricsApi = InstanceType<typeof MetricsApiClient>;

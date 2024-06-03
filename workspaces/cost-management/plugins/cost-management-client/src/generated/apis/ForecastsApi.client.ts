@@ -316,5 +316,4 @@ export class ForecastsApiClient {
     }
 
 }
-
 export type ForecastsApi = InstanceType<typeof ForecastsApiClient>;

@@ -181,5 +181,4 @@ export class AWSReportsApiClient {
     }
 
 }
-
 export type AWSReportsApi = InstanceType<typeof AWSReportsApiClient>;

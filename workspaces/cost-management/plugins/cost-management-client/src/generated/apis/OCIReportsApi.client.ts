@@ -179,5 +179,4 @@ export class OCIReportsApiClient {
     }
 
 }
-
 export type OCIReportsApi = InstanceType<typeof OCIReportsApiClient>;
