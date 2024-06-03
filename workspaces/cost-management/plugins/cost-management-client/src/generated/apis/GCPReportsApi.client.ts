@@ -179,5 +179,4 @@ export class GCPReportsApiClient {
     }
 
 }
-
 export type GCPReportsApi = InstanceType<typeof GCPReportsApiClient>;

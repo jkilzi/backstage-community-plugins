@@ -9,7 +9,7 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { Metrics } from '../models/Metrics.model';
+import { CostTypePagination } from '../models/CostTypePagination.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -33,7 +33,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class MetricsApiClient {
+export class CostTypeApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -46,17 +46,17 @@ export class MetricsApiClient {
     }
 
     /**
-     * Obtain Metrics
+     * Obtain the supported cost types
      */
-    public async getMetrics(
+    public async getCostType(
         // @ts-ignore
         request: {
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Metrics >> {
+    ): Promise<TypedResponse<CostTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/metrics/`;
+        const uriTemplate = `/cost-type/`;
 
         const uri = parser.parse(uriTemplate).expand({
         })
@@ -72,5 +72,4 @@ export class MetricsApiClient {
     }
 
 }
-
-export type MetricsApi = InstanceType<typeof MetricsApiClient>;
+export type CostTypeApi = InstanceType<typeof CostTypeApiClient>;

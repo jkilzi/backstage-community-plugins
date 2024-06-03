@@ -6,6 +6,7 @@ import {
     generateClient,
     patchExternalDefinitions,
     patchGetRecommendationsByIdPath,
+    patchSpecTitle,
     updateSchema,
 } from './lib/tasks.mjs';
 
@@ -25,6 +26,7 @@ async function main(_args) {
         specUrl: 'https://raw.githubusercontent.com/project-koku/koku/main/docs/specs/openapi.json',
         afterDownloadCompletes: async (spec) =>
             Promise.resolve(spec)
+                .then(patchSpecTitle)
                 .then(patchGetRecommendationsByIdPath)
                 .then(patchExternalDefinitions),
         saveAs: 'openapi.yaml',

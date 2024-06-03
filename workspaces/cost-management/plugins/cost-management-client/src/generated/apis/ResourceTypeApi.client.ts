@@ -9,7 +9,9 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { Tags } from '../models/Tags.model';
+import { ResourceTypeAwsCategories } from '../models/ResourceTypeAwsCategories.model';
+import { ResourceTypeListPagination } from '../models/ResourceTypeListPagination.model';
+import { ResourceTypePagination } from '../models/ResourceTypePagination.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -33,7 +35,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class TagsApiClient {
+export class ResourceTypeApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -46,27 +48,103 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain AWS tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List Resource Types For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourceTypes(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypeListPagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List AWS Accounts For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesAwsAccounts(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/aws-accounts/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * Obtain mapping of key and values for AWS Categories.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param key Parameter for matching on a key using a contains.
+     * @param value Parameter for matching the value data using a contains.
+     * @param account Parameter for matching the account data using a contains.
      * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
      */
-    public async getAWSTagData(
+    public async listResourcesAwsCategories(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
+                limit?: number,
+                key?: string,
+                value?: string,
+                account?: string,
                 keyOnly?: boolean,
-                offset?: number,
-                limit?: number,
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypeAwsCategories >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/aws/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/aws-categories/{?limit,key,value,account,key_only}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -83,67 +161,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain AWS tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List AWS Organizational Units For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getAWSTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/aws/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain Azure tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getAzureTagData(
+    public async listResourcesAwsOrgUnits(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/azure/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/aws-organizational-units/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -160,67 +198,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain Azure tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List AWS Regions For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getAzureTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/azure/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain GCP tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getGCPTagData(
+    public async listResourcesAwsRegions(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/gcp/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/aws-regions/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -237,67 +235,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain GCP tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List AWS Services For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getGCPTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/gcp/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain OCI tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getOciTagData(
+    public async listResourcesAwsServices(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/oci/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/aws-services/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -314,67 +272,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain OCI tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List Azure Regions For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getOciTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/oci/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain OpenShift-on-AWS tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getOpenShiftAWSTagData(
+    public async listResourcesAzureRegions(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/openshift/infrastructures/aws/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/azure-regions/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -391,67 +309,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain OpenShift-on-AWS tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List Azure Services For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getOpenShiftAWSTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/openshift/infrastructures/aws/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain OpenShift-on-All tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getOpenShiftAllTagData(
+    public async listResourcesAzureServices(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/openshift/infrastructures/all/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/azure-services/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -468,67 +346,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain OpenShift-on-All tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List Azure Subscription Guids For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getOpenShiftAllTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/openshift/infrastructures/all/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain OpenShift-on-Azure tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getOpenShiftAzureTagData(
+    public async listResourcesAzureSubGuids(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/openshift/infrastructures/azure/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/azure-subscription-guids/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -545,67 +383,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain OpenShift-on-Azure tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List Cost Models For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getOpenShiftAzureTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/openshift/infrastructures/azure/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain OpenShift-on-GCP tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getOpenShiftGCPTagData(
+    public async listResourcesCostModels(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/openshift/infrastructures/gcp/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/cost-models/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -622,67 +420,27 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain OpenShift-on-GCP tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List GCP Accounts For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getOpenShiftGCPTagKeyData(
-        // @ts-ignore
-        request: {
-            path: {
-                    key: string,
-            },
-            query: {
-                filter?: any,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/tags/openshift/infrastructures/gcp/{key}{?filter,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * Query to obtain OpenShift tags
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
-     * @param keyOnly Flag to indicate whether or not only the tag key values will be returned.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
-     */
-    public async getOpenShiftTagData(
+    public async listResourcesGcpAccounts(
         // @ts-ignore
         request: {
             query: {
-                filter?: any,
-                keyOnly?: boolean,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/openshift/{?filter,key_only,offset,limit}`;
+        const uriTemplate = `/resource-types/gcp-accounts/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -699,32 +457,325 @@ export class TagsApiClient {
     }
 
     /**
-     * Query to obtain OpenShift tags
-     * @param key The tag key to get
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * List GCP Projects For RBAC
      * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned. Limit of 0 will return all data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
      */
-    public async getOpenShiftTagKeyData(
+    public async listResourcesGcpProjects(
         // @ts-ignore
         request: {
-            path: {
-                    key: string,
-            },
             query: {
-                filter?: any,
                 offset?: number,
                 limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Tags >> {
+    ): Promise<TypedResponse<ResourceTypePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/tags/openshift/{key}{?filter,offset,limit}`;
+        const uriTemplate = `/resource-types/gcp-projects/{?offset,limit,value,ordering}`;
 
         const uri = parser.parse(uriTemplate).expand({
-            key: request.path.key,
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List GCP Regions For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesGcpRegions(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/gcp-regions/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List GCP Services For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesGcpServices(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/gcp-services/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List OCI Regions For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesOciRegions(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/oci-regions/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List OCI Services For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesOciServices(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/oci-services/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List OCI Subscription Guids For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesOciTenantids(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/oci-payer-tenant-ids/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List OpenShift Clusters For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesOpenShiftClusters(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/openshift-clusters/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List OpenShift Nodes For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesOpenShiftNodes(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/openshift-nodes/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List OpenShift Projects For RBAC
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param value Parameter for matching the value data using a contains.
+     * @param ordering Parameter for ordering the value data.
+     */
+    public async listResourcesOpenShiftProjects(
+        // @ts-ignore
+        request: {
+            query: {
+                offset?: number,
+                limit?: number,
+                value?: string,
+                ordering?: 'value' | '-value',
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<ResourceTypePagination >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/resource-types/openshift-projects/{?offset,limit,value,ordering}`;
+
+        const uri = parser.parse(uriTemplate).expand({
             ...request.query,
         })
 
@@ -739,5 +790,4 @@ export class TagsApiClient {
     }
 
 }
-
-export type TagsApi = InstanceType<typeof TagsApiClient>;
+export type ResourceTypeApi = InstanceType<typeof ResourceTypeApiClient>;

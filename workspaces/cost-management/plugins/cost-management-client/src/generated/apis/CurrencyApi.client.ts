@@ -9,7 +9,7 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { Status } from '../models/Status.model';
+import { Currency } from '../models/Currency.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -33,7 +33,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class StatusApiClient {
+export class CurrencyApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -46,17 +46,17 @@ export class StatusApiClient {
     }
 
     /**
-     * Obtain server status
+     * Obtain the supported currencies
      */
-    public async getStatus(
+    public async getCurrency(
         // @ts-ignore
         request: {
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<Status >> {
+    ): Promise<TypedResponse<Currency >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/status/`;
+        const uriTemplate = `/currency/`;
 
         const uri = parser.parse(uriTemplate).expand({
         })
@@ -72,5 +72,4 @@ export class StatusApiClient {
     }
 
 }
-
-export type StatusApi = InstanceType<typeof StatusApiClient>;
+export type CurrencyApi = InstanceType<typeof CurrencyApiClient>;

@@ -131,5 +131,4 @@ export class OptimizationsApiClient {
     }
 
 }
-
 export type OptimizationsApi = InstanceType<typeof OptimizationsApiClient>;
