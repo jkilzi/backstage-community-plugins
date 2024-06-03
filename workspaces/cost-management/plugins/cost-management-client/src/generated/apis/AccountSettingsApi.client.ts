@@ -9,8 +9,9 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { CostGroupsResponse } from '../models/CostGroupsResponse.model';
-import { PutSettingsCostGroupsRequestInner } from '../models/PutSettingsCostGroupsRequestInner.model';
+import { PutAccountSettingRequestBody } from '../models/PutAccountSettingRequestBody.model';
+import { UserSetting } from '../models/UserSetting.model';
+import { UserSettings } from '../models/UserSettings.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -34,7 +35,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class CostGroupsApiClient {
+export class AccountSettingsApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -47,28 +48,24 @@ export class CostGroupsApiClient {
     }
 
     /**
-     * Query which projects belong to which cost groups
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned.
-     * @param filter The filter to apply to the report as a URL encoded dictionary.
+     * Obtain a specific current user account setting
+     * @param setting Name of a setting to get
      */
-    public async getSettingsCostGroups(
+    public async getUserSetting(
         // @ts-ignore
         request: {
-            query: {
-                offset?: number,
-                limit?: number,
-                filter?: any,
+            path: {
+                    setting: string,
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<CostGroupsResponse >> {
+    ): Promise<TypedResponse<UserSetting >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/settings/cost-groups/{?offset,limit,filter}`;
+        const uriTemplate = `/account-settings/{setting}`;
 
         const uri = parser.parse(uriTemplate).expand({
-            ...request.query,
+            setting: request.path.setting,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -82,19 +79,17 @@ export class CostGroupsApiClient {
     }
 
     /**
-     * Add projects to a cost group
-     * @param putSettingsCostGroupsRequestInner List of project name and cost group
+     * Obtain the current account settings
      */
-    public async putSettingsCostGroups(
+    public async getUserSettings(
         // @ts-ignore
         request: {
-                body: Array<PutSettingsCostGroupsRequestInner>,
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<void >> {
+    ): Promise<TypedResponse<UserSettings >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/settings/cost/groups/add/`;
+        const uriTemplate = `/account-settings/`;
 
         const uri = parser.parse(uriTemplate).expand({
         })
@@ -104,27 +99,32 @@ export class CostGroupsApiClient {
                 'Content-Type': 'application/json',
                 ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
             },
-            method: 'PUT',
-             body: JSON.stringify(request.body), 
+            method: 'GET',
+            
         });
     }
 
     /**
-     * Remove projects from a cost group
-     * @param putSettingsCostGroupsRequestInner List of project name and cost group
+     * Modify a specific current user account setting.
+     * @param setting Name of a setting to get
+     * @param putAccountSettingRequestBody Modify account setting
      */
-    public async putSettingsCostGroupsRemove(
+    public async putAccountSettings(
         // @ts-ignore
         request: {
-                body: Array<PutSettingsCostGroupsRequestInner>,
+            path: {
+                    setting: string,
+            },
+                body: PutAccountSettingRequestBody,
         },
         options?: RequestOptions
     ): Promise<TypedResponse<void >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/settings/cost-groups/remove/`;
+        const uriTemplate = `/account-settings/{setting}`;
 
         const uri = parser.parse(uriTemplate).expand({
+            setting: request.path.setting,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -138,5 +138,4 @@ export class CostGroupsApiClient {
     }
 
 }
-
-export type CostGroupsApi = InstanceType<typeof CostGroupsApiClient>;
+export type AccountSettingsApi = InstanceType<typeof AccountSettingsApiClient>;

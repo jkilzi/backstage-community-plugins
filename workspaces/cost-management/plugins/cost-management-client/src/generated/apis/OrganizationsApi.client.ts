@@ -84,5 +84,4 @@ export class OrganizationsApiClient {
     }
 
 }
-
 export type OrganizationsApi = InstanceType<typeof OrganizationsApiClient>;

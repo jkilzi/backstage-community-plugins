@@ -179,5 +179,4 @@ export class AzureReportsApiClient {
     }
 
 }
-
 export type AzureReportsApi = InstanceType<typeof AzureReportsApiClient>;

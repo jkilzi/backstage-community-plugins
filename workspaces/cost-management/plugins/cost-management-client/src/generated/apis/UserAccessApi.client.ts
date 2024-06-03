@@ -9,7 +9,7 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { CostTypePagination } from '../models/CostTypePagination.model';
+import { UserAccessListPagination } from '../models/UserAccessListPagination.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -33,7 +33,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class CostTypeApiClient {
+export class UserAccessApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -46,19 +46,24 @@ export class CostTypeApiClient {
     }
 
     /**
-     * Obtain the supported cost types
+     * Returns user permission status.
+     * @param type String to identify user access permission type (i.e. AWS, cost_model).
      */
-    public async getCostType(
+    public async listUserAccess(
         // @ts-ignore
         request: {
+            query: {
+                type?: string,
+            },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<CostTypePagination >> {
+    ): Promise<TypedResponse<UserAccessListPagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/cost-type/`;
+        const uriTemplate = `/user-access/{?type}`;
 
         const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -72,5 +77,4 @@ export class CostTypeApiClient {
     }
 
 }
-
-export type CostTypeApi = InstanceType<typeof CostTypeApiClient>;
+export type UserAccessApi = InstanceType<typeof UserAccessApiClient>;

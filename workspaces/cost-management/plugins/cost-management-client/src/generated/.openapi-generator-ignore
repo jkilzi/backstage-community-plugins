@@ -19,7 +19,6 @@ models/*.ts
 types/ObjectParamAPI.ts
 types/ObservableAPI.ts
 types/PromiseAPI.ts
-pluginId.ts
 git_push.sh
 package.json
 tsconfig.json

@@ -9,9 +9,8 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { IngressReportIn } from '../models/IngressReportIn.model';
-import { IngressReportOut } from '../models/IngressReportOut.model';
-import { IngressReportsPagination } from '../models/IngressReportsPagination.model';
+import { SourceOut } from '../models/SourceOut.model';
+import { SourcePagination } from '../models/SourcePagination.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -35,7 +34,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class IngressReportsApiClient {
+export class IntegrationsApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -48,31 +47,57 @@ export class IngressReportsApiClient {
     }
 
     /**
-     * Get ingress reports for a source
-     * @param sourceId ID of source to get
-     * @param offset Parameter for selecting the offset of data.
+     * List available AWS S3 regions
      * @param limit Parameter for selecting the amount of data in a returned.
+     * @param offset Parameter for selecting the offset of data.
      */
-    public async getSourceIngressReports(
+    public async getAWSS3Regions(
+        // @ts-ignore
+        request: {
+            query: {
+                limit?: number,
+                offset?: number,
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<any >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/sources/aws-s3-regions/{?limit,offset}`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * Get an integration
+     * @param sourceId ID of source to get
+     */
+    public async getSource(
         // @ts-ignore
         request: {
             path: {
                     sourceId: number,
             },
-            query: {
-                offset?: number,
-                limit?: number,
-            },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<IngressReportOut >> {
+    ): Promise<TypedResponse<SourceOut >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/ingress/reports/{source_id}/{?offset,limit}`;
+        const uriTemplate = `/sources/{source_id}/`;
 
         const uri = parser.parse(uriTemplate).expand({
             source_id: request.path.sourceId,
-            ...request.query,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -86,23 +111,58 @@ export class IngressReportsApiClient {
     }
 
     /**
-     * List Ingress Reports
+     * Get integration statistics
+     * @param sourceId ID of source to get
+     */
+    public async getSourceStats(
+        // @ts-ignore
+        request: {
+            path: {
+                    sourceId: number,
+            },
+        },
+        options?: RequestOptions
+    ): Promise<TypedResponse<any >> {
+        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
+
+        const uriTemplate = `/sources/{source_id}/stats/`;
+
+        const uri = parser.parse(uriTemplate).expand({
+            source_id: request.path.sourceId,
+        })
+
+        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
+            },
+            method: 'GET',
+            
+        });
+    }
+
+    /**
+     * List the integrations
+     * @param type The type of source to filter for.
+     * @param name The name of the source to filter for.
      * @param offset Parameter for selecting the offset of data.
      * @param limit Parameter for selecting the amount of data in a returned.
      */
-    public async listIngressReports(
+    public async listSources(
         // @ts-ignore
         request: {
             query: {
+                type?: string,
+                name?: string,
                 offset?: number,
                 limit?: number,
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<IngressReportsPagination >> {
+    ): Promise<TypedResponse<SourcePagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/ingress/reports/{?offset,limit}`;
+        const uriTemplate = `/sources/{?type,name,offset,limit}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -115,37 +175,8 @@ export class IngressReportsApiClient {
             },
             method: 'GET',
             
-        });
-    }
-
-    /**
-     * Post ingress reports
-     * @param ingressReportIn Reports posted for particular source
-     */
-    public async postIngressReports(
-        // @ts-ignore
-        request: {
-                body: IngressReportIn,
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<IngressReportsPagination >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/ingress/reports/`;
-
-        const uri = parser.parse(uriTemplate).expand({
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'POST',
-             body: JSON.stringify(request.body), 
         });
     }
 
 }
-
-export type IngressReportsApi = InstanceType<typeof IngressReportsApiClient>;
+export type IntegrationsApi = InstanceType<typeof IntegrationsApiClient>;

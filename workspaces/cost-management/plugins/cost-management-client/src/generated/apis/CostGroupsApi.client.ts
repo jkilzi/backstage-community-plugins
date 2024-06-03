@@ -9,8 +9,8 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { SourceOut } from '../models/SourceOut.model';
-import { SourcePagination } from '../models/SourcePagination.model';
+import { CostGroupsResponse } from '../models/CostGroupsResponse.model';
+import { PutSettingsCostGroupsRequestInner } from '../models/PutSettingsCostGroupsRequestInner.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -34,7 +34,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class IntegrationsApiClient {
+export class CostGroupsApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -47,23 +47,25 @@ export class IntegrationsApiClient {
     }
 
     /**
-     * List available AWS S3 regions
-     * @param limit Parameter for selecting the amount of data in a returned.
+     * Query which projects belong to which cost groups
      * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
+     * @param filter The filter to apply to the report as a URL encoded dictionary.
      */
-    public async getAWSS3Regions(
+    public async getSettingsCostGroups(
         // @ts-ignore
         request: {
             query: {
-                limit?: number,
                 offset?: number,
+                limit?: number,
+                filter?: any,
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<any >> {
+    ): Promise<TypedResponse<CostGroupsResponse >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/sources/aws-s3-regions/{?limit,offset}`;
+        const uriTemplate = `/settings/cost-groups/{?offset,limit,filter}`;
 
         const uri = parser.parse(uriTemplate).expand({
             ...request.query,
@@ -80,24 +82,21 @@ export class IntegrationsApiClient {
     }
 
     /**
-     * Get an integration
-     * @param sourceId ID of source to get
+     * Add projects to a cost group
+     * @param putSettingsCostGroupsRequestInner List of project name and cost group
      */
-    public async getSource(
+    public async putSettingsCostGroups(
         // @ts-ignore
         request: {
-            path: {
-                    sourceId: number,
-            },
+                body: Array<PutSettingsCostGroupsRequestInner>,
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<SourceOut >> {
+    ): Promise<TypedResponse<void >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/sources/{source_id}/`;
+        const uriTemplate = `/settings/cost/groups/add/`;
 
         const uri = parser.parse(uriTemplate).expand({
-            source_id: request.path.sourceId,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -105,30 +104,27 @@ export class IntegrationsApiClient {
                 'Content-Type': 'application/json',
                 ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
             },
-            method: 'GET',
-            
+            method: 'PUT',
+             body: JSON.stringify(request.body), 
         });
     }
 
     /**
-     * Get integration statistics
-     * @param sourceId ID of source to get
+     * Remove projects from a cost group
+     * @param putSettingsCostGroupsRequestInner List of project name and cost group
      */
-    public async getSourceStats(
+    public async putSettingsCostGroupsRemove(
         // @ts-ignore
         request: {
-            path: {
-                    sourceId: number,
-            },
+                body: Array<PutSettingsCostGroupsRequestInner>,
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<any >> {
+    ): Promise<TypedResponse<void >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/sources/{source_id}/stats/`;
+        const uriTemplate = `/settings/cost-groups/remove/`;
 
         const uri = parser.parse(uriTemplate).expand({
-            source_id: request.path.sourceId,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -136,48 +132,10 @@ export class IntegrationsApiClient {
                 'Content-Type': 'application/json',
                 ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
             },
-            method: 'GET',
-            
-        });
-    }
-
-    /**
-     * List the integrations
-     * @param type The type of source to filter for.
-     * @param name The name of the source to filter for.
-     * @param offset Parameter for selecting the offset of data.
-     * @param limit Parameter for selecting the amount of data in a returned.
-     */
-    public async listSources(
-        // @ts-ignore
-        request: {
-            query: {
-                type?: string,
-                name?: string,
-                offset?: number,
-                limit?: number,
-            },
-        },
-        options?: RequestOptions
-    ): Promise<TypedResponse<SourcePagination >> {
-        const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
-
-        const uriTemplate = `/sources/{?type,name,offset,limit}`;
-
-        const uri = parser.parse(uriTemplate).expand({
-            ...request.query,
-        })
-
-        return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
-            },
-            method: 'GET',
-            
+            method: 'PUT',
+             body: JSON.stringify(request.body), 
         });
     }
 
 }
-
-export type IntegrationsApi = InstanceType<typeof IntegrationsApiClient>;
+export type CostGroupsApi = InstanceType<typeof CostGroupsApiClient>;
