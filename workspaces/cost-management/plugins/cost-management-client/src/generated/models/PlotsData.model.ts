@@ -5,7 +5,13 @@
 // ******************************************************************
 import { PlotDetails } from '../models/PlotDetails.model';
 
+
+
 export interface PlotsData {
-  datapoints?: number;
-  plotsData?: PlotDetails;
+
+
+    'datapoints'?: number;
+    'plotsData'?: PlotDetails;
 }
+
+

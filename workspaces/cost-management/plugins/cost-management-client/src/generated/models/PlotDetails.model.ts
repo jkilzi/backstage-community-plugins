@@ -5,9 +5,15 @@
 // ******************************************************************
 import { PlotDetails20230401T060000Z } from '../models/PlotDetails20230401T060000Z.model';
 
+
+
 export interface PlotDetails {
-  _20230401t060000Z?: PlotDetails20230401T060000Z;
-  _20230401t120000Z?: PlotDetails20230401T060000Z;
-  _20230401t180000Z?: PlotDetails20230401T060000Z;
-  _20230402t000000Z?: any;
+
+
+    '_20230401t060000Z'?: PlotDetails20230401T060000Z;
+    '_20230401t120000Z'?: PlotDetails20230401T060000Z;
+    '_20230401t180000Z'?: PlotDetails20230401T060000Z;
+    '_20230402t000000Z'?: any;
 }
+
+

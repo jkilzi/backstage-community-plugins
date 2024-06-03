@@ -6,7 +6,13 @@
 import { PerformanceRecommendationConfigRequestsCpu } from '../models/PerformanceRecommendationConfigRequestsCpu.model';
 import { PerformanceRecommendationConfigRequestsMemory } from '../models/PerformanceRecommendationConfigRequestsMemory.model';
 
+
+
 export interface PerformanceRecommendationConfigRequests {
-  cpu?: PerformanceRecommendationConfigRequestsCpu;
-  memory?: PerformanceRecommendationConfigRequestsMemory;
+
+
+    'cpu'?: PerformanceRecommendationConfigRequestsCpu;
+    'memory'?: PerformanceRecommendationConfigRequestsMemory;
 }
+
+
