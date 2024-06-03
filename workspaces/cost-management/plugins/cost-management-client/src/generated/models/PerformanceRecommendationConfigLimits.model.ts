@@ -6,7 +6,13 @@
 import { PerformanceRecommendationConfigLimitsCpu } from '../models/PerformanceRecommendationConfigLimitsCpu.model';
 import { PerformanceRecommendationConfigLimitsMemory } from '../models/PerformanceRecommendationConfigLimitsMemory.model';
 
+
+
 export interface PerformanceRecommendationConfigLimits {
-  cpu?: PerformanceRecommendationConfigLimitsCpu;
-  memory?: PerformanceRecommendationConfigLimitsMemory;
+
+
+    'cpu'?: PerformanceRecommendationConfigLimitsCpu;
+    'memory'?: PerformanceRecommendationConfigLimitsMemory;
 }
+
+

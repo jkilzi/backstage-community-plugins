@@ -6,7 +6,13 @@
 import { PerformanceRecommendationConfigLimits } from '../models/PerformanceRecommendationConfigLimits.model';
 import { PerformanceRecommendationConfigRequests } from '../models/PerformanceRecommendationConfigRequests.model';
 
+
+
 export interface PerformanceRecommendationConfig {
-  limits?: PerformanceRecommendationConfigLimits;
-  requests?: PerformanceRecommendationConfigRequests;
+
+
+    'limits'?: PerformanceRecommendationConfigLimits;
+    'requests'?: PerformanceRecommendationConfigRequests;
 }
+
+

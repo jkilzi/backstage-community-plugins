@@ -1,5 +1,25 @@
 
-export * as OptimizationsApi from './generated/apis/OptimizationsApi.client'
+export * as AWSReportsApiClientNamespace from './generated/apis/AWSReportsApiClient'
+export * as AccountSettingsApiClientNamespace from './generated/apis/AccountSettingsApiClient'
+export * as AzureReportsApiClientNamespace from './generated/apis/AzureReportsApiClient'
+export * as CostGroupsApiClientNamespace from './generated/apis/CostGroupsApiClient'
+export * as CostModelsApiClientNamespace from './generated/apis/CostModelsApiClient'
+export * as CostTypeApiClientNamespace from './generated/apis/CostTypeApiClient'
+export * as CurrencyApiClientNamespace from './generated/apis/CurrencyApiClient'
+export * as ForecastsApiClientNamespace from './generated/apis/ForecastsApiClient'
+export * as GCPReportsApiClientNamespace from './generated/apis/GCPReportsApiClient'
+export * as IngressReportsApiClientNamespace from './generated/apis/IngressReportsApiClient'
+export * as IntegrationsApiClientNamespace from './generated/apis/IntegrationsApiClient'
+export * as MetricsApiClientNamespace from './generated/apis/MetricsApiClient'
+export * as OCIReportsApiClientNamespace from './generated/apis/OCIReportsApiClient'
+export * as OpenShiftReportsApiClientNamespace from './generated/apis/OpenShiftReportsApiClient'
+export * as OptimizationsApiClientNamespace from './generated/apis/OptimizationsApiClient'
+export * as OrganizationsApiClientNamespace from './generated/apis/OrganizationsApiClient'
+export * as ResourceTypeApiClientNamespace from './generated/apis/ResourceTypeApiClient'
+export * as SettingsApiClientNamespace from './generated/apis/SettingsApiClient'
+export * as StatusApiClientNamespace from './generated/apis/StatusApiClient'
+export * as TagsApiClientNamespace from './generated/apis/TagsApiClient'
+export * as UserAccessApiClientNamespace from './generated/apis/UserAccessApiClient'
 
 export * from './generated/models';
 

@@ -9,7 +9,7 @@ import {
   HeaderLabel,
   SupportButton,
 } from '@backstage/core-components';
-import { ExampleFetchComponent } from '../ExampleFetchComponent';
+import { ExampleFetchComponent, ExampleFetchComponent2 } from '../ExampleFetchComponent';
 
 export const ExampleComponent = () => (
   <Page themeId="tool">
@@ -30,7 +30,8 @@ export const ExampleComponent = () => (
           </InfoCard>
         </Grid>
         <Grid item>
-          <ExampleFetchComponent />
+          {/* <ExampleFetchComponent /> */}
+          <ExampleFetchComponent2 />
         </Grid>
       </Grid>
     </Content>

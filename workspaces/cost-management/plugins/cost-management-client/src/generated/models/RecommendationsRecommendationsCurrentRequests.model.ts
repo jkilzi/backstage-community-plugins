@@ -6,7 +6,13 @@
 import { RecommendationsRecommendationsCurrentLimitsCpu } from '../models/RecommendationsRecommendationsCurrentLimitsCpu.model';
 import { RecommendationsRecommendationsCurrentRequestsMemory } from '../models/RecommendationsRecommendationsCurrentRequestsMemory.model';
 
+
+
 export interface RecommendationsRecommendationsCurrentRequests {
-  cpu?: RecommendationsRecommendationsCurrentLimitsCpu;
-  memory?: RecommendationsRecommendationsCurrentRequestsMemory;
+
+
+    'cpu'?: RecommendationsRecommendationsCurrentLimitsCpu;
+    'memory'?: RecommendationsRecommendationsCurrentRequestsMemory;
 }
+
+
