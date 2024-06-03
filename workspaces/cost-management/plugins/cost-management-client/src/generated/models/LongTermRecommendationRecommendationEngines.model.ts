@@ -6,7 +6,13 @@
 import { CostRecommendation } from '../models/CostRecommendation.model';
 import { PerformanceRecommendation } from '../models/PerformanceRecommendation.model';
 
+
+
 export interface LongTermRecommendationRecommendationEngines {
-  cost?: CostRecommendation;
-  performance?: PerformanceRecommendation;
+
+
+    'cost'?: CostRecommendation;
+    'performance'?: PerformanceRecommendation;
 }
+
+

@@ -7,8 +7,14 @@ import { RecommendationListLinks } from '../models/RecommendationListLinks.model
 import { RecommendationListMeta } from '../models/RecommendationListMeta.model';
 import { Recommendations } from '../models/Recommendations.model';
 
+
+
 export interface RecommendationList {
-  data?: Array<Recommendations>;
-  meta?: RecommendationListMeta;
-  links?: RecommendationListLinks;
+
+
+    'data'?: Array<Recommendations>;
+    'meta'?: RecommendationListMeta;
+    'links'?: RecommendationListLinks;
 }
+
+

@@ -6,7 +6,13 @@
 import { CostRecommendationVariationLimitsCpu } from '../models/CostRecommendationVariationLimitsCpu.model';
 import { CostRecommendationVariationLimitsMemory } from '../models/CostRecommendationVariationLimitsMemory.model';
 
+
+
 export interface CostRecommendationVariationLimits {
-  cpu?: CostRecommendationVariationLimitsCpu;
-  memory?: CostRecommendationVariationLimitsMemory;
+
+
+    'cpu'?: CostRecommendationVariationLimitsCpu;
+    'memory'?: CostRecommendationVariationLimitsMemory;
 }
+
+

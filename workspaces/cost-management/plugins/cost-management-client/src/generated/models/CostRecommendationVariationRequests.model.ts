@@ -6,7 +6,13 @@
 import { CostRecommendationVariationRequestsCpu } from '../models/CostRecommendationVariationRequestsCpu.model';
 import { CostRecommendationVariationRequestsMemory } from '../models/CostRecommendationVariationRequestsMemory.model';
 
+
+
 export interface CostRecommendationVariationRequests {
-  cpu?: CostRecommendationVariationRequestsCpu;
-  memory?: CostRecommendationVariationRequestsMemory;
+
+
+    'cpu'?: CostRecommendationVariationRequestsCpu;
+    'memory'?: CostRecommendationVariationRequestsMemory;
 }
+
+

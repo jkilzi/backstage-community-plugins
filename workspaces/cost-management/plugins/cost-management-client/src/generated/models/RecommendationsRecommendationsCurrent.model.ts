@@ -6,7 +6,13 @@
 import { RecommendationsRecommendationsCurrentLimits } from '../models/RecommendationsRecommendationsCurrentLimits.model';
 import { RecommendationsRecommendationsCurrentRequests } from '../models/RecommendationsRecommendationsCurrentRequests.model';
 
+
+
 export interface RecommendationsRecommendationsCurrent {
-  limits?: RecommendationsRecommendationsCurrentLimits;
-  requests?: RecommendationsRecommendationsCurrentRequests;
+
+
+    'limits'?: RecommendationsRecommendationsCurrentLimits;
+    'requests'?: RecommendationsRecommendationsCurrentRequests;
 }
+
+

@@ -6,7 +6,13 @@
 import { CpuUsage } from '../models/CpuUsage.model';
 import { MemoryUsage } from '../models/MemoryUsage.model';
 
+
+
 export interface PlotDetails20230401T060000Z {
-  cpuUsage?: CpuUsage;
-  memoryUsage?: MemoryUsage;
+
+
+    'cpuUsage'?: CpuUsage;
+    'memoryUsage'?: MemoryUsage;
 }
+
+
