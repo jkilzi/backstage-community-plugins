@@ -5,15 +5,21 @@
 // ******************************************************************
 import { RecommendationsRecommendations } from '../models/RecommendationsRecommendations.model';
 
+
+
 export interface Recommendations {
-  clusterAlias?: string;
-  clusterUuid?: string;
-  container?: string;
-  id?: string;
-  lastReported?: Date;
-  project?: string;
-  recommendations?: RecommendationsRecommendations;
-  sourceId?: string;
-  workload?: string;
-  workloadType?: string;
+
+
+    'clusterAlias'?: string;
+    'clusterUuid'?: string;
+    'container'?: string;
+    'id'?: string;
+    'lastReported'?: Date;
+    'project'?: string;
+    'recommendations'?: RecommendationsRecommendations;
+    'sourceId'?: string;
+    'workload'?: string;
+    'workloadType'?: string;
 }
+
+

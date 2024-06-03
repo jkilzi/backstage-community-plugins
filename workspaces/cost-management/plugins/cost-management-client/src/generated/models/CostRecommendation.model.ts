@@ -6,8 +6,14 @@
 import { CostRecommendationConfig } from '../models/CostRecommendationConfig.model';
 import { CostRecommendationVariation } from '../models/CostRecommendationVariation.model';
 
+
+
 export interface CostRecommendation {
-  config?: CostRecommendationConfig;
-  podsCount?: number;
-  variation?: CostRecommendationVariation;
+
+
+    'config'?: CostRecommendationConfig;
+    'podsCount'?: number;
+    'variation'?: CostRecommendationVariation;
 }
+
+

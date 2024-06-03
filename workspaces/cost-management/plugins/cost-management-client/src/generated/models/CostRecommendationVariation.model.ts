@@ -6,7 +6,13 @@
 import { CostRecommendationVariationLimits } from '../models/CostRecommendationVariationLimits.model';
 import { CostRecommendationVariationRequests } from '../models/CostRecommendationVariationRequests.model';
 
+
+
 export interface CostRecommendationVariation {
-  limits?: CostRecommendationVariationLimits;
-  requests?: CostRecommendationVariationRequests;
+
+
+    'limits'?: CostRecommendationVariationLimits;
+    'requests'?: CostRecommendationVariationRequests;
 }
+
+

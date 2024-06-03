@@ -3,35 +3,38 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-    updateSchema,
     generateClient,
+    patchExternalDefinitions,
+    patchGetRecommendationsByIdPath,
+    updateSchema,
 } from './lib/tasks.mjs';
-
-/**
- * The `getRecommendationsById` operation accepts a path parameter called 'recommendation-id'
- * that the code generator fails to transform it into a valid JavaScript identifier.
- * This patch converts the `-` into a `_` by mutating the input JSON OpenAPI spec to solve this issue.
- */
-function patchGetRecommendationsByIdPath(spec) {
-    const getRecommendationsByIdPath = '/recommendations/openshift/{recommendation-id}';
-    const getRecommendationsByIdDef = structuredClone(spec.paths[getRecommendationsByIdPath]);
-    const getRecommendationsByIdParamDef = getRecommendationsByIdDef.get.parameters.find(({name}) => name === 'recommendation-id');
-    getRecommendationsByIdParamDef.name = getRecommendationsByIdParamDef.name.replace('-', '_');
-    Object.assign(spec.paths, { [getRecommendationsByIdPath.replace('-', '_')]: getRecommendationsByIdDef })
-    delete spec.paths[getRecommendationsByIdPath];
-}
 
 async function main(_args) {
     const packageRootDir = dirname(fileURLToPath(dirname(import.meta.url)));
 
-    console.log('Updating src/schema/openapi.yaml')
+    console.log('Updating src/schema/resource-optimizations.openapi.yaml')
     await updateSchema({
         packageRootDir,
         specUrl: 'https://raw.githubusercontent.com/RedHatInsights/ros-ocp-backend/main/openapi.json',
-        afterDownloadCompletes: patchGetRecommendationsByIdPath
+        afterDownloadCompletes: patchGetRecommendationsByIdPath,
+        saveAs: 'resource-optimizations.openapi.yaml',
     });
-    console.log('Running openapi client generator')
-    await generateClient({ cwd: packageRootDir });
+    console.log('Updating src/schema/openapi.yaml')
+    await updateSchema({
+        packageRootDir,
+        specUrl: 'https://raw.githubusercontent.com/project-koku/koku/main/docs/specs/openapi.json',
+        afterDownloadCompletes: async (spec) =>
+            Promise.resolve(spec)
+                .then(patchGetRecommendationsByIdPath)
+                .then(patchExternalDefinitions),
+        saveAs: 'openapi.yaml',
+    })
+    console.log('Running OpenAPI client generator')
+    await generateClient(packageRootDir);
 }
 
-main(process.argv.slice(2));
+try {
+    await main(process.argv.slice(2));
+} catch (error) {
+    console.error(error);
+}

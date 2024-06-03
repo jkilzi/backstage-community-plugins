@@ -6,9 +6,15 @@
 import { LongTermRecommendationRecommendationEngines } from '../models/LongTermRecommendationRecommendationEngines.model';
 import { PlotsData } from '../models/PlotsData.model';
 
+
+
 export interface ShortTermRecommendation {
-  durationInHours?: number;
-  monitoringStartTime?: Date;
-  recommendationEngines?: LongTermRecommendationRecommendationEngines;
-  plots?: PlotsData;
+
+
+    'durationInHours'?: number;
+    'monitoringStartTime'?: Date;
+    'recommendationEngines'?: LongTermRecommendationRecommendationEngines;
+    'plots'?: PlotsData;
 }
+
+
