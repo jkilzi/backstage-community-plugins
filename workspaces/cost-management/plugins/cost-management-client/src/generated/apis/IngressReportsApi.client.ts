@@ -9,9 +9,9 @@ import crossFetch from 'cross-fetch';
 import {pluginId} from '../pluginId';
 import * as parser from 'uri-template';
 
-import { PutAccountSettingRequestBody } from '../models/PutAccountSettingRequestBody.model';
-import { UserSetting } from '../models/UserSetting.model';
-import { UserSettings } from '../models/UserSettings.model';
+import { IngressReportIn } from '../models/IngressReportIn.model';
+import { IngressReportOut } from '../models/IngressReportOut.model';
+import { IngressReportsPagination } from '../models/IngressReportsPagination.model';
 
 /**
  * Wraps the Response type to convey a type on the json call.
@@ -35,7 +35,7 @@ export interface RequestOptions {
 /**
  * no description
  */
-export class AccountSettingsApiClient {
+export class IngressReportsApiClient {
     private readonly discoveryApi: DiscoveryApi;
     private readonly fetchApi: FetchApi;
 
@@ -48,24 +48,31 @@ export class AccountSettingsApiClient {
     }
 
     /**
-     * Obtain a specific current user account setting
-     * @param setting Name of a setting to get
+     * Get ingress reports for a source
+     * @param sourceId ID of source to get
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
      */
-    public async getUserSetting(
+    public async getSourceIngressReports(
         // @ts-ignore
         request: {
             path: {
-                    setting: string,
+                    sourceId: number,
+            },
+            query: {
+                offset?: number,
+                limit?: number,
             },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<UserSetting >> {
+    ): Promise<TypedResponse<IngressReportOut >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/account-settings/{setting}`;
+        const uriTemplate = `/ingress/reports/{source_id}/{?offset,limit}`;
 
         const uri = parser.parse(uriTemplate).expand({
-            setting: request.path.setting,
+            source_id: request.path.sourceId,
+            ...request.query,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -79,19 +86,26 @@ export class AccountSettingsApiClient {
     }
 
     /**
-     * Obtain the current account settings
+     * List Ingress Reports
+     * @param offset Parameter for selecting the offset of data.
+     * @param limit Parameter for selecting the amount of data in a returned.
      */
-    public async getUserSettings(
+    public async listIngressReports(
         // @ts-ignore
         request: {
+            query: {
+                offset?: number,
+                limit?: number,
+            },
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<UserSettings >> {
+    ): Promise<TypedResponse<IngressReportsPagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/account-settings/`;
+        const uriTemplate = `/ingress/reports/{?offset,limit}`;
 
         const uri = parser.parse(uriTemplate).expand({
+            ...request.query,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -105,26 +119,21 @@ export class AccountSettingsApiClient {
     }
 
     /**
-     * Modify a specific current user account setting.
-     * @param setting Name of a setting to get
-     * @param putAccountSettingRequestBody Modify account setting
+     * Post ingress reports
+     * @param ingressReportIn Reports posted for particular source
      */
-    public async putAccountSettings(
+    public async postIngressReports(
         // @ts-ignore
         request: {
-            path: {
-                    setting: string,
-            },
-                body: PutAccountSettingRequestBody,
+                body: IngressReportIn,
         },
         options?: RequestOptions
-    ): Promise<TypedResponse<void >> {
+    ): Promise<TypedResponse<IngressReportsPagination >> {
         const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-        const uriTemplate = `/account-settings/{setting}`;
+        const uriTemplate = `/ingress/reports/`;
 
         const uri = parser.parse(uriTemplate).expand({
-            setting: request.path.setting,
         })
 
         return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
@@ -132,11 +141,10 @@ export class AccountSettingsApiClient {
                 'Content-Type': 'application/json',
                 ...(options?.token && { Authorization: `Bearer ${options?.token}` }),
             },
-            method: 'PUT',
+            method: 'POST',
              body: JSON.stringify(request.body), 
         });
     }
 
 }
-
-export type AccountSettingsApi = InstanceType<typeof AccountSettingsApiClient>;
+export type IngressReportsApi = InstanceType<typeof IngressReportsApiClient>;

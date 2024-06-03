@@ -589,5 +589,4 @@ export class SettingsApiClient {
     }
 
 }
-
 export type SettingsApi = InstanceType<typeof SettingsApiClient>;

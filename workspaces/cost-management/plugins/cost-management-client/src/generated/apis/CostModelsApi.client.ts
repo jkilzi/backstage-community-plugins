@@ -216,5 +216,4 @@ export class CostModelsApiClient {
     }
 
 }
-
 export type CostModelsApi = InstanceType<typeof CostModelsApiClient>;
