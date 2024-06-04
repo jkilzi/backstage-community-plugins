@@ -2763,15 +2763,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-cost-management-client@link:../cost-management-client::locator=%40backstage-community%2Fplugin-cost-management%40workspace%3Aplugins%2Fcost-management":
+"@backstage-community/plugin-cost-management-common@link:../cost-management-common::locator=%40backstage-community%2Fplugin-cost-management%40workspace%3Aplugins%2Fcost-management":
   version: 0.0.0-use.local
-  resolution: "@backstage-community/plugin-cost-management-client@link:../cost-management-client::locator=%40backstage-community%2Fplugin-cost-management%40workspace%3Aplugins%2Fcost-management"
+  resolution: "@backstage-community/plugin-cost-management-common@link:../cost-management-common::locator=%40backstage-community%2Fplugin-cost-management%40workspace%3Aplugins%2Fcost-management"
   languageName: node
   linkType: soft
 
-"@backstage-community/plugin-cost-management-client@workspace:plugins/cost-management-client":
+"@backstage-community/plugin-cost-management-common@workspace:plugins/cost-management-common":
   version: 0.0.0-use.local
-  resolution: "@backstage-community/plugin-cost-management-client@workspace:plugins/cost-management-client"
+  resolution: "@backstage-community/plugin-cost-management-common@workspace:plugins/cost-management-common"
   dependencies:
     "@backstage/cli": ^0.26.3
     cross-fetch: ^4.0.0
@@ -2790,7 +2790,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@backstage-community/plugin-cost-management@workspace:plugins/cost-management"
   dependencies:
-    "@backstage-community/plugin-cost-management-client": "link:../cost-management-client"
+    "@backstage-community/plugin-cost-management-common": "link:../cost-management-common"
     "@backstage/cli": ^0.26.3
     "@backstage/core-app-api": ^1.12.4
     "@backstage/core-components": ^0.14.4

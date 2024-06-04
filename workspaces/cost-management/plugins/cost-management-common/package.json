@@ -1,6 +1,6 @@
 {
-  "name": "@backstage-community/plugin-cost-management-client",
-  "description": "An isomorphic client for the cost-management API",
+  "name": "@backstage-community/plugin-cost-management-common",
+  "description": "An isomorphic common package for the cost-management plug-in",
   "version": "0.1.0",
   "main": "src/index.ts",
   "types": "src/index.ts",

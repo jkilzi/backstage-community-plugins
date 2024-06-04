@@ -24,7 +24,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage-community/plugin-cost-management-client": "link:../cost-management-client",
+    "@backstage-community/plugin-cost-management-common": "link:../cost-management-common",
     "@backstage/core-components": "^0.14.4",
     "@backstage/core-plugin-api": "^1.9.2",
     "@backstage/theme": "^0.5.3",
