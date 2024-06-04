@@ -5,10 +5,10 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import { Apis } from '@backstage-community/plugin-cost-management-client';
+import { Apis } from '@backstage-community/plugin-cost-management-common';
 
 import { rootRouteRef } from './routes';
-import { optimizationsApiRef } from './api/ApiRefs';
+import { optimizationsApiRef } from './api/refs';
 
 export const costManagementPlugin = createPlugin({
   id: 'cost-management',
@@ -22,12 +22,9 @@ export const costManagementPlugin = createPlugin({
       factory({ discoveryApi, fetchApi }) {
         return new Apis.OptimizationsApiClient({
           discoveryApi: {
-            async getBaseUrl(pluginId = 'cost-management') {
-              const baseUrl = await discoveryApi.getBaseUrl(pluginId);
-              return baseUrl.replace(
-                /\/api\/cost-management$/,
-                '/api/proxy/cost-management/v1',
-              );
+            async getBaseUrl() {
+              const baseUrl = await discoveryApi.getBaseUrl('proxy');
+              return `${baseUrl}/cost-management/v1`;
             },
           },
           fetchApi,
