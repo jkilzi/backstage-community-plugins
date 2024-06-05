@@ -87,7 +87,7 @@ export async function generateClient(packageRootDir) {
   }
 
   await exec(
-    `yarn run -T backstage-repo-tools package schema openapi generate --client-package plugins/cost-management-client &>/dev/null || true`,
+    `yarn run -T backstage-repo-tools package schema openapi generate --client-package plugins/cost-management-common &>/dev/null || true`,
     { cwd: packageRootDir },
   );
 
