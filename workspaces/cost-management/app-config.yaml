@@ -47,6 +47,7 @@ proxy:
   endpoints:
     '/cost-management/v1':
       target: https://console.redhat.com/api/cost-management/v1
+      changeOrigin: true
       headers:
         Authorization: Bearer ${OCM_AUTH_TOKEN}
   ### Example for how to add a proxy endpoint for the frontend.
