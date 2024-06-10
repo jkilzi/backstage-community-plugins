@@ -16,6 +16,8 @@ import {
 import useAsync from 'react-use/lib/useAsync';
 import { useApi, configApiRef } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../api/refs';
+import { JSONUtils } from "@backstage-community/plugin-cost-management-common";
+import { Recommendations } from '@backstage-community/plugin-cost-management-common/src/generated/models/Recommendations.model';
 
 export default {
   title: 'Plugins/Examples',
@@ -37,23 +39,26 @@ export const ExampleComponent = () => {
   const api = useApi(optimizationsApiRef);
 
   const { value, loading, error } = useAsync(async () => {
-    return (await api.getRecommendationList({ query: {} })).json();
+    return (await api.getRecommendationList({ query: {} })).text();
   }, []);
 
-  const generateTestData = (rows = 10) => {
+  const generateTestData = () => {
     const data: Array<TableData> = [];
 
-    value?.data?.map( item => {
-        console.log("Workload Type:", item.workloadType, item.lastReported)
-        data.push({
-          container: item.container ? item.container : '',
-          project: item.project ? item.project : '',
-          workload: item.workload ? item.workload : '',
-          workload_type: item.workloadType ? item.workloadType : '',
-          cluster:  item.clusterAlias ? item.clusterAlias : item.clusterUuid ? item.clusterUuid : '',
-          last_reported: '6 hours ago'
-      });
-    })
+    if(value){
+      const responseData = JSON.parse(value, JSONUtils.camelCaseReviver)
+
+      responseData?.data?.map( (item: Recommendations) => {
+          data.push({
+            container: item.container ? item.container : '',
+            project: item.project ? item.project : '',
+            workload: item.workload ? item.workload : '',
+            workload_type: item.workloadType ? item.workloadType : '',
+            cluster:  item.clusterAlias ? item.clusterAlias : item.clusterUuid ? item.clusterUuid : '',
+            last_reported: '6 hours ago'
+        });
+      })
+    }
 
     return data;
   };
@@ -96,7 +101,7 @@ export const ExampleComponent = () => {
       title: 'Cluster names',
       render: (row: Partial<TableData>) => (
         <>
-          <Link to="#message-source">{row.cluster}</Link>
+          <Typography variant="body2">{row.cluster}</Typography>
         </>
       ),
     },
