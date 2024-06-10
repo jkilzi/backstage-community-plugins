@@ -1,6 +1,6 @@
 app:
   title: Cost Management
-  baseUrl: http://localhost:5000
+  baseUrl: http://localhost:3000
 
 organization:
   name: Red Hat
