@@ -1,20 +1,50 @@
-function snakeToCamel(snake: string) {
-    return snake.split('_').map((word, index) => {
-        if (index === 0) {
-            return word.toLowerCase();
-        }
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    }).join('');
+import camelCase from 'lodash/camelCase';
+import { isNonNullableObject } from './TypeGuards';
+
+export type JsonScalarValues = Boolean | null | number | string;
+
+export interface JsonDictionary {
+  [K: string]: JsonScalarValues | JsonDictionary | Array<JsonDictionary>;
 }
 
+export type JsonList = Array<JsonDictionary>;
 
-export function camelCaseReviver(this: any, key: string, value: string) {
-    if (key === '') return value; // For the root object, return the value as is
-    const pascalKey = snakeToCamel(key);
-    this[pascalKey] = value; // Assign the transformed key to the value in the current context
-    return value; // Return the value to maintain the default behavior
-}
+const _toCamelCaseObjectKeysHelper = <TResult>(
+  current: JsonDictionary | JsonList,
+  accumulator: JsonDictionary | JsonList,
+): TResult => {
+  if (Array.isArray(current)) {
+    for (const item of current) {
+      if (Array.isArray(item)) {
+        (accumulator as JsonList).push(_toCamelCaseObjectKeysHelper(item, []));
+      } else if (isNonNullableObject(item)) {
+        (accumulator as JsonList).push(_toCamelCaseObjectKeysHelper(item, {}));
+      } else {
+        (accumulator as JsonList).push(item);
+      }
+    }
+  } else {
+    for (const [k, v] of Object.entries(current)) {
+      if (isNonNullableObject(v)) {
+        (accumulator as JsonDictionary)[camelCase(k)] =
+          _toCamelCaseObjectKeysHelper(v, {});
+      } else {
+        (accumulator as JsonDictionary)[camelCase(k)] = v;
+      }
+    }
+  }
 
+  return accumulator as TResult;
+};
 
+export const toCamelCaseObjectKeys = <TResult>(
+  root: JsonDictionary | JsonList,
+) => {
+  if (Array.isArray(root)) {
+    return _toCamelCaseObjectKeysHelper<TResult>(root, []);
+  } else if (isNonNullableObject(root)) {
+    return _toCamelCaseObjectKeysHelper<TResult>(root, {});
+  }
 
-
+  throw new Error('Illegal argument exception');
+};
