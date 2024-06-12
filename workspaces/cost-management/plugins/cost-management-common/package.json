@@ -29,10 +29,12 @@
   },
   "devDependencies": {
     "@backstage/cli": "^0.26.3",
+    "@types/lodash": "^4.17.5",
     "yaml": "^2.4.2"
   },
   "dependencies": {
     "cross-fetch": "^4.0.0",
+    "lodash": "^4.17.21",
     "uri-template": "^2.0.0"
   },
   "files": [
