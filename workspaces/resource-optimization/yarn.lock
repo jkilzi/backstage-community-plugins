@@ -2551,7 +2551,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-resource-optimization-common@workspace:plugins/resource-optimization-common":
+"@backstage-community/plugin-resource-optimization-common@workspace:^, @backstage-community/plugin-resource-optimization-common@workspace:plugins/resource-optimization-common":
   version: 0.0.0-use.local
   resolution: "@backstage-community/plugin-resource-optimization-common@workspace:plugins/resource-optimization-common"
   dependencies:
@@ -2563,6 +2563,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@backstage-community/plugin-resource-optimization@workspace:plugins/resource-optimization"
   dependencies:
+    "@backstage-community/plugin-resource-optimization-common": "workspace:^"
     "@backstage/cli": ^0.26.5
     "@backstage/core-app-api": ^1.12.5
     "@backstage/core-components": ^0.14.7
@@ -2577,13 +2578,13 @@ __metadata:
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.0.0
     msw: ^1.0.0
-react: ^18.3.1
+    react: ^18.3.1
     react-dom: ^18.3.1
     react-router-dom: ^6.23.1
     react-use: ^17.2.4
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
-react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-router-dom: 6.0.0-beta.0 || ^6.3.0
   languageName: unknown
   linkType: soft
