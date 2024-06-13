@@ -1,4 +1,4 @@
-import { generateUser } from '../__tests__/fixtures/UserGenerator';
+import { generateUser } from '../__tests__/fixtures/user-generator';
 import { toCamelCaseObjectKeys } from './json';
 
 describe('json.ts/toCamelCaseObjectKeys', () => {
