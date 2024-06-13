@@ -1,0 +1,1 @@
+export { ResourceOptimizationIcon } from './ResourceOptimizationIcon';
