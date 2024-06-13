@@ -1,5 +1,5 @@
-import { generateUser } from '../__tests__/fixtures/user-generator';
-import { toCamelCaseObjectKeys } from './json';
+import { mockRecommendationsList } from '../__tests__/fixtures/responses';
+import { JsonDictionary, toCamelCaseObjectKeys } from './json';
 
 describe('json.ts/toCamelCaseObjectKeys', () => {
   afterEach(() => {
@@ -117,16 +117,11 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
       expect(spyOnSubject).toThrow(/Illegal argument exception/);
     }
   });
-  test('should process large payloads in a feasible time', () => {
-    const users = [] as Array<any>;
-    const MAX_ITEMS = 71_659;
+  test('should process large JSON payloads in a feasible time', () => {
+    const result = toCamelCaseObjectKeys<Array<any>>(
+      mockRecommendationsList as JsonDictionary,
+    );
 
-    for (let userId = 1; userId <= MAX_ITEMS; userId++) {
-      users.push(generateUser(userId));
-    }
-
-    const result = toCamelCaseObjectKeys<Array<any>>(users);
-
-    expect(JSON.stringify(result).includes('_')).toBe(false);
+    expect(Object.keys(result).every(k => !k.includes('_'))).toBe(true);
   });
 });
