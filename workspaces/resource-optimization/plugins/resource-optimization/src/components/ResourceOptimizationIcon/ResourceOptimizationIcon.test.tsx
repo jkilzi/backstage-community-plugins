@@ -10,7 +10,7 @@ describe('ResourceOptimizationIcon', () => {
       <DocumentFragment>
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+          class="MuiSvgIcon-root"
           focusable="false"
           viewBox="0 0 24 24"
         >
