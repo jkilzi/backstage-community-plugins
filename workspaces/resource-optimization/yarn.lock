@@ -2768,22 +2768,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@backstage-community/plugin-resource-optimization-common@workspace:plugins/resource-optimization-common"
   dependencies:
-    "@backstage/cli": ^0.26.5
-  languageName: unknown
-  linkType: soft
-
-"@backstage-community/plugin-resource-optimization-react@workspace:plugins/resource-optimization-react":
-  version: 0.0.0-use.local
-  resolution: "@backstage-community/plugin-resource-optimization-react@workspace:plugins/resource-optimization-react"
-  dependencies:
-    "@backstage/cli": ^0.26.5
-    "@backstage/core-plugin-api": ^1.9.2
-    "@backstage/test-utils": ^1.5.5
-    "@material-ui/core": ^4.9.13
-    "@testing-library/jest-dom": ^6.0.0
-    "@testing-library/react": ^14.0.0
-  peerDependencies:
-    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    "@backstage/cli": ^0.26.3
+    "@types/lodash": ^4.17.5
+    cross-fetch: ^4.0.0
+    lodash: ^4.17.21
+    uri-template: ^2.0.0
+    yaml: ^2.4.2
   languageName: unknown
   linkType: soft
 
@@ -12092,6 +12082,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: e009a2bfb50e90ca9b7c6e8f648f8464067271fd99116f881073fa6fa76dc8d0133181dd65e6614d5fb1220d671d67b0124aef7d97dc02d7e342ab143a47779d
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4.17.5":
+  version: 4.17.5
+  resolution: "@types/lodash@npm:4.17.5"
+  checksum: 3c9bb15772509f0ecb40428531863dbc3f064f2bf34bbccc2ce2b2923c69fb0868aec7e357b1d97fd0d7f7e435a014ea5c1adef8a64715529887179c97a5a823
   languageName: node
   linkType: hard
 
@@ -33589,7 +33586,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.0.0, yaml@npm:^2.0.0-10, yaml@npm:^2.2.1, yaml@npm:^2.3.2, yaml@npm:^2.3.4":
+"yaml@npm:^2.0.0, yaml@npm:^2.0.0-10, yaml@npm:^2.2.1, yaml@npm:^2.3.2, yaml@npm:^2.3.4, yaml@npm:^2.4.2":
   version: 2.4.5
   resolution: "yaml@npm:2.4.5"
   bin:
