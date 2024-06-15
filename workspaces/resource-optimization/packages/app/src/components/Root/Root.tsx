@@ -78,7 +78,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem
           icon={ResourceOptimizationIcon}
           to="/resource-optimization"
-          text="Resource Optimization"
+          text="Optimizations"
         />
       </SidebarGroup>
       <SidebarSpace />
