@@ -1,38 +1,213 @@
 import React from 'react';
-import { Typography, Grid } from '@material-ui/core';
+import { Typography, Grid, Chip, Box } from '@material-ui/core';
 import {
   InfoCard,
   Header,
+  HeaderLabel,
+  HeaderTabs,
   Page,
   Content,
   ContentHeader,
-  HeaderLabel,
-  SupportButton,
+  Link, TrendLine,
+  TableColumn, Table,
+  SupportButton, StatusOK, GaugeCard,
+  Select,Progress, ResponseErrorPanel
 } from '@backstage/core-components';
-import { ExampleFetchComponent } from '../ExampleFetchComponent';
+import useAsync from 'react-use/lib/useAsync';
+import { useApi, configApiRef } from '@backstage/core-plugin-api';
+import { optimizationsApiRef } from '../../api/refs';
+import { Apis } from "@backstage-community/plugin-resource-optimization-common";
+import { JsonUtils } from "@backstage-community/plugin-resource-optimization-common";
+import { toCamelCaseObjectKeys } from '@backstage-community/plugin-resource-optimization-common/src/utils/json';
+import { RecommendationList, Recommendations } from '@backstage-community/plugin-resource-optimization-common/src/generated/models';
 
-export const ExampleComponent = () => (
-  <Page themeId="tool">
-    <Header title="Welcome to resource-optimization!" subtitle="Optional subtitle">
-      <HeaderLabel label="Owner" value="Team X" />
-      <HeaderLabel label="Lifecycle" value="Alpha" />
+export default {
+  title: 'Plugins/Examples',
+  component: Page,
+};
+
+interface TableData {
+  container: string;
+  project: string;
+  workload: string;
+  workload_type: string;
+  cluster: string;
+  last_reported: string;
+}
+
+export const ExampleComponent = () => {
+
+  const config = useApi(configApiRef);
+  const api = useApi(optimizationsApiRef);
+
+  const { value, loading, error } = useAsync(async () => {
+    return (await api.getRecommendationList({ query: {} })).text();
+  }, []);
+
+  const generateTestData = () => {
+    const data: Array<TableData> = [];
+
+    if(value){
+      const responseData = toCamelCaseObjectKeys<RecommendationList>(JSON.parse(value));
+
+      responseData?.data?.map( (item: Recommendations) => {
+          data.push({
+            container: item.container ? item.container : '',
+            project: item.project ? item.project : '',
+            workload: item.workload ? item.workload : '',
+            workload_type: item.workloadType ? item.workloadType : '',
+            cluster:  item.clusterAlias ? item.clusterAlias : item.clusterUuid ? item.clusterUuid : '',
+            last_reported: '6 hours ago'
+        });
+      })
+    }
+
+    return data;
+  };
+
+  const columns: TableColumn[] = [
+    {
+      title: 'Container names',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          <Link to="#message-source">{row.container}</Link>
+        </>
+      ),
+    },
+    {
+      title: 'Project names',
+      render: (row: Partial<TableData>) => (
+        <>
+        <Typography variant="body2">{row.project}</Typography>
+        </>
+      ),
+    },
+    {
+      title: 'Workload names',
+      render: (row: Partial<TableData>) => (
+        <>
+        <Typography variant="body2">{row.workload}</Typography>
+        </>
+      ),
+    },
+    {
+      title: 'Workload types',
+      render: (row: Partial<TableData>) => (
+        <>
+        <Typography variant="body2">{row.workload_type}</Typography>
+        </>
+      ),
+    },
+    {
+      title: 'Cluster names',
+      render: (row: Partial<TableData>) => (
+        <>
+          <Typography variant="body2">{row.cluster}</Typography>
+        </>
+      ),
+    },
+    {
+      title: 'Last reported',
+      render: (row: Partial<TableData>) => (
+        <>
+        <Typography variant="body2">{row.last_reported}</Typography>
+        </>
+      ),
+    }
+  ];
+
+
+  const ExampleHeader = () => (
+    <Header title="Resource Optimization">
     </Header>
-    <Content>
-      <ContentHeader title="Plugin title">
-        <SupportButton>A description of your plugin goes here.</SupportButton>
-      </ContentHeader>
-      <Grid container spacing={3} direction="column">
-        <Grid item>
-          <InfoCard title="Information card">
-            <Typography variant="body1">
-              All content should be wrapped in a card like this.
-            </Typography>
-          </InfoCard>
-        </Grid>
-        <Grid item>
-          <ExampleFetchComponent />
-        </Grid>
-      </Grid>
-    </Content>
-  </Page>
-);
+  );
+
+  const SELECT_ITEMS = [
+    {
+      label: 'Cluster 1',
+      value: 'cluster_1',
+    },
+    {
+      label: 'Cluster 2',
+      value: 'cluster_2',
+    },
+    {
+      label: 'Cluster 3',
+      value: 'cluster_3',
+    },
+  ];
+
+  const ClusterFilter = () => (
+    <Select
+      placeholder="All results"
+      label="CLUSTER"
+      items={SELECT_ITEMS}
+      multiple
+      onChange={() => {}}
+    />
+  );
+
+  const ProjectFilter = () => (
+    <Select
+      placeholder="All results"
+      label="PROJECT"
+      items={SELECT_ITEMS}
+      multiple
+      onChange={() => {}}
+    />
+  );
+
+  const WorkloadFilter = () => (
+    <Select
+      placeholder="All results"
+      label="WORKLOAD"
+      items={SELECT_ITEMS}
+      multiple
+      onChange={() => {}}
+    />
+  );
+
+  const TypeFilter = () => (
+    <Select
+      placeholder="All results"
+      label="TYPE"
+      items={SELECT_ITEMS}
+      multiple
+      onChange={() => {}}
+    />
+  );
+
+  return (
+      loading ? 
+      <Progress /> :
+      <div style={{ border: '1px solid #ddd' }}>
+        <Page themeId="tool">
+        <Content >
+            <ExampleHeader />
+            <h2>Filters</h2>
+            <br/>
+            <Grid container direction="row">
+              <Grid item xs={3}>
+                
+                  <ClusterFilter />
+                  <ProjectFilter />
+                  <WorkloadFilter />
+                  <TypeFilter />
+                
+              </Grid>
+              
+              <Grid item xs={9}>
+                <Table
+                  options={{ paging: true, padding: 'dense' }}
+                  data={generateTestData()}
+                  columns={columns}
+                  title="Optimizable containers"
+                />
+              </Grid>
+            </Grid> 
+            </Content>
+        </Page>
+      </div>
+  );
+};

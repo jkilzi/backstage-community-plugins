@@ -45,7 +45,7 @@ integrations:
 
 proxy:
   endpoints:
-    '/resource-optimization/v1':
+    '/cost-management/v1':
       target: https://console.redhat.com/api/cost-management/v1
       changeOrigin: true
       headers:
