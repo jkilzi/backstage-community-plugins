@@ -26,7 +26,7 @@ import {
 } from '@backstage/core-components';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import { ResourceOptimizationIcon } from '@backstage-community/plugin-resource-optimization';
+import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -76,7 +76,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           <SidebarItem icon={MapIcon} to="tech-radar" text="Tech Radar" />
         </SidebarScrollWrapper>
         <SidebarItem
-          icon={ResourceOptimizationIcon}
+          icon={ResourceOptimizationIconOutlined}
           to="/resource-optimization"
           text="Optimizations"
         />
