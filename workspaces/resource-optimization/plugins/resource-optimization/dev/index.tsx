@@ -1,14 +1,17 @@
 import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { resourceOptimizationPlugin, ResourceOptimizationPage } from '../src/plugin';
-import { ResourceOptimizationIcon } from '../src/components/ResourceOptimizationIcon';
+import {
+  resourceOptimizationPlugin,
+  ResourceOptimizationPage,
+} from '../src/plugin';
+import { ResourceOptimizationIconOutlined } from '../src/components/ResourceOptimizationIcon';
 
 createDevApp()
   .registerPlugin(resourceOptimizationPlugin)
   .addPage({
     element: <ResourceOptimizationPage />,
     title: 'Optimizations',
-    icon: ResourceOptimizationIcon,
+    icon: ResourceOptimizationIconOutlined,
     path: '/resource-optimization',
   })
   .addPage({
