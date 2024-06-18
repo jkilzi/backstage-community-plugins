@@ -25,7 +25,10 @@ const _toCamelCaseObjectKeysHelper = <TResult>(
     }
   } else {
     for (const [k, v] of Object.entries(current)) {
-      if (isNonNullableObject(v)) {
+      if (Array.isArray(v)) {
+        (accumulator as JsonDictionary)[camelCase(k)] =
+          _toCamelCaseObjectKeysHelper(v, []);
+      } else if (isNonNullableObject(v)) {
         (accumulator as JsonDictionary)[camelCase(k)] =
           _toCamelCaseObjectKeysHelper(v, {});
       } else {

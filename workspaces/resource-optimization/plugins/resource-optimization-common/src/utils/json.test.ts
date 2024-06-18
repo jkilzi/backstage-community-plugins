@@ -1,4 +1,5 @@
 import { mockRecommendationsList } from '../__tests__/fixtures/responses';
+import { RecommendationList } from '../generated/models';
 import { JsonDictionary, toCamelCaseObjectKeys } from './json';
 
 describe('json.ts/toCamelCaseObjectKeys', () => {
@@ -118,10 +119,15 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
     }
   });
   test('should process large JSON payloads in a feasible time', () => {
-    const result = toCamelCaseObjectKeys<Array<any>>(
-      mockRecommendationsList as JsonDictionary,
-    );
+    const mockResponse = {
+      data: [structuredClone(mockRecommendationsList.data[0])],
+      meta: structuredClone(mockRecommendationsList.meta),
+      links: structuredClone(mockRecommendationsList.links),
+    };
+    const [recommendation] = toCamelCaseObjectKeys<RecommendationList>(
+      mockResponse as JsonDictionary,
+    ).data!;
 
-    expect(Object.keys(result).every(k => !k.includes('_'))).toBe(true);
+    expect(Object.keys(recommendation).every(k => !k.includes('_'))).toBe(true);
   });
 });
