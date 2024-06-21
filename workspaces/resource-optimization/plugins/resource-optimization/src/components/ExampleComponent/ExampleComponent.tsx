@@ -1,25 +1,21 @@
 import React from 'react';
-import { Typography, Grid, Chip, Box } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import {
-  InfoCard,
   Header,
-  HeaderLabel,
-  HeaderTabs,
   Page,
   Content,
+  Link,
+  TableColumn,
+  Table,
+  Select,
+  Progress,
+  ResponseErrorPanel,
   ContentHeader,
-  Link, TrendLine,
-  TableColumn, Table,
-  SupportButton, StatusOK, GaugeCard,
-  Select,Progress, ResponseErrorPanel
 } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
-import { useApi, configApiRef } from '@backstage/core-plugin-api';
+import { useApi } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../api/refs';
-import { Apis } from "@backstage-community/plugin-resource-optimization-common";
-import { JsonUtils } from "@backstage-community/plugin-resource-optimization-common";
-import { toCamelCaseObjectKeys } from '@backstage-community/plugin-resource-optimization-common/src/utils/json';
-import { RecommendationList, Recommendations } from '@backstage-community/plugin-resource-optimization-common/src/generated/models';
+import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
 
 export default {
   title: 'Plugins/Examples',
@@ -30,184 +26,159 @@ interface TableData {
   container: string;
   project: string;
   workload: string;
-  workload_type: string;
+  workloadType: string;
   cluster: string;
-  last_reported: string;
+  lastReported: string;
 }
 
-export const ExampleComponent = () => {
+const VALUE_NOT_AVAILABLE = 'N/A';
 
-  const config = useApi(configApiRef);
+const SELECT_ITEMS = [
+  {
+    label: 'Cluster 1',
+    value: 'cluster_1',
+  },
+  {
+    label: 'Cluster 2',
+    value: 'cluster_2',
+  },
+  {
+    label: 'Cluster 3',
+    value: 'cluster_3',
+  },
+];
+
+const columns: TableColumn<Recommendations>[] = [
+  {
+    title: 'Containers',
+    highlight: true,
+    render: row => (
+      <>
+        <Link to="#message-source">{row.container}</Link>
+      </>
+    ),
+  },
+  {
+    title: 'Projects',
+    render: row => (
+      <>
+        <Typography variant="body2">{row.project}</Typography>
+      </>
+    ),
+  },
+  {
+    title: 'Workloads',
+    render: row => (
+      <>
+        <Typography variant="body2">{row.workload}</Typography>
+      </>
+    ),
+  },
+  {
+    title: 'Workload types',
+    render: row => (
+      <>
+        <Typography variant="body2">{row.workloadType}</Typography>
+      </>
+    ),
+  },
+  {
+    title: 'Clusters',
+    render: row => (
+      <>
+        <Typography variant="body2">{row.clusterAlias}</Typography>
+      </>
+    ),
+  },
+  {
+    title: 'Last reported',
+    render: row => (
+      <>
+        <Typography variant="body2">{row.lastReported?.toString()}</Typography>
+      </>
+    ),
+  },
+];
+
+const ClusterFilter = () => (
+  <Select
+    placeholder="All results"
+    label="CLUSTER"
+    items={SELECT_ITEMS}
+    multiple
+    onChange={() => {}}
+  />
+);
+
+const ProjectFilter = () => (
+  <Select
+    placeholder="All results"
+    label="PROJECT"
+    items={SELECT_ITEMS}
+    multiple
+    onChange={() => {}}
+  />
+);
+
+const WorkloadFilter = () => (
+  <Select
+    placeholder="All results"
+    label="WORKLOAD"
+    items={SELECT_ITEMS}
+    multiple
+    onChange={() => {}}
+  />
+);
+
+const TypeFilter = () => (
+  <Select
+    placeholder="All results"
+    label="TYPE"
+    items={SELECT_ITEMS}
+    multiple
+    onChange={() => {}}
+  />
+);
+
+export const ExampleComponent = () => {
   const api = useApi(optimizationsApiRef);
 
   const { value, loading, error } = useAsync(async () => {
-    return (await api.getRecommendationList({ query: {} })).text();
+    const response = await api.getRecommendationList({ query: {} });
+    const payload = await response.json();
+    return payload;
   }, []);
 
-  const generateTestData = () => {
-    const data: Array<TableData> = [];
-
-    if(value){
-      const responseData = toCamelCaseObjectKeys<RecommendationList>(JSON.parse(value));
-
-      responseData?.data?.map( (item: Recommendations) => {
-          data.push({
-            container: item.container ? item.container : '',
-            project: item.project ? item.project : '',
-            workload: item.workload ? item.workload : '',
-            workload_type: item.workloadType ? item.workloadType : '',
-            cluster:  item.clusterAlias ? item.clusterAlias : item.clusterUuid ? item.clusterUuid : '',
-            last_reported: '6 hours ago'
-        });
-      })
-    }
-
-    return data;
-  };
-
-  const columns: TableColumn[] = [
-    {
-      title: 'Container names',
-      highlight: true,
-      render: (row: Partial<TableData>) => (
-        <>
-          <Link to="#message-source">{row.container}</Link>
-        </>
-      ),
-    },
-    {
-      title: 'Project names',
-      render: (row: Partial<TableData>) => (
-        <>
-        <Typography variant="body2">{row.project}</Typography>
-        </>
-      ),
-    },
-    {
-      title: 'Workload names',
-      render: (row: Partial<TableData>) => (
-        <>
-        <Typography variant="body2">{row.workload}</Typography>
-        </>
-      ),
-    },
-    {
-      title: 'Workload types',
-      render: (row: Partial<TableData>) => (
-        <>
-        <Typography variant="body2">{row.workload_type}</Typography>
-        </>
-      ),
-    },
-    {
-      title: 'Cluster names',
-      render: (row: Partial<TableData>) => (
-        <>
-          <Typography variant="body2">{row.cluster}</Typography>
-        </>
-      ),
-    },
-    {
-      title: 'Last reported',
-      render: (row: Partial<TableData>) => (
-        <>
-        <Typography variant="body2">{row.last_reported}</Typography>
-        </>
-      ),
-    }
-  ];
-
-
-  const ExampleHeader = () => (
-    <Header title="Resource Optimization">
-    </Header>
-  );
-
-  const SELECT_ITEMS = [
-    {
-      label: 'Cluster 1',
-      value: 'cluster_1',
-    },
-    {
-      label: 'Cluster 2',
-      value: 'cluster_2',
-    },
-    {
-      label: 'Cluster 3',
-      value: 'cluster_3',
-    },
-  ];
-
-  const ClusterFilter = () => (
-    <Select
-      placeholder="All results"
-      label="CLUSTER"
-      items={SELECT_ITEMS}
-      multiple
-      onChange={() => {}}
-    />
-  );
-
-  const ProjectFilter = () => (
-    <Select
-      placeholder="All results"
-      label="PROJECT"
-      items={SELECT_ITEMS}
-      multiple
-      onChange={() => {}}
-    />
-  );
-
-  const WorkloadFilter = () => (
-    <Select
-      placeholder="All results"
-      label="WORKLOAD"
-      items={SELECT_ITEMS}
-      multiple
-      onChange={() => {}}
-    />
-  );
-
-  const TypeFilter = () => (
-    <Select
-      placeholder="All results"
-      label="TYPE"
-      items={SELECT_ITEMS}
-      multiple
-      onChange={() => {}}
-    />
-  );
+  if (loading) {
+    return <Progress />;
+  }
+  if (error) {
+    return <ResponseErrorPanel error={error} />;
+  }
 
   return (
-      loading ? 
-      <Progress /> :
-      <div style={{ border: '1px solid #ddd' }}>
-        <Page themeId="tool">
-        <Content >
-            <ExampleHeader />
-            <h2>Filters</h2>
-            <br/>
-            <Grid container direction="row">
-              <Grid item xs={3}>
-                
-                  <ClusterFilter />
-                  <ProjectFilter />
-                  <WorkloadFilter />
-                  <TypeFilter />
-                
-              </Grid>
-              
-              <Grid item xs={9}>
-                <Table
-                  options={{ paging: true, padding: 'dense' }}
-                  data={generateTestData()}
-                  columns={columns}
-                  title="Optimizable containers"
-                />
-              </Grid>
-            </Grid> 
-            </Content>
-        </Page>
-      </div>
+    <Page themeId="tool">
+      <Header title="Resource Optimization" />
+      <Content>
+        <ContentHeader title="Filters" />
+        <Grid container direction="row">
+          <Grid item xs={3}>
+            <ClusterFilter />
+            <ProjectFilter />
+            <WorkloadFilter />
+            <TypeFilter />
+          </Grid>
+
+          <Grid item xs={9}>
+            <Table<Recommendations>
+              options={{ paging: true, padding: 'dense' }}
+              data={value!.data ?? []}
+              columns={columns}
+              title="Optimizable containers"
+            />
+          </Grid>
+        </Grid>
+      </Content>
+    </Page>
   );
 };

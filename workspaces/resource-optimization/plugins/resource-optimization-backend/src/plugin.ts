@@ -2,7 +2,7 @@ import {
   coreServices,
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
-import { createRouter } from './service/router';
+import { createRouter } from './service/createRouter';
 
 /**
  * resourceOptimizationPlugin backend plugin
@@ -16,14 +16,16 @@ export const resourceOptimizationPlugin = createBackendPlugin({
       deps: {
         httpRouter: coreServices.httpRouter,
         logger: coreServices.logger,
+        config: coreServices.rootConfig,
       },
-      async init({
+      async init({ httpRouter, logger, config }) {
         httpRouter,
         logger,
       }) {
         httpRouter.use(
           await createRouter({
             logger,
+            config,
           }),
         );
         httpRouter.addAuthPolicy({
