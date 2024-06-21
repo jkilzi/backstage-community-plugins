@@ -5,10 +5,9 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import { Apis } from "@backstage-community/plugin-resource-optimization-common";
-
+import { OptimizationsClient } from '@backstage-community/plugin-resource-optimization-common';
 import { rootRouteRef } from './routes';
-import { optimizationsApiRef } from './api/refs'
+import { optimizationsApiRef } from './api/refs';
 
 export const resourceOptimizationPlugin = createPlugin({
   id: 'resource-optimization',
@@ -20,13 +19,8 @@ export const resourceOptimizationPlugin = createPlugin({
         fetchApi: fetchApiRef,
       },
       factory({ discoveryApi, fetchApi }) {
-        return new Apis.OptimizationsApiClient({
-          discoveryApi: {
-            async getBaseUrl() {
-              const baseUrl = await discoveryApi.getBaseUrl('proxy');
-              return `${baseUrl}/cost-management/v1`;
-            },
-          },
+        return new OptimizationsClient({
+          discoveryApi,
           fetchApi,
         });
       },

@@ -1,2 +1,2 @@
-export * from './service/router';
+export * from './service/createRouter';
 export { resourceOptimizationPlugin as default } from './plugin';

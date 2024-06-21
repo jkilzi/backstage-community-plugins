@@ -1,4 +1,3 @@
-
-export * as Apis from './generated/apis';
-export * as Models from './generated/models';
-export * as JsonUtils from './utils/json';
+export * from './generated/models';
+export { OptimizationsClient } from './OptimizationsClient';
+export type { OptimizationsApi } from './OptimizationsClient';
