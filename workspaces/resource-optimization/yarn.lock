@@ -2792,6 +2792,7 @@ __metadata:
   resolution: "@backstage-community/plugin-resource-optimization-common@workspace:plugins/resource-optimization-common"
   dependencies:
     "@backstage/cli": ^0.26.3
+    "@backstage/types": ^1.1.1
     "@types/lodash": ^4.17.5
     cross-fetch: ^4.0.0
     lodash: ^4.17.21
