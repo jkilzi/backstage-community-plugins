@@ -1,24 +1,26 @@
 import { errorHandler } from '@backstage/backend-common';
-import { LoggerService } from '@backstage/backend-plugin-api';
+import {
+  LoggerService,
+  RootConfigService,
+} from '@backstage/backend-plugin-api';
 import express from 'express';
 import Router from 'express-promise-router';
+import { registerHealthRoutes } from '../routes/health';
+import { registerTokenRoutes } from '../routes/token';
 
 export interface RouterOptions {
   logger: LoggerService;
+  config: RootConfigService;
 }
 
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger } = options;
-
   const router = Router();
   router.use(express.json());
 
-  router.get('/health', (_, response) => {
-    logger.info('PONG!');
-    response.json({ status: 'ok' });
-  });
+  registerHealthRoutes(router, options);
+  registerTokenRoutes(router, options);
 
   router.use(errorHandler());
   return router;

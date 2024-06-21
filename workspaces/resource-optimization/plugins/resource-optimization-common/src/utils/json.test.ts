@@ -1,8 +1,9 @@
+import camelCase from 'lodash/camelCase';
 import { mockRecommendationsList } from '../__tests__/fixtures/responses';
-import { RecommendationList } from '../generated/models';
-import { JsonDictionary, toCamelCaseObjectKeys } from './json';
+import type { RecommendationList } from '../generated/models';
+import { deepMapKeys } from './json';
 
-describe('json.ts/toCamelCaseObjectKeys', () => {
+describe('json.ts/deepMapKeys', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -11,17 +12,7 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
     const jsonString =
       '{ "first_name": "John", "last_name": "Doe", "address": { "street_name": "Main St" }}';
 
-    type Address = {
-      streetName: string;
-    };
-
-    type Person = {
-      firstName: string;
-      lastName: string;
-      address: Address;
-    };
-
-    const result = toCamelCaseObjectKeys<Person>(JSON.parse(jsonString));
+    const result = deepMapKeys(JSON.parse(jsonString), camelCase);
     expect(result).toEqual({
       firstName: 'John',
       lastName: 'Doe',
@@ -35,23 +26,7 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
     const nestedJsonString =
       '{"user_info": {"user_name": "Alice", "user_age": 30}, "account_details": {"account_number": "12345"}}';
 
-    type AccountDetails = {
-      accountNumber: string;
-    };
-
-    type UserInfo = {
-      userName: string;
-      userAge: number;
-    };
-
-    type NestedObject = {
-      userInfo: UserInfo;
-      accountDetails: AccountDetails;
-    };
-
-    const result: NestedObject = toCamelCaseObjectKeys<NestedObject>(
-      JSON.parse(nestedJsonString),
-    );
+    const result = deepMapKeys(JSON.parse(nestedJsonString), camelCase);
 
     expect(result).toEqual({
       userInfo: {
@@ -65,7 +40,7 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
   });
 
   test('should return an empty object for empty JSON', () => {
-    const result = toCamelCaseObjectKeys<any>(JSON.parse('{}'));
+    const result = deepMapKeys(JSON.parse('{}'));
     expect(result).toEqual({});
   });
 
@@ -73,13 +48,9 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
     const arrayJsonString =
       '[{"item_name": "Item1", "item_price": 10}, {"item_name": "Item2", "item_price": 20}]';
 
-    type Item = {
-      itemName: string;
-      itemPrice: number;
-    };
-
-    const result: Item[] = toCamelCaseObjectKeys<Item[]>(
+    const result = deepMapKeys(
       JSON.parse(arrayJsonString),
+      camelCase,
     );
 
     expect(result).toEqual([
@@ -92,7 +63,7 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
     const mixedArrayJsonString =
       '[{"item_name": "Item1"}, 10, {"l_1": {"second_level": false, "third_level": true}}, null, "foo_bar"]';
 
-    const result = toCamelCaseObjectKeys(JSON.parse(mixedArrayJsonString));
+    const result = deepMapKeys(JSON.parse(mixedArrayJsonString), camelCase);
 
     expect(result).toEqual([
       { itemName: 'Item1' },
@@ -103,29 +74,22 @@ describe('json.ts/toCamelCaseObjectKeys', () => {
     ]);
   });
 
-  test('should throw when the given value is not an object or array', () => {
-    const nonValidValueTypes = ['null', 'false', 'true', 'foo_bar', '0'];
-    const target = { toCamelCaseObjectKeys };
-    const spyOnSubject = jest.spyOn(target, 'toCamelCaseObjectKeys');
+  test('should return the same value when the given value is a JSON primitive value', () => {
+    const primitiveValues = [null, false, true, 'some_string', 42];
 
-    for (const v of nonValidValueTypes) {
-      try {
-        toCamelCaseObjectKeys(JSON.parse(v));
-      } catch {
-        // skip...
-      }
-
-      expect(spyOnSubject).toThrow(/Illegal argument exception/);
+    for (const v of primitiveValues) {
+      expect(deepMapKeys(v, camelCase)).toEqual(v);
     }
   });
+
   test('should process large JSON payloads in a feasible time', () => {
     const mockResponse = {
-      data: [structuredClone(mockRecommendationsList.data[0])],
-      meta: structuredClone(mockRecommendationsList.meta),
-      links: structuredClone(mockRecommendationsList.links),
+      data: [mockRecommendationsList.data[0]],
+      meta: mockRecommendationsList.meta,
+      links: mockRecommendationsList.links,
     };
-    const [recommendation] = toCamelCaseObjectKeys<RecommendationList>(
-      mockResponse as JsonDictionary,
+    const [recommendation] = (
+      deepMapKeys(mockResponse, camelCase) as RecommendationList
     ).data!;
 
     expect(Object.keys(recommendation).every(k => !k.includes('_'))).toBe(true);
