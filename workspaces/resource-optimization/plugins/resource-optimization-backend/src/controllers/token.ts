@@ -2,6 +2,8 @@ import { RequestHandler } from 'express';
 import { GetTokenResponse } from '../models/token/GetTokenResponse';
 import { RouterOptions } from '../service/createRouter';
 
+const DEFAULT_SSO_BASE_URL = 'https://sso.redhat.com';
+
 export const getToken: (options: RouterOptions) => RequestHandler =
   options => async (_, response) => {
     const { logger, config } = options;
@@ -10,7 +12,7 @@ export const getToken: (options: RouterOptions) => RequestHandler =
 
     const clientId = config.getString('resourceOptimization.clientId');
     const clientSecret = config.getString('resourceOptimization.clientSecret');
-    const ssoBaseUrl = config.getString('resourceOptimization.ssoBaseUrl');
+    const ssoBaseUrl = config.getOptionalString('resourceOptimization.ssoBaseUrl') ?? DEFAULT_SSO_BASE_URL;
 
     const params = {
       tokenUrl: `${ssoBaseUrl}/auth/realms/redhat-external/protocol/openid-connect/token`,
