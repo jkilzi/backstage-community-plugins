@@ -22,16 +22,7 @@ export default {
   component: Page,
 };
 
-interface TableData {
-  container: string;
-  project: string;
-  workload: string;
-  workloadType: string;
-  cluster: string;
-  lastReported: string;
-}
-
-const VALUE_NOT_AVAILABLE = 'N/A';
+// const VALUE_NOT_AVAILABLE = 'N/A';
 
 const SELECT_ITEMS = [
   {
@@ -52,50 +43,28 @@ const columns: TableColumn<Recommendations>[] = [
   {
     title: 'Containers',
     highlight: true,
-    render: row => (
-      <>
-        <Link to="#message-source">{row.container}</Link>
-      </>
-    ),
+    render: row => <Link to="#message-source">{row.container}</Link>,
   },
   {
     title: 'Projects',
-    render: row => (
-      <>
-        <Typography variant="body2">{row.project}</Typography>
-      </>
-    ),
+    render: row => <Typography variant="body2">{row.project}</Typography>,
   },
   {
     title: 'Workloads',
-    render: row => (
-      <>
-        <Typography variant="body2">{row.workload}</Typography>
-      </>
-    ),
+    render: row => <Typography variant="body2">{row.workload}</Typography>,
   },
   {
     title: 'Workload types',
-    render: row => (
-      <>
-        <Typography variant="body2">{row.workloadType}</Typography>
-      </>
-    ),
+    render: row => <Typography variant="body2">{row.workloadType}</Typography>,
   },
   {
     title: 'Clusters',
-    render: row => (
-      <>
-        <Typography variant="body2">{row.clusterAlias}</Typography>
-      </>
-    ),
+    render: row => <Typography variant="body2">{row.clusterAlias}</Typography>,
   },
   {
     title: 'Last reported',
     render: row => (
-      <>
-        <Typography variant="body2">{row.lastReported?.toString()}</Typography>
-      </>
+      <Typography variant="body2">{row.lastReported?.toString()}</Typography>
     ),
   },
 ];
@@ -152,6 +121,7 @@ export const ExampleComponent = () => {
   if (loading) {
     return <Progress />;
   }
+
   if (error) {
     return <ResponseErrorPanel error={error} />;
   }
