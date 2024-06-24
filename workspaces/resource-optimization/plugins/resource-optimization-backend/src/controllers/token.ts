@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { RequestHandler } from 'express';
 import { GetTokenResponse } from '../models/token/GetTokenResponse';
 import { RouterOptions } from '../service/createRouter';
@@ -8,11 +9,15 @@ export const getToken: (options: RouterOptions) => RequestHandler =
   options => async (_, response) => {
     const { logger, config } = options;
 
+    assert(typeof config !== 'undefined', 'Config is undefined');
+
     logger.info('Requesting new access token');
 
     const clientId = config.getString('resourceOptimization.clientId');
     const clientSecret = config.getString('resourceOptimization.clientSecret');
-    const ssoBaseUrl = config.getOptionalString('resourceOptimization.ssoBaseUrl') ?? DEFAULT_SSO_BASE_URL;
+    const ssoBaseUrl =
+      config.getOptionalString('resourceOptimization.ssoBaseUrl') ??
+      DEFAULT_SSO_BASE_URL;
 
     const params = {
       tokenUrl: `${ssoBaseUrl}/auth/realms/redhat-external/protocol/openid-connect/token`,
