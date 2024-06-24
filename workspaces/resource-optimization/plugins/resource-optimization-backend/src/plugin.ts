@@ -19,9 +19,6 @@ export const resourceOptimizationPlugin = createBackendPlugin({
         config: coreServices.rootConfig,
       },
       async init({ httpRouter, logger, config }) {
-        httpRouter,
-        logger,
-      }) {
         httpRouter.use(
           await createRouter({
             logger,
@@ -31,6 +28,10 @@ export const resourceOptimizationPlugin = createBackendPlugin({
         httpRouter.addAuthPolicy({
           path: '/health',
           allow: 'unauthenticated',
+        });
+        httpRouter.addAuthPolicy({
+          path: '/token',
+          allow: 'user-cookie',
         });
       },
     });
