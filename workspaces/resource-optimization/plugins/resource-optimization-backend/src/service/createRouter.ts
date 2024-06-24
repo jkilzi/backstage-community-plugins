@@ -10,7 +10,7 @@ import { registerTokenRoutes } from '../routes/token';
 
 export interface RouterOptions {
   logger: LoggerService;
-  config: RootConfigService;
+  config?: RootConfigService;
 }
 
 export async function createRouter(
