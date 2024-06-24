@@ -2794,6 +2794,7 @@ __metadata:
     "@backstage/cli": ^0.26.3
     "@backstage/types": ^1.1.1
     "@types/lodash": ^4.17.5
+    "@y0n1/json": "npm:@jsr/y0n1__json@1.0.0-rc.1"
     cross-fetch: ^4.0.0
     lodash: ^4.17.21
     uri-template: ^2.0.0
@@ -13271,6 +13272,13 @@ __metadata:
   version: 4.2.2
   resolution: "@xtuc/long@npm:4.2.2"
   checksum: 8ed0d477ce3bc9c6fe2bf6a6a2cc316bb9c4127c5a7827bae947fa8ec34c7092395c5a283cc300c05b5fa01cbbfa1f938f410a7bf75db7c7846fea41949989ec
+  languageName: node
+  linkType: hard
+
+"@y0n1/json@npm:@jsr/y0n1__json@1.0.0-rc.1":
+  version: 1.0.0-rc.1
+  resolution: "@jsr/y0n1__json@npm:1.0.0-rc.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fy0n1__json%2F1.0.0-rc.1.tgz"
+  checksum: 149390946c008192e1c86ffc859f3d60792a5b8ee3a18482d24e4363f7c0cabd1250cd4f7c45d2e3dea8726ac2a2d0ba8a37316f21ef76a2a8884bf8ec353d4e
   languageName: node
   linkType: hard
 

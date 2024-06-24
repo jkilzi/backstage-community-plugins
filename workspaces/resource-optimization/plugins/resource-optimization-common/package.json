@@ -34,6 +34,7 @@
     "yaml": "^2.4.2"
   },
   "dependencies": {
+    "@y0n1/json": "npm:@jsr/y0n1__json@1.0.0-rc.1",
     "cross-fetch": "^4.0.0",
     "lodash": "^4.17.21",
     "uri-template": "^2.0.0"
