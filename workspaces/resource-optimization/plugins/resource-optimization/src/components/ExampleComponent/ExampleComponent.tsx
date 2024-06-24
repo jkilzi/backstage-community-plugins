@@ -24,7 +24,6 @@ export default {
   component: Page,
 };
 
-// const VALUE_NOT_AVAILABLE = 'N/A';
 
 const SELECT_ITEMS = [
   {
@@ -79,7 +78,7 @@ const columns: TableColumn<Recommendations>[] = [
 const ClusterFilter = () => (
   <>
     <SearchBar
-        placeholder="Filter by cluster"
+        placeholder="Filter by Cluster"
         debounceTime={700}
     />
     
@@ -93,29 +92,27 @@ const ClusterFilter = () => (
 );
 
 const ProjectFilter = () => (
-  <Select
-    placeholder="All results"
-    label="PROJECT"
-    items={SELECT_ITEMS}
-    multiple
-    onChange={() => {}}
-  />
+  <>
+    <SearchBar
+        placeholder="Filter by Project"
+        debounceTime={700}
+    />
+  </>
 );
 
 const WorkloadFilter = () => (
-  <Select
-    placeholder="All results"
-    label="WORKLOAD"
-    items={SELECT_ITEMS}
-    multiple
-    onChange={() => {}}
-  />
+  <>
+    <SearchBar
+        placeholder="Filter by Workload"
+        debounceTime={700}
+    />
+  </>
 );
 
 const TypeFilter = () => (
   <Select
     placeholder="All results"
-    label="TYPE"
+    label="WorkLoad Type"
     items={SELECT_ITEMS}
     multiple
     onChange={() => {}}
@@ -161,8 +158,9 @@ export const ExampleComponent = () => {
               title={tableTitle}
               options={{ 
                 debounceInterval: 700,
-                filtering: true, 
+                filtering: false, 
                 paging: true, 
+                search: true,
                 padding: 'dense'}}
               data={query =>
                 new Promise((resolve, reject) => {
@@ -170,7 +168,7 @@ export const ExampleComponent = () => {
                     // prepare your data and then call resolve like this:
                     const offset = query.page * query.pageSize;
                     
-                    const apiQuery: APIQuery = {
+                    const apiQuery: Parameters<typeof api.getRecommendationList>[0]['query'] = {
                       limit: query.pageSize, 
                       offset: offset, 
                     }
@@ -181,8 +179,8 @@ export const ExampleComponent = () => {
                     }
 
                     if(query.orderBy){
-                      apiQuery.order_by = query.orderBy.field;
-                      apiQuery.order_how = query.orderDirection
+                      apiQuery.orderBy = query.orderBy.field;
+                      apiQuery.orderHow = query.orderDirection
                     }
 
                     if(query.filters.length){
