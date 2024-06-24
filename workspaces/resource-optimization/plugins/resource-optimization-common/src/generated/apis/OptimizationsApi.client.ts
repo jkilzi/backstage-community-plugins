@@ -125,6 +125,7 @@ export class OptimizationsApiClient {
       ...request.query,
     });
 
+    console.log("Query:", request.query);
     return await this.fetchApi.fetch(`${baseUrl}${uri}`, {
       headers: {
         'Content-Type': 'application/json',

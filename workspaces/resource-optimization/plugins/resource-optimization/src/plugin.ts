@@ -39,3 +39,12 @@ export const ResourceOptimizationPage = resourceOptimizationPlugin.provide(
     mountPoint: rootRouteRef,
   }),
 );
+
+export const ResourceOptimizationDetailPage = resourceOptimizationPlugin.provide(
+  createRoutableExtension({
+    name: 'ResourceOptimizationPage',
+    component: () =>
+      import('./components/ExampleFetchComponent').then(m => m.ExampleFetchComponent),
+    mountPoint: rootRouteRef,
+  }),
+);

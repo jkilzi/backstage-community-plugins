@@ -1,5 +1,5 @@
-import React from 'react';
-import { Typography, Grid } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Typography, Grid, Chip } from '@material-ui/core';
 import {
   Header,
   Page,
@@ -12,10 +12,12 @@ import {
   ResponseErrorPanel,
   ContentHeader,
 } from '@backstage/core-components';
+import { SearchBar } from '@backstage/plugin-search-react';
 import useAsync from 'react-use/lib/useAsync';
 import { useApi } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../api/refs';
 import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
+import { getTimeFromNow } from '../../utils/dates';
 
 export default {
   title: 'Plugins/Examples',
@@ -63,20 +65,31 @@ const columns: TableColumn<Recommendations>[] = [
   },
   {
     title: 'Last reported',
+    field: 'last_reported',
+    defaultSort: 'desc',
+    filtering: false,
     render: row => (
-      <Typography variant="body2">{row.lastReported?.toString()}</Typography>
+      <>
+        <Typography variant="body2">{getTimeFromNow(row.lastReported?.toString())}</Typography>
+      </>
     ),
   },
 ];
 
 const ClusterFilter = () => (
-  <Select
-    placeholder="All results"
-    label="CLUSTER"
-    items={SELECT_ITEMS}
-    multiple
-    onChange={() => {}}
-  />
+  <>
+    <SearchBar
+        placeholder="Filter by cluster"
+        debounceTime={700}
+    />
+    
+    <Chip
+      label='demo'
+      size='medium'
+      variant='default'
+      onDelete={() => ({})} />
+  </>
+  
 );
 
 const ProjectFilter = () => (
@@ -118,6 +131,7 @@ export const ExampleComponent = () => {
     return payload;
   }, []);
 
+
   if (loading) {
     return <Progress />;
   }
@@ -125,6 +139,9 @@ export const ExampleComponent = () => {
   if (error) {
     return <ResponseErrorPanel error={error} />;
   }
+
+
+  const tableTitle = `Optimizable containers (${value?.meta?.count || 0})`;
 
   return (
     <Page themeId="tool">
@@ -141,11 +158,52 @@ export const ExampleComponent = () => {
 
           <Grid item xs={9}>
             <Table<Recommendations>
-              options={{ paging: true, padding: 'dense' }}
-              data={value!.data ?? []}
+              title={tableTitle}
+              options={{ 
+                debounceInterval: 700,
+                filtering: true, 
+                paging: true, 
+                padding: 'dense'}}
+              data={query =>
+                new Promise((resolve, reject) => {
+                    console.log("Checking Query:", query);
+                    // prepare your data and then call resolve like this:
+                    const offset = query.page * query.pageSize;
+                    
+                    const apiQuery: APIQuery = {
+                      limit: query.pageSize, 
+                      offset: offset, 
+                    }
+                    
+                    if(query.search){
+                      const constainerValue = query.search;
+                      apiQuery.container = constainerValue;
+                    }
+
+                    if(query.orderBy){
+                      apiQuery.order_by = query.orderBy.field;
+                      apiQuery.order_how = query.orderDirection
+                    }
+
+                    if(query.filters.length){
+                      console.log("Filters:", query.filters);
+                    }
+
+                    api.getRecommendationList({ query: apiQuery }).then(
+                      response => response.json()).then(response =>{
+                        const pageNumber = Math.floor(offset / query.pageSize);
+          
+                        resolve({
+                          data: response.data || [],// your data array
+                          page: pageNumber,// current page number
+                          totalCount: response.meta?.count || 0// total row number
+                      });  
+                  });
+                })
+              }
               columns={columns}
-              title="Optimizable containers"
             />
+          
           </Grid>
         </Grid>
       </Content>
