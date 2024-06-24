@@ -14,7 +14,7 @@ import type {
 import type { DiscoveryApi } from './generated/types/discovery';
 import type { FetchApi } from './generated/types/fetch';
 import type { GetTokenResponse } from './types/token';
-import { deepMapKeys } from './utils/json';
+import { deepMapKeys } from '@y0n1/json/deep-map-keys';
 
 export type OptimizationsApi = Omit<
   OptimizationsApiInternal,
