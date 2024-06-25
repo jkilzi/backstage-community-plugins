@@ -128,7 +128,6 @@ export const ExampleComponent = () => {
 
   const handleOnOrderChange = (orderBy: number, orderDirection: SortOrder) => {
     if(orderBy >= 0) {
-      console.log("Handle order change:", columns[orderBy].field, orderDirection);
       setOrderBy(`${columns[orderBy].field}`);
       setOrderDirection(orderDirection);
     }
@@ -160,7 +159,9 @@ export const ExampleComponent = () => {
                 debounceInterval: 700,
                 paging: true,
                 search: true,
-                padding: 'dense'}}
+                padding: 'dense',
+                thirdSortClick: false
+              }}
               data={value?.data || []}
               isLoading={loading}
               columns={columns}
