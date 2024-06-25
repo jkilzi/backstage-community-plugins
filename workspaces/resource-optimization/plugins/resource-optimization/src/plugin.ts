@@ -42,9 +42,9 @@ export const ResourceOptimizationPage = resourceOptimizationPlugin.provide(
 
 export const ResourceOptimizationDetailPage = resourceOptimizationPlugin.provide(
   createRoutableExtension({
-    name: 'ResourceOptimizationPage',
+    name: 'ResourceOptimizationDetailPage',
     component: () =>
-      import('./components/ExampleFetchComponent').then(m => m.ExampleFetchComponent),
+      import('./components/RosDetailComponent').then(m => m.RosDetailComponent),
     mountPoint: rootRouteRef,
   }),
 );
