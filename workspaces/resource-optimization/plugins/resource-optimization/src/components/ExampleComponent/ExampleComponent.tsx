@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, Chip } from '@material-ui/core';
 import {
   Header,
@@ -83,30 +83,35 @@ const TypeFilter = () => (
   />
 );
 
+type SortOrder = 'asc' | 'desc';
 
 export const ExampleComponent = () => {
   const api = useApi(optimizationsApiRef);
 
-  const [data, setData] = useState<Recommendations[]>([]);
-
   const [page, setPage] = useState(0);  // first page starts at 0
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [offset, setOffset] = useState(0);
-  
+
+  const [orderBy, setOrderBy] = useState('last_reported');
+  const [orderDirection, setOrderDirection] = useState<SortOrder>('desc');
+
+
 
   const { value, loading, error } = useAsync(async () => {
+    const offsetValue = page * rowsPerPage;
+    
+    const apiQuery: Parameters<typeof api.getRecommendationList>[0]['query'] = {
+      limit: rowsPerPage, 
+      offset: offsetValue,
+      orderBy: orderBy,
+      orderHow: orderDirection
+    }
 
     const response = await api.getRecommendationList({ 
-      query: { 
-        limit: rowsPerPage, 
-        offset: 0,
-        orderBy: 'last_reported',
-        orderHow: 'desc'
-      } 
+      query: apiQuery 
     });
     const payload = await response.json();
     return payload;
-  }, []);
+  }, [rowsPerPage, page, orderBy, orderDirection]);
   
   
   if (error) {
@@ -121,9 +126,11 @@ export const ExampleComponent = () => {
     setPage(page);
   };
 
-  const handleOnOrderChange = (orderBy: number, orderDirection: 'asc' | 'desc') => {
+  const handleOnOrderChange = (orderBy: number, orderDirection: SortOrder) => {
     if(orderBy >= 0) {
       console.log("Handle order change:", columns[orderBy].field, orderDirection);
+      setOrderBy(`${columns[orderBy].field}`);
+      setOrderDirection(orderDirection);
     }
   }
 
@@ -163,9 +170,7 @@ export const ExampleComponent = () => {
               onRowsPerPageChange={handleChangeRowsPerPage}
               onOrderChange={handleOnOrderChange}
               onSearchChange={handleOnSearchChange}
-              
             />
-          
           </Grid>
         </Grid>
       </Content>

@@ -12,58 +12,32 @@ export const columns: TableColumn<Recommendations>[] = [
     {
       title: 'Container names',
       field: 'container',
-      render: row => (
-        <>
-          <Link to="/resource-optimization/1">{row.container}</Link>
-        </>
-      ),
+      render: row => <Link to="/resource-optimization/1">{row.container}</Link>
     },
     {
       title: 'Project names',
       field: 'project',
-      render: row => (
-        <>
-          <Typography variant="body2">{row.project}</Typography>
-        </>
-      ),
+      render: row => <Typography variant="body2">{row.project}</Typography>
     },
     {
       title: 'Workload names',
       field: 'workload',
-      render: row => (
-        <>
-          <Typography variant="body2">{row.workload}</Typography>
-        </>
-      ),
+      render: row => <Typography variant="body2">{row.workload}</Typography>
     },
     {
       title: 'Workload types',
       field: 'workload_type',
-      render: row => (
-        <>
-          <Typography variant="body2">{row.workloadType}</Typography>
-        </>
-      ),
+      render: row => <Typography variant="body2">{row.workloadType}</Typography>
     },
     {
       title: 'Cluster name',
       field: 'cluster',
-      render: row => (
-        <>
-          <Typography variant="body2">{row.clusterAlias}</Typography>
-        </>
-      ),
+      render: row => <Typography variant="body2">{row.clusterAlias}</Typography>
     },
     {
       title: 'Last reported',
       field: 'last_reported',
-      defaultSort: 'desc',
-      filtering: false,
-      render: row => (
-        <>
-          <Typography variant="body2">{getTimeFromNow(row.lastReported?.toString())}</Typography>
-        </>
-      ),
+      render: row => <Typography variant="body2">{getTimeFromNow(row.lastReported?.toString())}</Typography>
     },
   ];
 
