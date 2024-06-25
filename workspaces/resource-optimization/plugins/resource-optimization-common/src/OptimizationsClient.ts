@@ -1,5 +1,6 @@
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
+import snakeCase from 'lodash/snakeCase';
 import {
   OptimizationsApiClient,
   RequestOptions,
@@ -56,9 +57,10 @@ export class OptimizationsClient implements OptimizationsApi {
       this._token = accessToken;
     }
 
-    const response: Awaited<ReturnType<F>> = await asyncOp.call(
+    const transformedRequest = deepMapKeys(request, snakeCase);
+    let response: Awaited<ReturnType<F>> = await asyncOp.call(
       this._client,
-      request,
+      transformedRequest,
       {
         token: this._token,
       },
@@ -69,15 +71,21 @@ export class OptimizationsClient implements OptimizationsApi {
         const { accessToken } = await this.getNewToken();
         this._token = accessToken;
 
-        return await asyncOp.call(this._client, request, {
+        response = await asyncOp.call(this._client, transformedRequest, {
           token: this._token,
         });
+      } else {
+        throw new Error(response.statusText);
       }
-
-      throw new Error(response.statusText);
     }
 
-    return response;
+    const data = await response.json();
+    const transformedData = deepMapKeys(data, camelCase);
+
+    return {
+      ...response,
+      json: () => Promise.resolve(transformedData),
+    };
   }
 
   public async getRecommendationById(
@@ -95,16 +103,7 @@ export class OptimizationsClient implements OptimizationsApi {
       request,
     );
 
-    const data = await response.json();
-    const dataWithCamelCaseKeys = deepMapKeys(
-      data,
-      camelCase,
-    ) as RecommendationBoxPlots;
-
-    return {
-      ...response,
-      json: () => Promise.resolve(dataWithCamelCaseKeys),
-    };
+    return response;
   }
 
   public async getRecommendationList(
@@ -130,15 +129,6 @@ export class OptimizationsClient implements OptimizationsApi {
       request,
     );
 
-    const data = await response.json();
-    const dataWithCamelCaseKeys = deepMapKeys(
-      data,
-      camelCase,
-    ) as RecommendationList;
-
-    return {
-      ...response,
-      json: () => Promise.resolve(dataWithCamelCaseKeys),
-    };
+    return response;
   }
 }
