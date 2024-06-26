@@ -5,6 +5,8 @@ import {
   TableColumn,
   Progress,
   ResponseErrorPanel,
+  Page,
+  Header,
 } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 
@@ -293,7 +295,6 @@ export const DenseTable = ({ users }: DenseTableProps) => {
 };
 
 export const ExampleFetchComponent = () => {
-
   const { value, loading, error } = useAsync(async (): Promise<User[]> => {
     // Would use fetch in a real world example
     return exampleUsers.results;

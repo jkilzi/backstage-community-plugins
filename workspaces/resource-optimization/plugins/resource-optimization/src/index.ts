@@ -1,4 +1,4 @@
-export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';
+export { resourceOptimizationPlugin, ResourceOptimizationPage, ResourceOptimizationDetailPage } from './plugin';
 export {
   ResourceOptimizationIcon,
   ResourceOptimizationIconFilled,
