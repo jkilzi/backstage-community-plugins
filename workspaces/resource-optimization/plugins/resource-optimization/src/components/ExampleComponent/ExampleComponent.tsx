@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Chip } from '@material-ui/core';
+import { Grid, Chip, Typography } from '@material-ui/core';
 import {
   Header,
   Page,
@@ -9,6 +9,7 @@ import {
   Progress,
   ResponseErrorPanel,
   ContentHeader,
+  SupportButton,
 } from '@backstage/core-components';
 import { SearchBar } from '@backstage/plugin-search-react';
 import useAsync from 'react-use/lib/useAsync';
@@ -16,6 +17,10 @@ import { useApi } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../api/refs';
 import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
 import { columns } from '../Tables/columns';
+import {
+  CatalogFilterLayout,
+  EntityListProvider,
+} from '@backstage/plugin-catalog-react';
 
 export default {
   title: 'Plugins/Examples',
@@ -38,18 +43,33 @@ const SELECT_ITEMS = [
 ];
 
 const ClusterFilter = () => (
-  <>
-    <SearchBar placeholder="Filter by Cluster" debounceTime={700} />
-    <Chip label="demo" size="medium" variant="default" onDelete={() => ({})} />
-  </>
+  <Select
+    placeholder="All results"
+    label="Cluster"
+    items={SELECT_ITEMS}
+    multiple
+    onChange={() => {}}
+  />
 );
 
 const ProjectFilter = () => (
-  <SearchBar placeholder="Filter by Project" debounceTime={700} />
+  <Select
+    placeholder="All results"
+    label="Project"
+    items={SELECT_ITEMS}
+    multiple
+    onChange={() => {}}
+  />
 );
 
 const WorkloadFilter = () => (
-  <SearchBar placeholder="Filter by Workload" debounceTime={700} />
+  <Select
+    placeholder="All results"
+    label="Workload"
+    items={SELECT_ITEMS}
+    multiple
+    onChange={() => {}}
+  />
 );
 
 const TypeFilter = () => (
@@ -119,37 +139,43 @@ export const ExampleComponent = () => {
     <Page themeId="tool">
       <Header title="Resource Optimization" />
       <Content>
-        <ContentHeader title="Filters" />
-        <Grid container direction="row">
-          <Grid item xs={3}>
-            <ClusterFilter />
-            <ProjectFilter />
-            <WorkloadFilter />
-            <TypeFilter />
-          </Grid>
+        <ContentHeader title="">
+          <SupportButton>All your optimizations</SupportButton>
+        </ContentHeader>
 
-          <Grid item xs={9}>
-            <Table<Recommendations>
-              title={tableTitle}
-              options={{
-                debounceInterval: 700,
-                paging: true,
-                search: true,
-                padding: 'dense',
-                thirdSortClick: false,
-              }}
-              data={value?.data || []}
-              isLoading={loading}
-              columns={columns}
-              totalCount={value?.meta?.count || 0}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              onOrderChange={handleOnOrderChange}
-              onSearchChange={handleOnSearchChange}
-            />
-          </Grid>
-        </Grid>
+        <EntityListProvider>
+          <CatalogFilterLayout>
+            <CatalogFilterLayout.Filters>
+              <Typography variant="h6">Filters</Typography>
+              <hr></hr>
+              <ClusterFilter />
+              <ProjectFilter />
+              <WorkloadFilter />
+              <TypeFilter />
+            </CatalogFilterLayout.Filters>
+            <CatalogFilterLayout.Content>
+              <Table<Recommendations>
+                title={tableTitle}
+                options={{
+                  debounceInterval: 700,
+                  paging: true,
+                  search: true,
+                  padding: 'dense',
+                  thirdSortClick: false,
+                }}
+                data={value?.data || []}
+                isLoading={loading}
+                columns={columns}
+                totalCount={value?.meta?.count || 0}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                onOrderChange={handleOnOrderChange}
+                onSearchChange={handleOnSearchChange}
+              />
+            </CatalogFilterLayout.Content>
+          </CatalogFilterLayout>
+        </EntityListProvider>
       </Content>
     </Page>
   );
