@@ -38,7 +38,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-resource-optimization';
-import { ResourceOptimizationDetailPage } from '@backstage-community/plugin-resource-optimization/src/plugin';
+import { ResourceOptimizationDetailPage } from '@backstage-community/plugin-resource-optimization';
 
 const app = createApp({
   apis,

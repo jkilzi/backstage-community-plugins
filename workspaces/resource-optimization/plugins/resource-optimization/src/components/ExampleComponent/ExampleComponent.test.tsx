@@ -6,7 +6,39 @@ import { screen } from '@testing-library/react';
 import {
   setupRequestMockHandlers,
   renderInTestApp,
+  TestApiRegistry,
 } from '@backstage/test-utils';
+import { ApiProvider } from '@backstage/core-app-api';
+import { optimizationsApiRef } from '../../api/refs';
+import { searchApiRef } from '@backstage/plugin-search-react';
+import { getRecommendationMockResponse } from './mockResponses';
+import { RecommendationList } from '@backstage-community/plugin-resource-optimization-common';
+import { TypedResponse } from '@backstage-community/plugin-resource-optimization-common/src/generated/apis/OptimizationsApi.client';
+
+const emptySearchResults = Promise.resolve({
+  results: [],
+});
+
+const recommendationsListResult: Promise<TypedResponse<RecommendationList>> =
+  new Promise((resolve, reject) => {
+    return {
+      json: async () => getRecommendationMockResponse,
+    };
+  });
+
+const query = () => emptySearchResults;
+const querySpy = jest.fn(query);
+const searchApi = { query: querySpy };
+
+const getRecommendationList = () => recommendationsListResult;
+const getRecommendationListSpy = jest.fn(getRecommendationList);
+const optimizationApi = { getRecommendationList: getRecommendationListSpy };
+
+// create apiRegistry for mocking apis
+const apiRegistry = TestApiRegistry.from(
+  [searchApiRef, searchApi],
+  [optimizationsApiRef, optimizationApi],
+);
 
 describe('ExampleComponent', () => {
   const server = setupServer();
@@ -21,9 +53,12 @@ describe('ExampleComponent', () => {
   });
 
   it('should render', async () => {
-    await renderInTestApp(<ExampleComponent />);
-    expect(
-      screen.getByText('Welcome to resource-optimization!'),
-    ).toBeInTheDocument();
+    expect(1).toBeTruthy();
+    await renderInTestApp(
+      <ApiProvider apis={apiRegistry}>
+        <ExampleComponent />
+      </ApiProvider>,
+    );
+    expect(screen.getByText('Resource Optimization')).toBeInTheDocument();
   });
 });

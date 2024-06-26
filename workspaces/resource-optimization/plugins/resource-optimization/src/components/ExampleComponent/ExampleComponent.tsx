@@ -22,7 +22,6 @@ export default {
   component: Page,
 };
 
-
 const SELECT_ITEMS = [
   {
     label: 'Cluster 1',
@@ -38,39 +37,19 @@ const SELECT_ITEMS = [
   },
 ];
 
-
 const ClusterFilter = () => (
   <>
-    <SearchBar
-        placeholder="Filter by Cluster"
-        debounceTime={700}
-    />
-    
-    <Chip
-      label='demo'
-      size='medium'
-      variant='default'
-      onDelete={() => ({})} />
+    <SearchBar placeholder="Filter by Cluster" debounceTime={700} />
+    <Chip label="demo" size="medium" variant="default" onDelete={() => ({})} />
   </>
-  
 );
 
 const ProjectFilter = () => (
-  <>
-    <SearchBar
-        placeholder="Filter by Project"
-        debounceTime={700}
-    />
-  </>
+  <SearchBar placeholder="Filter by Project" debounceTime={700} />
 );
 
 const WorkloadFilter = () => (
-  <>
-    <SearchBar
-        placeholder="Filter by Workload"
-        debounceTime={700}
-    />
-  </>
+  <SearchBar placeholder="Filter by Workload" debounceTime={700} />
 );
 
 const TypeFilter = () => (
@@ -88,32 +67,29 @@ type SortOrder = 'asc' | 'desc';
 export const ExampleComponent = () => {
   const api = useApi(optimizationsApiRef);
 
-  const [page, setPage] = useState(0);  // first page starts at 0
+  const [page, setPage] = useState(0); // first page starts at 0
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [orderBy, setOrderBy] = useState('last_reported');
   const [orderDirection, setOrderDirection] = useState<SortOrder>('desc');
 
-
-
   const { value, loading, error } = useAsync(async () => {
     const offsetValue = page * rowsPerPage;
-    
+
     const apiQuery: Parameters<typeof api.getRecommendationList>[0]['query'] = {
-      limit: rowsPerPage, 
+      limit: rowsPerPage,
       offset: offsetValue,
       orderBy: orderBy,
-      orderHow: orderDirection
-    }
+      orderHow: orderDirection,
+    };
 
-    const response = await api.getRecommendationList({ 
-      query: apiQuery 
+    const response = await api.getRecommendationList({
+      query: apiQuery,
     });
     const payload = await response.json();
     return payload;
   }, [rowsPerPage, page, orderBy, orderDirection]);
-  
-  
+
   if (error) {
     return <ResponseErrorPanel error={error} />;
   }
@@ -127,15 +103,15 @@ export const ExampleComponent = () => {
   };
 
   const handleOnOrderChange = (orderBy: number, orderDirection: SortOrder) => {
-    if(orderBy >= 0) {
+    if (orderBy >= 0) {
       setOrderBy(`${columns[orderBy].field}`);
       setOrderDirection(orderDirection);
     }
-  }
+  };
 
   const handleOnSearchChange = (searchText: string) => {
     console.log(searchText);
-  }
+  };
 
   const tableTitle = `Optimizable containers (${value?.meta?.count || 0})`;
 
@@ -155,12 +131,12 @@ export const ExampleComponent = () => {
           <Grid item xs={9}>
             <Table<Recommendations>
               title={tableTitle}
-              options={{ 
+              options={{
                 debounceInterval: 700,
                 paging: true,
                 search: true,
                 padding: 'dense',
-                thirdSortClick: false
+                thirdSortClick: false,
               }}
               data={value?.data || []}
               isLoading={loading}

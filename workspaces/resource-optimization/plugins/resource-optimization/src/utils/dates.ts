@@ -1,4 +1,8 @@
 export const getTimeFromNow = (lastDate: string = 'N/A') => {
+    if(lastDate === 'N/A'){
+        return lastDate;
+    }
+
     const intl = new Intl.RelativeTimeFormat('en', { style: 'long' });
     const WEEK_IN_MILLIS = 6.048e8;
     const DAY_IN_MILLIS = 8.64e7;
