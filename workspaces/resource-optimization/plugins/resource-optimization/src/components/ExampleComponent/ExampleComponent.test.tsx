@@ -8,6 +8,7 @@ import {
   renderInTestApp,
   TestApiRegistry,
 } from '@backstage/test-utils';
+import { CatalogApi, catalogApiRef } from '@backstage/plugin-catalog-react';
 import { ApiProvider } from '@backstage/core-app-api';
 import { optimizationsApiRef } from '../../api/refs';
 import { searchApiRef } from '@backstage/plugin-search-react';
@@ -30,6 +31,10 @@ const query = () => emptySearchResults;
 const querySpy = jest.fn(query);
 const searchApi = { query: querySpy };
 
+const catalogApi: jest.Mocked<CatalogApi> = {
+  getEntitiesByRefs: jest.fn(),
+} as any;
+
 const getRecommendationList = () => recommendationsListResult;
 const getRecommendationListSpy = jest.fn(getRecommendationList);
 const optimizationApi = { getRecommendationList: getRecommendationListSpy };
@@ -38,6 +43,7 @@ const optimizationApi = { getRecommendationList: getRecommendationListSpy };
 const apiRegistry = TestApiRegistry.from(
   [searchApiRef, searchApi],
   [optimizationsApiRef, optimizationApi],
+  [catalogApiRef, catalogApi],
 );
 
 describe('ExampleComponent', () => {
