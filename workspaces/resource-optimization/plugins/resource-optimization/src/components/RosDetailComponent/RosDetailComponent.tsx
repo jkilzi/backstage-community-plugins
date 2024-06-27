@@ -26,20 +26,15 @@ import { getTimeFromNow } from '../../utils/dates';
 export const RosDetailComponent = () => {
   const { id } = useParams();
   const api = useApi(optimizationsApiRef);
-
   const [selectedValue, setSelectedValue] = useState('option1');
 
   const { value, loading, error } = useAsync(async () => {
-    console.log('Value of id:', id);
-    const recommendationId = id;
+    const recommendationId = id || '';
     const apiQuery = {
       path: {
         recommendationId: recommendationId,
       },
-      query: {
-        memoryUnit: undefined,
-        cpuUnit: undefined,
-      },
+      query: {},
     };
 
     const response = await api.getRecommendationById(apiQuery);
