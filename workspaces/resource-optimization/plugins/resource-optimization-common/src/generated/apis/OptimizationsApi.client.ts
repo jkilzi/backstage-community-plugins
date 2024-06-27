@@ -102,11 +102,11 @@ export class OptimizationsApiClient {
     // @ts-ignore
     request: {
       query: {
-        cluster?: string;
-        workloadType?: string;
-        workload?: string;
-        container?: string;
-        project?: string;
+        cluster?: Array<string>;
+        workloadType?: Array<string>;
+        workload?: Array<string>;
+        container?: Array<string>;
+        project?: Array<string>;
         startDate?: string;
         endDate?: string;
         offset?: number;
@@ -119,7 +119,7 @@ export class OptimizationsApiClient {
   ): Promise<TypedResponse<RecommendationList>> {
     const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-    const uriTemplate = `/recommendations/openshift{?cluster,workload_type,workload,container,project,start_date,end_date,offset,limit,order_by,order_how}`;
+    const uriTemplate = `/recommendations/openshift{?cluster*,workload_type*,workload*,container*,project*,start_date,end_date,offset,limit,order_by,order_how}`;
 
     const uri = parser.parse(uriTemplate).expand({
       ...request.query,
@@ -134,4 +134,5 @@ export class OptimizationsApiClient {
     });
   }
 }
+
 export type OptimizationsApi = InstanceType<typeof OptimizationsApiClient>;

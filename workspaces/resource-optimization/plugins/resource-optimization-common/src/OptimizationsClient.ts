@@ -109,11 +109,11 @@ export class OptimizationsClient implements OptimizationsApi {
   public async getRecommendationList(
     request: {
       query: {
-        cluster?: string;
-        workloadType?: string;
-        workload?: string;
-        container?: string;
-        project?: string;
+        cluster?: string[];
+        workloadType?: string[];
+        workload?: string[];
+        container?: string[];
+        project?: string[];
         startDate?: string;
         endDate?: string;
         offset?: number;

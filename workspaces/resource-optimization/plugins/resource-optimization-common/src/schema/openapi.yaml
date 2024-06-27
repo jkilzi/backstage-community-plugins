@@ -24,32 +24,42 @@ paths:
           description: Cluster alias or UUID
           required: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
         - name: workload_type
           in: query
           description: Options are daemonset, deployment, deploymentconfig, replicaset,
             replicationcontroller, statefulset
           required: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
         - name: workload
           in: query
           description: Workload name
           required: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
         - name: container
           in: query
           description: Container name
           required: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
         - name: project
           in: query
           description: Project name
           required: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
         - name: start_date
           in: query
           description: Start date
