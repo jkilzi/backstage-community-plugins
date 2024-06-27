@@ -43,8 +43,6 @@ export const RosDetailComponent = () => {
     return payload;
   }, []);
 
-  console.log('Checking API response:', loading, value, error);
-
   if (loading) {
     return <Progress />;
   }
