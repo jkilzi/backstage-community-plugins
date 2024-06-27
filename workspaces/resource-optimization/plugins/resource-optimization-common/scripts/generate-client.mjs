@@ -9,6 +9,7 @@ import {
     patchGeneratedIndexFile,
     patchGeneratedModelFiles,
     patchGetRecommendationsByIdPath,
+    patchRecommendationsListQueryParams,
     patchSpecTitle,
     updateSchema,
 } from './lib/tasks.mjs';
@@ -23,6 +24,7 @@ async function main(_args) {
         afterDownloadCompletes: async (spec) =>
             Promise.resolve(spec)
                 .then(patchSpecTitle('resource-optimization'))
+                .then(patchRecommendationsListQueryParams)
                 .then(patchGetRecommendationsByIdPath),
         saveAs: 'openapi.yaml',
     });

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { basename } from 'node:path';
-import { writeFile, readdir, unlink, rm, stat } from 'node:fs/promises';
+import { writeFile, readdir, unlink } from 'node:fs/promises';
 import { fetchJson } from './fetch.mjs';
 import { toYaml } from './yaml.mjs';
 import { exec } from './exec.mjs';
@@ -58,22 +58,31 @@ export async function updateSchema({
 }
 
 export async function generateClient(packageRootDir) {
-  const apisDir = `${packageRootDir}/src/generated/apis`;
-  try {
-    const dirInfo = await stat(apisDir);
-    if (dirInfo.size > 0) {
-      await rm(apisDir, { recursive: true, force: true });
-    }
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      console.warn(`WARN: ${apisDir} could not be found`);
-    }
-  }
-
   await exec(
     `yarn run -T backstage-repo-tools package schema openapi generate --client-package plugins/resource-optimization-common &>/dev/null || true`,
     { cwd: packageRootDir },
   );
+}
+
+export async function patchRecommendationsListQueryParams(spec) {
+  const PROBLEMATIC_QUERY_PARAM_NAMES =
+    /(cluster|workload_type|workload|container|project)/;
+  const { parameters } = spec.paths['/recommendations/openshift'].get;
+  const problematicParams = parameters.filter(param =>
+    PROBLEMATIC_QUERY_PARAM_NAMES.test(param.name),
+  );
+  for (const param of problematicParams) {
+    if (param.schema.type === 'string') {
+      param.schema = {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+      };
+    }
+  }
+
+  return spec;
 }
 
 export async function patchGeneratedModelFiles(packageRootDir) {
@@ -103,7 +112,9 @@ export async function patchGeneratedApiFiles(packageRootDir) {
   for (const fileName of fileNames) {
     const typeName = fileName.replace(/\.client\.ts$/, '');
     const className = fileName.replace(/\.client\.ts$/, 'Client');
-    const content = `export type ${typeName} = InstanceType<typeof ${className}>;`;
+    const content = `
+export type ${typeName} = InstanceType<typeof ${className}>;
+`;
     await writeFile(`${apisDir}/${fileName}`, content, { flag: 'a' });
     const indexFileContent = `
 export type { ${typeName} } from "./${basename(fileName, '.ts')}";
