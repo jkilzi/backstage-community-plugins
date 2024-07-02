@@ -1,6 +1,6 @@
 import YAML from 'yaml';
 
-type YAMLCodeData = {
+export type YAMLCodeDataType = {
   limits: {
     cpu: number | string;
     memory: number | string;
@@ -11,7 +11,7 @@ type YAMLCodeData = {
   };
 };
 
-export const generateYAMLCode = (yamlCodeData: YAMLCodeData) => {
+export const generateYAMLCode = (yamlCodeData: YAMLCodeDataType) => {
   const yamlCode = {
     limits: {
       cpu: yamlCodeData.limits.cpu,
@@ -23,7 +23,7 @@ export const generateYAMLCode = (yamlCodeData: YAMLCodeData) => {
     },
   };
 
-  const yamlCodeString = YAML.stringify(yamlCode);
+  const yamlCodeString = YAML.stringify(yamlCode).replace(/"/g, ''); // prettify;
 
   return yamlCodeString;
 };

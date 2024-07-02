@@ -1,31 +1,35 @@
 import { CodeSnippet, InfoCard } from '@backstage/core-components';
 import { Typography } from '@material-ui/core';
 import React, { useState } from 'react';
-import { generateYAMLCode } from '../../utils/generateYAMLCode';
+import {
+  YAMLCodeDataType,
+  generateYAMLCode,
+} from '../../utils/generateYAMLCode';
 
-const yamlCodeData = {
+const sampleYAMLCodeData = {
   limits: {
-    cpu: 0.5,
-    memory: '500Mi',
+    cpu: '-',
+    memory: '500Mi  # -85.1%',
   },
   requests: {
     cpu: 0.1,
-    memory: '20Mi',
+    memory: '20Mi  # -86.1%',
   },
 };
-
-const YAMLCode = generateYAMLCode(yamlCodeData);
 
 interface CodeInfoCardProps {
   cardTitle: string;
   showCopyCodeButton: boolean;
+  yamlCodeData?: YAMLCodeDataType;
 }
 
 export const CodeInfoCard: React.FC<CodeInfoCardProps> = ({
   cardTitle,
   showCopyCodeButton,
+  yamlCodeData,
 }) => {
-  console.log('Code:', YAMLCode);
+  const YAMLCode = generateYAMLCode(yamlCodeData || sampleYAMLCodeData);
+
   return (
     <InfoCard
       title={

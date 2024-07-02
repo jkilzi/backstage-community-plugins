@@ -22,11 +22,17 @@ import { useApi } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../api/refs';
 import useAsync from 'react-use/esm/useAsync';
 import { getTimeFromNow } from '../../utils/dates';
+import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
+import { getRecommendedValue } from '../../utils/utils';
+
+type durationType = 'shortTerm' | 'mediumTerm' | 'longTerm';
+type recommendationType = 'cost' | 'performance';
 
 export const RosDetailComponent = () => {
   const { id } = useParams();
   const api = useApi(optimizationsApiRef);
-  const [selectedValue, setSelectedValue] = useState('option1');
+  const [durationSelectedValue, setDurationSelectedValue] =
+    useState<durationType>('shortTerm');
 
   const { value, loading, error } = useAsync(async () => {
     const recommendationId = id || '';
@@ -52,7 +58,7 @@ export const RosDetailComponent = () => {
   }
 
   const handleChange = (event: any) => {
-    setSelectedValue(event.target.value);
+    setDurationSelectedValue(event.target.value);
   };
 
   const containerData = [
@@ -66,7 +72,93 @@ export const RosDetailComponent = () => {
     { key: 'Workload name:', value: value?.workload },
   ];
 
-  console.log('Checking id:', id);
+  // get current configuration
+  const getCurrentYAMLCodeData = () => {
+    // limits values
+    const cpuLimitsValue = `${value?.recommendations?.current?.limits?.cpu?.amount}${value?.recommendations?.current?.limits?.cpu?.format}`;
+    const memoryLimitsValue = `${value?.recommendations?.current?.limits?.memory?.amount}${value?.recommendations?.current?.limits?.memory?.format}`;
+
+    // requests values
+    const cpuRequestsValue = `${value?.recommendations?.current?.requests?.cpu?.amount}${value?.recommendations?.current?.requests?.cpu?.format}`;
+    const memoryRequestsValue = `${value?.recommendations?.current?.requests?.memory?.amount}${value?.recommendations?.current?.requests?.memory?.format}`;
+
+    const currentYAMLCodeData: YAMLCodeDataType = {
+      limits: {
+        cpu: cpuLimitsValue,
+        memory: memoryLimitsValue,
+      },
+      requests: {
+        cpu: cpuRequestsValue,
+        memory: memoryRequestsValue,
+      },
+    };
+
+    return currentYAMLCodeData;
+  };
+
+  // get recommended configuration
+
+  const getRecommendedYAMLCodeData = (
+    duration: durationType,
+    type: recommendationType,
+  ) => {
+    const currentValues = value?.recommendations?.current;
+    const recommendedValues =
+      value?.recommendations?.recommendationTerms?.[duration]
+        ?.recommendationEngines?.[type]?.config;
+
+    if (currentValues && recommendedValues) {
+      const cpuLimitsValue = getRecommendedValue(
+        currentValues,
+        recommendedValues,
+        'limits',
+        'cpu',
+      );
+      const memoryLimitsValue = getRecommendedValue(
+        currentValues,
+        recommendedValues,
+        'limits',
+        'memory',
+      );
+
+      const cpuRequestsValue = getRecommendedValue(
+        currentValues,
+        recommendedValues,
+        'requests',
+        'cpu',
+      );
+      const memoryRequestsValue = getRecommendedValue(
+        currentValues,
+        recommendedValues,
+        'requests',
+        'memory',
+      );
+
+      const recommendedYAMLCodeData: YAMLCodeDataType = {
+        limits: {
+          cpu: cpuLimitsValue,
+          memory: memoryLimitsValue,
+        },
+        requests: {
+          cpu: cpuRequestsValue,
+          memory: memoryRequestsValue,
+        },
+      };
+
+      return recommendedYAMLCodeData;
+    }
+
+    return {
+      limits: {
+        cpu: '',
+        memory: '',
+      },
+      requests: {
+        cpu: '',
+        memory: '',
+      },
+    };
+  };
 
   return (
     <Page themeId="tool">
@@ -103,12 +195,12 @@ export const RosDetailComponent = () => {
               <FormControl fullWidth variant="outlined">
                 <Select
                   id="dropdown"
-                  value={selectedValue}
+                  value={durationSelectedValue}
                   onChange={handleChange}
                 >
-                  <MenuItem value="option1">Last 24 hrs</MenuItem>
-                  <MenuItem value="option2">Last 7 days</MenuItem>
-                  <MenuItem value="option3">Last 15 days</MenuItem>
+                  <MenuItem value="shortTerm">Last 24 hrs</MenuItem>
+                  <MenuItem value="mediumTerm">Last 7 days</MenuItem>
+                  <MenuItem value="longTerm">Last 15 days</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -122,19 +214,24 @@ export const RosDetailComponent = () => {
                 <CodeInfoCard
                   cardTitle="Current configuration"
                   showCopyCodeButton={false}
+                  yamlCodeData={getCurrentYAMLCodeData()}
                 />
               </Grid>
               <Grid item xs={6}>
                 <CodeInfoCard
                   cardTitle="Recommended configuration"
                   showCopyCodeButton={true}
+                  yamlCodeData={getRecommendedYAMLCodeData(
+                    durationSelectedValue,
+                    'cost',
+                  )}
                 />
               </Grid>
             </Grid>
           </TabbedLayout.Route>
 
           <TabbedLayout.Route
-            path="/some-other-path"
+            path="/performance-tab"
             title="Performance optimizations"
           >
             <Grid container>
@@ -142,12 +239,17 @@ export const RosDetailComponent = () => {
                 <CodeInfoCard
                   cardTitle="Current configuration"
                   showCopyCodeButton={false}
+                  yamlCodeData={getCurrentYAMLCodeData()}
                 />
               </Grid>
               <Grid item xs={6}>
                 <CodeInfoCard
                   cardTitle="Recommended configuration"
                   showCopyCodeButton={true}
+                  yamlCodeData={getRecommendedYAMLCodeData(
+                    durationSelectedValue,
+                    'performance',
+                  )}
                 />
               </Grid>
             </Grid>
