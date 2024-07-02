@@ -26,7 +26,7 @@ import {
 } from '@backstage/core-components';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization';
+import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization-react';
 
 const useSidebarLogoStyles = makeStyles({
   root: {

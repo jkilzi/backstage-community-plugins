@@ -1,5 +1,11 @@
-import { createRouteRef } from '@backstage/core-plugin-api';
+import { createRouteRef, createSubRouteRef } from '@backstage/core-plugin-api';
 
 export const rootRouteRef = createRouteRef({
-  id: 'resource-optimization',
+  id: 'ros/optimizations',
+});
+
+export const optimizationsBreakdownRouteRef = createSubRouteRef({
+  id: 'ros/optimizations/breakdown',
+  parent: rootRouteRef,
+  path: '/:id',
 });

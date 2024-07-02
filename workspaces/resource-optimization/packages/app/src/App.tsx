@@ -38,7 +38,6 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-resource-optimization';
-import { ResourceOptimizationDetailPage } from '@backstage-community/plugin-resource-optimization';
 
 const app = createApp({
   apis,
@@ -102,13 +101,10 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    <Route path="/resource-optimization" element={<ResourceOptimizationPage />} />
     <Route
-        path="/resource-optimization/:id"
-        element={<ResourceOptimizationDetailPage />}
-      >
-      {entityPage}
-    </Route>
+      path="/resource-optimization"
+      element={<ResourceOptimizationPage />}
+    />
   </FlatRoutes>
 );
 
