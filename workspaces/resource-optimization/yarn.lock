@@ -2826,6 +2826,7 @@ __metadata:
     react-dom: ^18.3.1
     react-router-dom: ^6.23.1
     react-use: ^17.2.4
+    yaml: ^2.4.5
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
@@ -33750,7 +33751,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.0.0, yaml@npm:^2.0.0-10, yaml@npm:^2.2.1, yaml@npm:^2.3.2, yaml@npm:^2.3.4, yaml@npm:^2.4.2":
+"yaml@npm:^2.0.0, yaml@npm:^2.0.0-10, yaml@npm:^2.2.1, yaml@npm:^2.3.2, yaml@npm:^2.3.4, yaml@npm:^2.4.2, yaml@npm:^2.4.5":
   version: 2.4.5
   resolution: "yaml@npm:2.4.5"
   bin:
