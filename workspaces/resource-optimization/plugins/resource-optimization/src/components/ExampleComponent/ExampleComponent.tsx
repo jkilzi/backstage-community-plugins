@@ -28,7 +28,7 @@ export default {
 type SortOrder = 'asc' | 'desc';
 
 export interface filtersType {
-  containerFilter: string;
+  containerFilter: string[];
   clusterFilter: string[];
   projectFilter: string[];
   workloadFilter: string[];
@@ -45,7 +45,7 @@ export const ExampleComponent = () => {
   const [orderDirection, setOrderDirection] = useState<SortOrder>('desc');
 
   const [filters, setFilers] = useState<filtersType>({
-    containerFilter: '',
+    containerFilter: [],
     clusterFilter: [],
     projectFilter: [],
     workloadFilter: [],
@@ -67,19 +67,19 @@ export const ExampleComponent = () => {
     }
 
     if (filters.projectFilter) {
-      apiQuery.project = filters.projectFilter[0];
+      apiQuery.project = filters.projectFilter;
     }
 
     if (filters.workloadFilter) {
-      apiQuery.workload = filters.workloadFilter[0];
+      apiQuery.workload = filters.workloadFilter;
     }
 
     if (filters.workloadTypeFilter) {
-      apiQuery.workloadType = filters.workloadTypeFilter[0];
+      apiQuery.workloadType = filters.workloadTypeFilter;
     }
 
     if (filters.clusterFilter) {
-      apiQuery.cluster = filters.clusterFilter[0];
+      apiQuery.cluster = filters.clusterFilter;
     }
 
     const response = await api.getRecommendationList({
@@ -110,10 +110,9 @@ export const ExampleComponent = () => {
   };
 
   const handleOnSearchChange = (searchText: string) => {
-    console.log(searchText);
     setFilers(prevState => ({
       ...prevState,
-      containerFilter: searchText,
+      containerFilter: [searchText],
     }));
   };
 
