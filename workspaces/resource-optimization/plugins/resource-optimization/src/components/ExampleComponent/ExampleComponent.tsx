@@ -110,7 +110,10 @@ export const ExampleComponent = () => {
   };
 
   const handleOnSearchChange = (searchText: string) => {
-    filters.containerFilter[0] = searchText;
+    setFilers(prevState => ({
+      ...prevState,
+      containerFilter: [searchText],
+    }));
   };
 
   const handleFilterChange = (

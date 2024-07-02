@@ -62,8 +62,8 @@ export const RosDetailComponent = () => {
     },
     { key: 'Cluster name:', value: value?.clusterAlias },
     { key: 'Project name:', value: value?.project },
-    { key: 'Workload type:', value: value?.workload },
-    { key: 'Workload name:', value: value?.workloadType },
+    { key: 'Workload type:', value: value?.workloadType },
+    { key: 'Workload name:', value: value?.workload },
   ];
 
   console.log('Checking id:', id);
