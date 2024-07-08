@@ -21,7 +21,8 @@
     "test": "backstage-cli package test",
     "clean": "backstage-cli package clean",
     "prepack": "backstage-cli package prepack",
-    "postpack": "backstage-cli package postpack"
+    "postpack": "backstage-cli package postpack",
+    "export-dynamic": "yarn run -T janus-cli package export-dynamic-plugin"
   },
   "dependencies": {
     "@backstage-community/plugin-resource-optimization-common": "workspace:^",
@@ -54,6 +55,13 @@
     "react-router-dom": "^6.23.1"
   },
   "files": [
-    "dist"
-  ]
+    "dist",
+    "dist-scalprum"
+  ],
+  "scalprum": {
+    "name": "backstage-community.plugin-resource-optimization",
+    "exposedModules": {
+      "PluginRoot": "./src/index.ts"
+    }
+  }
 }
