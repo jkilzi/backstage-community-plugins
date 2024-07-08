@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 import { CodeInfoCard } from '../CodeInfoCard/CodeInfoCard';
-import { useApi } from '@backstage/core-plugin-api';
+import { optimizationsApiRef } from '../../apis';
 import { optimizationsApiRef } from '../../api/refs';
 import useAsync from 'react-use/esm/useAsync';
 import { getTimeFromNow } from '../../utils/dates';

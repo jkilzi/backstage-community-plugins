@@ -10,7 +10,7 @@ import {
 } from '@backstage/test-utils';
 import { CatalogApi, catalogApiRef } from '@backstage/plugin-catalog-react';
 import { ApiProvider } from '@backstage/core-app-api';
-import { optimizationsApiRef } from '../../api/refs';
+import { optimizationsApiRef } from '../../apis';
 import { searchApiRef } from '@backstage/plugin-search-react';
 import { getRecommendationMockResponse } from './mockResponses';
 import { RecommendationList } from '@backstage-community/plugin-resource-optimization-common';
