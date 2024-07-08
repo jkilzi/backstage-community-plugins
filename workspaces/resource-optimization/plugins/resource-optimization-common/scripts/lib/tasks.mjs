@@ -1,15 +1,54 @@
 /* eslint-disable no-console */
 import { basename } from 'node:path';
-import { writeFile, readdir, unlink } from 'node:fs/promises';
+import { execSync } from 'node:child_process';
+import { writeFileSync, readdirSync, unlinkSync, rmSync } from 'node:fs';
 import { fetchJson } from './fetch.mjs';
 import { toYaml } from './yaml.mjs';
-import { exec } from './exec.mjs';
 
 export function patchSpecTitle(specTitle = 'resource-optimization') {
   return spec => {
     spec.info.title = specTitle;
     return spec;
   };
+}
+
+export function pathPlotDetailsComponent(spec) {
+  const plotDetailsDef = spec.components.schemas.PlotDetails;
+  delete plotDetailsDef.properties;
+  plotDetailsDef.additionalProperties = {
+    type: 'object',
+    properties: {
+      cpuUsage: {
+        $ref: '#/components/schemas/cpuUsage',
+      },
+      memoryUsage: {
+        $ref: '#/components/schemas/memoryUsage',
+      },
+    },
+  };
+
+  return spec;
+}
+
+export function patchRecommendationsListQueryParams(spec) {
+  const PROBLEMATIC_QUERY_PARAM_NAMES =
+    /(cluster|workload_type|workload|container|project)/;
+  const { parameters } = spec.paths['/recommendations/openshift'].get;
+  const problematicParams = parameters.filter(param =>
+    PROBLEMATIC_QUERY_PARAM_NAMES.test(param.name),
+  );
+  for (const param of problematicParams) {
+    if (param.schema.type === 'string') {
+      param.schema = {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+      };
+    }
+  }
+
+  return spec;
 }
 
 /**
@@ -48,55 +87,37 @@ export async function updateSchema({
   afterDownloadCompletes = null,
 }) {
   const spec = await fetchJson(specUrl);
-  if (afterDownloadCompletes) await afterDownloadCompletes(spec);
+  if (afterDownloadCompletes) afterDownloadCompletes(spec);
 
   const outputFile = `${packageRootDir}/src/schema/${saveAs}`;
-  await writeFile(
+  writeFileSync(
     outputFile,
     saveAs.endsWith('.yaml') ? toYaml(spec) : JSON.stringify(spec, null, 2),
   );
 }
 
-export async function generateClient(packageRootDir) {
-  await exec(
-    `yarn run -T backstage-repo-tools package schema openapi generate --client-package plugins/resource-optimization-common &>/dev/null || true`,
-    { cwd: packageRootDir },
+export function generateClient(packageRootDir) {
+  const generatedFilesDir = `${packageRootDir}/src/generated/*`;
+  rmSync(generatedFilesDir, { recursive: true, force: true });
+
+  execSync(
+    `yarn run -T backstage-repo-tools package schema openapi generate --client-package plugins/resource-optimization-common`,
+    { cwd: packageRootDir, stdio: ['ignore', 'inherit', 'inherit'] },
   );
 }
 
-export async function patchRecommendationsListQueryParams(spec) {
-  const PROBLEMATIC_QUERY_PARAM_NAMES =
-    /(cluster|workload_type|workload|container|project)/;
-  const { parameters } = spec.paths['/recommendations/openshift'].get;
-  const problematicParams = parameters.filter(param =>
-    PROBLEMATIC_QUERY_PARAM_NAMES.test(param.name),
-  );
-  for (const param of problematicParams) {
-    if (param.schema.type === 'string') {
-      param.schema = {
-        type: 'array',
-        items: {
-          type: 'string',
-        },
-      };
-    }
-  }
-
-  return spec;
-}
-
-export async function patchGeneratedModelFiles(packageRootDir) {
+export function patchGeneratedModelFiles(packageRootDir) {
   const modelsDir = `${packageRootDir}/src/generated/models`;
-  await unlink(`${modelsDir}/index.ts`);
+  unlinkSync(`${modelsDir}/index.ts`);
 
-  const fileNames = await readdir(modelsDir);
+  const fileNames = readdirSync(modelsDir);
   for (const fileName of fileNames) {
     const aliasName = fileName.replace(/\.model\.ts$/, '');
     const content = `export type { ${aliasName} } from "./${basename(
       fileName,
       '.ts',
     )}";\n`;
-    await writeFile(`${modelsDir}/index.ts`, content, { flag: 'a' });
+    writeFileSync(`${modelsDir}/index.ts`, content, { flag: 'a' });
   }
 }
 
@@ -104,39 +125,40 @@ export async function patchGeneratedModelFiles(packageRootDir) {
  * Appends a type descibing the generated `*ApiClient` class; this type can later be consumed by `createApiRef` to provide type annotations.
  * Also, generates `apis/index.ts`.
  */
-export async function patchGeneratedApiFiles(packageRootDir) {
+export function patchGeneratedApiFiles(packageRootDir) {
   const apisDir = `${packageRootDir}/src/generated/apis`;
-  await unlink(`${apisDir}/index.ts`);
+  unlinkSync(`${apisDir}/index.ts`);
 
-  const fileNames = await readdir(apisDir);
+  const fileNames = readdirSync(apisDir);
   for (const fileName of fileNames) {
     const typeName = fileName.replace(/\.client\.ts$/, '');
     const className = fileName.replace(/\.client\.ts$/, 'Client');
     const content = `
 export type ${typeName} = InstanceType<typeof ${className}>;
 `;
-    await writeFile(`${apisDir}/${fileName}`, content, { flag: 'a' });
+    writeFileSync(`${apisDir}/${fileName}`, content, { flag: 'a' });
     const indexFileContent = `
 export type { ${typeName} } from "./${basename(fileName, '.ts')}";
 export { ${className} } from "./${basename(fileName, '.ts')}";
 `;
-    await writeFile(`${apisDir}/index.ts`, indexFileContent, { flag: 'a' });
+    writeFileSync(`${apisDir}/index.ts`, indexFileContent, { flag: 'a' });
   }
 }
 
-export async function lintAndFormatGeneratedFiles(packageRootDir) {
-  return await exec('yarn backstage-cli package lint --fix src/generated', {
-    cwd: packageRootDir,
-  });
-}
-
-export async function patchGeneratedIndexFile(packageRootDir) {
+export function patchGeneratedIndexFile(packageRootDir) {
   const indexFile = `${packageRootDir}/src/generated/index.ts`;
-  await unlink(indexFile);
+  unlinkSync(indexFile);
   const content = `
 export * as Apis from "./apis";
 export * as Models from "./models";
 
 `;
-  await writeFile(`${indexFile}`, content.trimStart());
+  writeFileSync(`${indexFile}`, content.trimStart());
+}
+
+export function lintAndFormatGeneratedFiles(packageRootDir) {
+  execSync('yarn backstage-cli package lint --fix src/generated', {
+    cwd: packageRootDir,
+    stdio: ['ignore', 'inherit', 'inherit'],
+  });
 }
