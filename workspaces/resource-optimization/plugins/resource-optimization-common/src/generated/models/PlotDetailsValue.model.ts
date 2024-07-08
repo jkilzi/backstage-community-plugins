@@ -6,7 +6,7 @@
 import { CpuUsage } from '../models/CpuUsage.model';
 import { MemoryUsage } from '../models/MemoryUsage.model';
 
-export interface PlotDetails20230401T060000Z {
+export interface PlotDetailsValue {
   cpuUsage?: CpuUsage;
   memoryUsage?: MemoryUsage;
 }
