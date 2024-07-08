@@ -14,14 +14,17 @@ import { optimizationsApiRef } from '../../apis';
 import { searchApiRef } from '@backstage/plugin-search-react';
 import { getRecommendationMockResponse } from './mockResponses';
 import { RecommendationList } from '@backstage-community/plugin-resource-optimization-common';
-import { TypedResponse } from '@backstage-community/plugin-resource-optimization-common/src/generated/apis/OptimizationsApi.client';
 
 const emptySearchResults = Promise.resolve({
   results: [],
 });
 
+type TypedResponse<T> = Omit<Response, 'json'> & {
+  json: () => Promise<T>;
+};
+
 const recommendationsListResult: Promise<TypedResponse<RecommendationList>> =
-  new Promise((resolve, reject) => {
+  new Promise((_resolve, _reject) => {
     return {
       json: async () => getRecommendationMockResponse,
     };
