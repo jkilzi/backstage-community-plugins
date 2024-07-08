@@ -98,14 +98,17 @@ export const ExampleComponent = () => {
     setRowsPerPage(pageSize);
   };
 
-  const handleChangePage = (page: number, pageSize: number) => {
-    setPage(page);
+  const handleChangePage = (pageNumber: number, _pageSize: number) => {
+    setPage(pageNumber);
   };
 
-  const handleOnOrderChange = (orderBy: number, orderDirection: SortOrder) => {
-    if (orderBy >= 0) {
-      setOrderBy(`${columns[orderBy].field}`);
-      setOrderDirection(orderDirection);
+  const handleOnOrderChange = (
+    orderByParam: number,
+    orderDirectionParam: SortOrder,
+  ) => {
+    if (orderByParam >= 0) {
+      setOrderBy(`${columns[orderByParam].field}`);
+      setOrderDirection(orderDirectionParam);
     }
   };
 
@@ -140,7 +143,7 @@ export const ExampleComponent = () => {
           <CatalogFilterLayout>
             <CatalogFilterLayout.Filters>
               <Typography variant="h6">Filters</Typography>
-              <hr></hr>
+              <hr />
               <SearchFilterComponent
                 filterLabel="CLUSTER"
                 filterKey="clusterFilter"
