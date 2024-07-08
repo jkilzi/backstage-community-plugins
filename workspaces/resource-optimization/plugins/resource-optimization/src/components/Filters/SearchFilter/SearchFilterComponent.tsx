@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Chip, Typography, TextField, Box } from '@material-ui/core';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import ClearIcon from '@mui/icons-material/Clear';
-import Stack from '@mui/material/Stack';
+import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
 import { filtersType } from '../../ExampleComponent/ExampleComponent';
 
 interface SearchFilterComponentProps {
@@ -62,7 +64,6 @@ export const SearchFilterComponent: React.FC<SearchFilterComponentProps> = ({
           value={inputValue}
           variant="outlined"
           size="small"
-          style={{ background: '#fff' }}
           onChange={handleInputChange}
           onKeyDown={handleInputKeyDown}
           InputProps={{
@@ -75,7 +76,7 @@ export const SearchFilterComponent: React.FC<SearchFilterComponentProps> = ({
             ),
           }}
         />
-        <Stack direction="row" marginTop={1} useFlexGap flexWrap="wrap">
+        <Box flexDirection="row" marginTop={1} flexWrap="wrap">
           {chips.map((chip, index) => (
             <Chip
               size="small"
@@ -84,7 +85,7 @@ export const SearchFilterComponent: React.FC<SearchFilterComponentProps> = ({
               onDelete={() => handleDeleteChip(chip)}
             />
           ))}
-        </Stack>
+        </Box>
       </Typography>
     </Box>
   );
