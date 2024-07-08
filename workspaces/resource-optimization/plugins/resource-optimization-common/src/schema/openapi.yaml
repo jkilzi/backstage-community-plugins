@@ -714,31 +714,13 @@ components:
           $ref: "#/components/schemas/PlotDetails"
     PlotDetails:
       type: object
-      properties:
-        2023-04-01T06:00:00Z:
-          type: object
-          properties:
-            cpuUsage:
-              $ref: "#/components/schemas/cpuUsage"
-            memoryUsage:
-              $ref: "#/components/schemas/memoryUsage"
-        2023-04-01T12:00:00Z:
-          type: object
-          properties:
-            cpuUsage:
-              $ref: "#/components/schemas/cpuUsage"
-            memoryUsage:
-              $ref: "#/components/schemas/memoryUsage"
-        2023-04-01T18:00:00Z:
-          type: object
-          properties:
-            cpuUsage:
-              $ref: "#/components/schemas/cpuUsage"
-            memoryUsage:
-              $ref: "#/components/schemas/memoryUsage"
-        2023-04-02T00:00:00Z:
-          type: object
-          additionalProperties: false
+      additionalProperties:
+        type: object
+        properties:
+          cpuUsage:
+            $ref: "#/components/schemas/cpuUsage"
+          memoryUsage:
+            $ref: "#/components/schemas/memoryUsage"
     cpuUsage:
       type: object
       properties:

@@ -34,8 +34,7 @@ export type { PerformanceRecommendationVariationLimitsCpu } from "./PerformanceR
 export type { PerformanceRecommendationVariationLimitsMemory } from "./PerformanceRecommendationVariationLimitsMemory.model";
 export type { PerformanceRecommendationVariationRequests } from "./PerformanceRecommendationVariationRequests.model";
 export type { PerformanceRecommendationVariationRequestsMemory } from "./PerformanceRecommendationVariationRequestsMemory.model";
-export type { PlotDetails } from "./PlotDetails.model";
-export type { PlotDetails20230401T060000Z } from "./PlotDetails20230401T060000Z.model";
+export type { PlotDetailsValue } from "./PlotDetailsValue.model";
 export type { PlotsData } from "./PlotsData.model";
 export type { RecommendationBoxPlots } from "./RecommendationBoxPlots.model";
 export type { RecommendationBoxPlotsRecommendations } from "./RecommendationBoxPlotsRecommendations.model";
