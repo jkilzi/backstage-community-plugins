@@ -13,6 +13,21 @@
   "backstage": {
     "role": "backend-plugin"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./alpha": "./src/alpha.ts",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "alpha": [
+        "src/alpha.ts"
+      ],
+      "package.json": [
+        "package.json"
+      ]
+    }
+  },
   "scripts": {
     "start": "backstage-cli package start",
     "build": "backstage-cli package build",
@@ -20,7 +35,8 @@
     "test": "backstage-cli package test",
     "clean": "backstage-cli package clean",
     "prepack": "backstage-cli package prepack",
-    "postpack": "backstage-cli package postpack"
+    "postpack": "backstage-cli package postpack",
+    "export-dynamic": "yarn run -T janus-cli package export-dynamic-plugin --embed-as-dependencies"
   },
   "dependencies": {
     "@backstage/backend-common": "^0.22.0",
@@ -44,6 +60,7 @@
   },
   "files": [
     "dist",
+    "dist-dynamic",
     "config.d.ts"
   ],
   "configSchema": "config.d.ts"
