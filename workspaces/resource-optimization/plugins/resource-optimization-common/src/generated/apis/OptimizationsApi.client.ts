@@ -67,7 +67,7 @@ export class OptimizationsApiClient {
   ): Promise<TypedResponse<RecommendationBoxPlots>> {
     const baseUrl = await this.discoveryApi.getBaseUrl(pluginId);
 
-    const uriTemplate = `/recommendations/openshift/{recommendation_id}{?memory-unit,cpu-unit}`;
+    const uriTemplate = `/recommendations/openshift/{recommendation_id}{?memory_unit,cpu_unit}`;
 
     const uri = parser.parse(uriTemplate).expand({
       recommendation_id: request.path.recommendationId,

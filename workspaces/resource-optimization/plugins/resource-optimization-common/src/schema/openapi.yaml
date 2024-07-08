@@ -136,7 +136,7 @@ paths:
             type: string
           description: The recommendation UUID
         - in: query
-          name: memory-unit
+          name: memory_unit
           description: unit preference for memory
           required: false
           schema:
@@ -147,7 +147,7 @@ paths:
               - GiB
             default: MiB
         - in: query
-          name: cpu-unit
+          name: cpu_unit
           description: unit preference for cpu
           required: false
           schema:
