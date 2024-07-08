@@ -1,6 +1,6 @@
 import { CodeSnippet, InfoCard } from '@backstage/core-components';
 import { Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   YAMLCodeDataType,
   generateYAMLCode,
