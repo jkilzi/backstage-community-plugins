@@ -63,13 +63,9 @@ export function patchGetRecommendationsByIdPath(spec) {
   const getRecommendationsByIdDef = structuredClone(
     spec.paths[getRecommendationsByIdPath],
   );
-  const getRecommendationsByIdParamDef =
-    getRecommendationsByIdDef.get?.parameters.find(
-      ({ name }) => name === 'recommendation-id',
-    );
-  if (getRecommendationsByIdParamDef) {
-    getRecommendationsByIdParamDef.name =
-      getRecommendationsByIdParamDef.name.replace('-', '_');
+
+  for (const parameter of getRecommendationsByIdDef.get?.parameters ?? []) {
+    parameter.name = parameter.name.replace('-', '_');
   }
 
   Object.assign(spec.paths, {
