@@ -1,6 +1,5 @@
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
-import snakeCase from 'lodash/snakeCase';
 import {
   OptimizationsApiClient,
   RequestOptions,
@@ -57,10 +56,9 @@ export class OptimizationsClient implements OptimizationsApi {
       this._token = accessToken;
     }
 
-    const transformedRequest = deepMapKeys(request, snakeCase);
     let response: Awaited<ReturnType<F>> = await asyncOp.call(
       this._client,
-      transformedRequest,
+      request,
       {
         token: this._token,
       },
@@ -71,7 +69,7 @@ export class OptimizationsClient implements OptimizationsApi {
         const { accessToken } = await this.getNewToken();
         this._token = accessToken;
 
-        response = await asyncOp.call(this._client, transformedRequest, {
+        response = await asyncOp.call(this._client, request, {
           token: this._token,
         });
       } else {
