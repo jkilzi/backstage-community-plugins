@@ -11,7 +11,7 @@ import {
 } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import { useApi } from '@backstage/core-plugin-api';
-import { optimizationsApiRef } from '../../api/refs';
+import { optimizationsApiRef } from '../../apis';
 import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
 import { columns } from '../Tables/columns';
 import {

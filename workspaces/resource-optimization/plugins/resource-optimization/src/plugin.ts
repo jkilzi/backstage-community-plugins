@@ -7,7 +7,7 @@ import {
 } from '@backstage/core-plugin-api';
 import { OptimizationsClient } from '@backstage-community/plugin-resource-optimization-common';
 import { rootRouteRef } from './routes';
-import { optimizationsApiRef } from './api/refs';
+import { optimizationsApiRef } from './apis';
 
 export const resourceOptimizationPlugin = createPlugin({
   id: 'resource-optimization',
