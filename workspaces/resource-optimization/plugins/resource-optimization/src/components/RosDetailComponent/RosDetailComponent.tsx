@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useAsync from 'react-use/esm/useAsync';
 import {
   Page,
   Header,
@@ -6,39 +8,39 @@ import {
   TabbedLayout,
   Progress,
   ResponseErrorPanel,
-  Breadcrumbs,
 } from '@backstage/core-components';
-import {
-  FormControl,
-  Select,
-  MenuItem,
-  Box,
-  Typography,
-  Grid,
-} from '@mui/material';
-import { Link, useParams } from 'react-router-dom';
+import { useApi } from '@backstage/core-plugin-api';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import { CodeInfoCard } from '../CodeInfoCard/CodeInfoCard';
 import { optimizationsApiRef } from '../../apis';
-import { optimizationsApiRef } from '../../api/refs';
-import useAsync from 'react-use/esm/useAsync';
 import { getTimeFromNow } from '../../utils/dates';
 import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
 import { getRecommendedValue } from '../../utils/utils';
+import { OptimizationsBreakdownChart } from '../OptimizationsBreakdownChart';
+import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common';
 
-type durationType = 'shortTerm' | 'mediumTerm' | 'longTerm';
-type recommendationType = 'cost' | 'performance';
+type RecommendationTerms =
+  keyof RecommendationBoxPlotsRecommendationsRecommendationTerms;
+type RecommendationEngines = 'cost' | 'performance';
 
 export const RosDetailComponent = () => {
+  const [recommendationTerm, setRecommendationTerm] =
+    useState<RecommendationTerms>('shortTerm');
+
+  // All this can be a dedicated hook, exposed by a provider 🤔... (maybe like, "useRecommendation(id)")
+  // `id` must be defined (despite being typed as "string | undefined", otherwise the URL will route the user to the recommendations list)
   const { id } = useParams();
   const api = useApi(optimizationsApiRef);
-  const [durationSelectedValue, setDurationSelectedValue] =
-    useState<durationType>('shortTerm');
-
   const { value, loading, error } = useAsync(async () => {
-    const recommendationId = id || '';
     const apiQuery = {
       path: {
-        recommendationId: recommendationId,
+        recommendationId: id!,
       },
       query: {},
     };
@@ -58,7 +60,7 @@ export const RosDetailComponent = () => {
   }
 
   const handleChange = (event: any) => {
-    setDurationSelectedValue(event.target.value);
+    setRecommendationTerm(event.target.value);
   };
 
   const containerData = [
@@ -72,6 +74,7 @@ export const RosDetailComponent = () => {
     { key: 'Workload name:', value: value?.workload },
   ];
 
+  
   // get current configuration
   const getCurrentYAMLCodeData = () => {
     // limits values
@@ -97,10 +100,9 @@ export const RosDetailComponent = () => {
   };
 
   // get recommended configuration
-
   const getRecommendedYAMLCodeData = (
-    duration: durationType,
-    type: recommendationType,
+    duration: RecommendationTerms,
+    type: RecommendationEngines,
   ) => {
     const currentValues = value?.recommendations?.current;
     const recommendedValues =
@@ -169,33 +171,34 @@ export const RosDetailComponent = () => {
       />
 
       <Content>
-        <Typography variant="h4">{value?.container}</Typography>
+        <Typography variant="h4" paragraph>
+          {value?.container}
+        </Typography>
 
-        <Box sx={{ paddingTop: 2 }}>
+        <Grid container spacing={1} xs={8}>
           {containerData.map((item, index) => (
-            <Grid container spacing={2} key={index}>
-              <Grid item xs={1.5}>
-                <Typography variant="body1">{item.key}</Typography>
+            <Grid container item xs={9} spacing={1} key={index}>
+              <Grid item xs={4}>
+                <Typography variant="body1">
+                  <b>{item.key}</b>
+                </Typography>
               </Grid>
-              <Grid item xs={10}>
+              <Grid item xs={5}>
                 <Typography variant="body1">{item.value}</Typography>
               </Grid>
             </Grid>
           ))}
-        </Box>
-
-        <Box sx={{ paddingTop: 8, marginBottom: 4 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={2}>
+          <Grid container item xs={9} spacing={1}>
+            <Grid item xs={6} alignContent="center">
               <Typography variant="body1">
-                View optimizations based on
+                <b>View optimizations based on</b>
               </Typography>
             </Grid>
-            <Box sx={{ minWidth: 200 }}>
+            <Grid item xs={3}>
               <FormControl fullWidth variant="outlined">
                 <Select
                   id="dropdown"
-                  value={durationSelectedValue}
+                  value={recommendationTerm}
                   onChange={handleChange}
                 >
                   <MenuItem value="shortTerm">Last 24 hrs</MenuItem>
@@ -203,58 +206,81 @@ export const RosDetailComponent = () => {
                   <MenuItem value="longTerm">Last 15 days</MenuItem>
                 </Select>
               </FormControl>
-            </Box>
+            </Grid>
           </Grid>
+        </Grid>
+
+        <Box sx={{ marginTop: 16 }}>
+          <TabbedLayout>
+            <TabbedLayout.Route path="/cost?" title="Cost optimizations">
+              <>
+                <Grid container>
+                  <Grid item xs={6}>
+                    <CodeInfoCard
+                      cardTitle="Current configuration"
+                      showCopyCodeButton={false}
+                      yamlCodeData={getCurrentYAMLCodeData()}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <CodeInfoCard
+                      cardTitle="Recommended configuration"
+                      showCopyCodeButton
+                      yamlCodeData={getRecommendedYAMLCodeData(
+                        recommendationTerm,
+                        'cost',
+                      )}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container>
+                  <Grid item xs={6}>
+                    <Paper>
+                      <OptimizationsBreakdownChart
+                        name="CPU utilization"
+                        data={{ limits: {}, requests: {}, usage: {} }}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Paper>
+                      <OptimizationsBreakdownChart
+                        name="Memory utilization"
+                        data={{ limits: {}, requests: {}, usage: {} }}
+                      />
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </>
+            </TabbedLayout.Route>
+
+            <TabbedLayout.Route
+              path="/performance"
+              title="Performance optimizations"
+            >
+              <Grid container>
+                <Grid item xs={6}>
+                  <CodeInfoCard
+                    cardTitle="Current configuration"
+                    showCopyCodeButton={false}
+                    yamlCodeData={getCurrentYAMLCodeData()}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <CodeInfoCard
+                    cardTitle="Recommended configuration"
+                    showCopyCodeButton
+                    yamlCodeData={getRecommendedYAMLCodeData(
+                      recommendationTerm,
+                      'performance',
+                    )}
+                  />
+                </Grid>
+              </Grid>
+            </TabbedLayout.Route>
+          </TabbedLayout>
         </Box>
-
-        <TabbedLayout>
-          <TabbedLayout.Route path="/" title="Cost optimizations">
-            <Grid container>
-              <Grid item xs={6}>
-                <CodeInfoCard
-                  cardTitle="Current configuration"
-                  showCopyCodeButton={false}
-                  yamlCodeData={getCurrentYAMLCodeData()}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <CodeInfoCard
-                  cardTitle="Recommended configuration"
-                  showCopyCodeButton={true}
-                  yamlCodeData={getRecommendedYAMLCodeData(
-                    durationSelectedValue,
-                    'cost',
-                  )}
-                />
-              </Grid>
-            </Grid>
-          </TabbedLayout.Route>
-
-          <TabbedLayout.Route
-            path="/performance-tab"
-            title="Performance optimizations"
-          >
-            <Grid container>
-              <Grid item xs={6}>
-                <CodeInfoCard
-                  cardTitle="Current configuration"
-                  showCopyCodeButton={false}
-                  yamlCodeData={getCurrentYAMLCodeData()}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <CodeInfoCard
-                  cardTitle="Recommended configuration"
-                  showCopyCodeButton={true}
-                  yamlCodeData={getRecommendedYAMLCodeData(
-                    durationSelectedValue,
-                    'performance',
-                  )}
-                />
-              </Grid>
-            </Grid>
-          </TabbedLayout.Route>
-        </TabbedLayout>
       </Content>
     </Page>
   );
