@@ -11,14 +11,14 @@ import {
   TableToolbar,
 } from '@backstage-community/plugin-resource-optimization-react';
 import { useApi, useRouteRef } from '@backstage/core-plugin-api';
-import { optimizationsApiRef } from '../../../api/refs';
+import { optimizationsApiRef } from '../../../apis';
 import useAsync from 'react-use/lib/useAsync';
 import { optimizationsBreakdownRouteRef } from '../../../routes';
 import {
   Filter,
   Filters,
 } from '@backstage-community/plugin-resource-optimization-react';
-import { ContentLayout } from './ContentLayout';
+import { PageLayout } from './PageLayout';
 
 const DEFAULT_DEBOUNCE_INTERVAL = 700;
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
@@ -78,9 +78,11 @@ const filters: Filter[] = [
   },
 ];
 
-export type IndexPageProps = {};
+export type ResourceOptimizationIndexPageProps = {};
 
-export function IndexPage(props: IndexPageProps) {
+export function ResourceOptimizationIndexPage(
+  props: ResourceOptimizationIndexPageProps,
+) {
   const api = useApi(optimizationsApiRef);
   const { value, error, loading } = useAsync(async () => {
     const response = await api.getRecommendationList({
@@ -95,11 +97,11 @@ export function IndexPage(props: IndexPageProps) {
 
   return (
     <BasePage pageTitle="Resource Optimization">
-      <ContentLayout>
-        <ContentLayout.Filters>
+      <PageLayout>
+        <PageLayout.Filters>
           <Filters filters={filters} onChangeFilters={() => {}} />
-        </ContentLayout.Filters>
-        <ContentLayout.Table>
+        </PageLayout.Filters>
+        <PageLayout.Table>
           <Table<Recommendations>
             components={{
               Toolbar: TableToolbar,
@@ -125,8 +127,8 @@ export function IndexPage(props: IndexPageProps) {
             // onOrderChange={handleOnOrderChange}
             // onSearchChange={handleOnSearchChange}
           />
-        </ContentLayout.Table>
-      </ContentLayout>
+        </PageLayout.Table>
+      </PageLayout>
     </BasePage>
   );
 }

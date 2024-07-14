@@ -10,7 +10,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme, useTheme } from '@material-ui/core/styles';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-/** @public */
 export function Filters(props: {
   children: React.ReactNode;
   options?: {
@@ -60,7 +59,6 @@ export function Filters(props: {
   );
 }
 
-/** @public */
 export function Table(props: { children: React.ReactNode }) {
   return (
     <Grid item xs={12} lg={10}>
@@ -69,8 +67,7 @@ export function Table(props: { children: React.ReactNode }) {
   );
 }
 
-/** @public */
-export function ContentLayout(props: { children: React.ReactNode }) {
+export function PageLayout(props: { children: React.ReactNode }) {
   return (
     <Grid container style={{ position: 'relative' }}>
       {props.children}
@@ -78,5 +75,5 @@ export function ContentLayout(props: { children: React.ReactNode }) {
   );
 }
 
-ContentLayout.Filters = Filters;
-ContentLayout.Table = Table;
+PageLayout.Filters = Filters;
+PageLayout.Table = Table;

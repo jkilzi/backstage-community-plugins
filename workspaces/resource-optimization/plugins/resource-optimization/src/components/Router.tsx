@@ -1,14 +1,16 @@
 import { ErrorPage } from '@backstage/core-components';
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { optimizationsBreakdownRouteRef } from '../routes';
-import { IndexPage } from './Pages/Index/IndexPage';
-import { OptimizationsBreakdownPage } from './Pages/OptimizationsBreakdown/OptimizationsBreakdownPage';
+// import { ResourceOptimizationIndexPage } from './Pages/ResourceOptimizationIndex';
+import { ExampleComponent as ResourceOptimizationIndexPage } from './ExampleComponent'; // TODO(jkilzi): replace with above line after PoC
+// import { OptimizationsBreakdownPage } from './Pages/OptimizationsBreakdown';
+import { RosDetailComponent as OptimizationsBreakdownPage } from './RosDetailComponent'; // TODO(jkilzi): replace with above line after PoC
 
-export function Router(props: PropsWithChildren) {
+export function Router() {
   return (
     <Routes>
-      <Route path="/" element={<IndexPage />} />
+      <Route path="/" element={<ResourceOptimizationIndexPage />} />
       <Route
         path={optimizationsBreakdownRouteRef.path}
         element={<OptimizationsBreakdownPage />}
