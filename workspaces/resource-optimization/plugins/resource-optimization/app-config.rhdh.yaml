@@ -1,0 +1,15 @@
+dynamicPlugins:
+  frontend:
+    backstage-community.plugin-resource-optimization:
+      appIcons:
+        - name: resourceOptimizationIconOutlined
+          importName: ResourceOptimizationIconOutlined
+      routeBindings:
+        targets:
+          - name: resourceOptimizationPlugin
+      dynamicRoutes:
+        - path: /resource-optimization
+          importName: ResourceOptimizationPage
+          menuItem:
+            icon: resourceOptimizationIconOutlined
+            text: Optimizations

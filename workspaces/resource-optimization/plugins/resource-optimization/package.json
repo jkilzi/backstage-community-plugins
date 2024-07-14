@@ -59,6 +59,7 @@
     "react-router-dom": "^6.23.1"
   },
   "files": [
+    "app-config.rhdh.yaml",
     "dist",
     "dist-scalprum"
   ],
