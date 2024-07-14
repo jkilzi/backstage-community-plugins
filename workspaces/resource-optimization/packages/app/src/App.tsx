@@ -38,8 +38,9 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-resource-optimization';
+import { useRhdhTheme } from './hooks/useRhdhTheme';
 
-const app = createApp({
+const options: Parameters<typeof createApp>[0] = {
   apis,
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
@@ -61,7 +62,15 @@ const app = createApp({
   components: {
     SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
   },
-});
+};
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const { isRhdhThemeEnabled, theme } = useRhdhTheme();
+if (isRhdhThemeEnabled) {
+  options.themes = theme;
+}
+
+const app = createApp(options);
 
 const routes = (
   <FlatRoutes>
