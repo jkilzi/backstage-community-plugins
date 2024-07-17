@@ -53,11 +53,16 @@
   },
   "devDependencies": {
     "@backstage/test-utils": "^1.5.4",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.16.1",
+    "@mui/material": "^5.16.1",
     "@playwright/test": "^1.32.3",
     "@testing-library/dom": "^9.0.0",
     "@testing-library/jest-dom": "^6.0.0",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^15.0.0",
     "@testing-library/user-event": "^14.0.0",
+    "@types/react": "^18",
     "@types/react-dom": "*",
     "cross-env": "^7.0.0"
   },
