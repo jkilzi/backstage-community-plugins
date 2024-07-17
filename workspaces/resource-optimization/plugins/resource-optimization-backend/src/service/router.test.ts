@@ -2,7 +2,7 @@ import { getVoidLogger } from '@backstage/backend-common';
 import express from 'express';
 import request from 'supertest';
 
-import { createRouter } from './createRouter';
+import { createRouter } from './router';
 
 describe('createRouter', () => {
   let app: express.Express;

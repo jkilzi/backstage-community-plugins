@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { RouterOptions } from '../service/createRouter';
+import type { Router } from 'express';
+import type { RouterOptions } from '../service/router';
 import { getHealth } from '../controllers/health';
 
 export const registerHealthRoutes = (
