@@ -1,0 +1,10 @@
+resourceOptimization:
+  clientId: ${RHCC_SA_CLIENT_ID}
+  clientSecret: ${RHCC_SA_CLIENT_SECRET}
+
+proxy:
+  endpoints:
+    '/cost-management/v1':
+      target: https://console.redhat.com/api/cost-management/v1
+      changeOrigin: true
+      allowedHeaders: ['Authorization']

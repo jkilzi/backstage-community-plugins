@@ -4,4 +4,4 @@ import { createApiRef } from "@backstage/core-plugin-api";
 
 export const optimizationsApiRef = createApiRef<OptimizationsApi>({
   id: 'plugin.resource-optimization.api',
-});     
+});
