@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { RouterOptions } from '../service/createRouter';
+import type { Router } from 'express';
+import type { RouterOptions } from '../service/router';
 import { getToken } from '../controllers/token';
 
 export const registerTokenRoutes = (router: Router, options: RouterOptions) => {
