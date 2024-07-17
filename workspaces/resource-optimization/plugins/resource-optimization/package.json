@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@backstage-community/plugin-resource-optimization-common": "workspace:^",
+    "@backstage-community/plugin-resource-optimization-react": "workspace:^",
     "@backstage/core-components": "^0.14.7",
     "@backstage/core-plugin-api": "^1.9.2",
     "@backstage/plugin-catalog-react": "^1.12.1",
@@ -58,6 +59,7 @@
     "react-router-dom": "^6.23.1"
   },
   "files": [
+    "app-config.rhdh.yaml",
     "dist",
     "dist-scalprum"
   ],

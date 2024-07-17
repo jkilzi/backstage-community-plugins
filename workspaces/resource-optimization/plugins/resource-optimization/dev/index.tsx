@@ -4,7 +4,7 @@ import {
   resourceOptimizationPlugin,
   ResourceOptimizationPage,
 } from '../src/plugin';
-import { ResourceOptimizationIconOutlined } from '../src/components/ResourceOptimizationIcon';
+import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization-react';
 
 createDevApp()
   .registerPlugin(resourceOptimizationPlugin)
@@ -22,6 +22,6 @@ createDevApp()
       </>
     ),
     title: 'Optimization Details',
-    path: '/resource-optimization/:recommendationId',
+    path: '/resource-optimization/:id',
   })
   .render();
