@@ -1,5 +1,5 @@
 import { errorHandler } from '@backstage/backend-common';
-import {
+import type {
   LoggerService,
   RootConfigService,
 } from '@backstage/backend-plugin-api';
