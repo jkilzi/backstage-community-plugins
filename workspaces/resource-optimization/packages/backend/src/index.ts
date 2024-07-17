@@ -7,15 +7,8 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
-import {
-  dynamicPluginsFeatureDiscoveryServiceFactory,
-  dynamicPluginsServiceFactory,
-} from '@backstage/backend-dynamic-feature-service';
 
 const backend = createBackend();
-
-backend.add(dynamicPluginsFeatureDiscoveryServiceFactory()); // overridden version of the FeatureDiscoveryService which provides features loaded by dynamic plugins
-backend.add(dynamicPluginsServiceFactory());
 
 backend.add(
   import('@backstage-community/plugin-resource-optimization-backend'),
