@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   Chart,
-  ChartArea,
+  // ChartArea,
   ChartAxis,
   ChartBoxPlot,
-  ChartLegend,
-  ChartLegendTooltip,
-  ChartScatter,
-  createContainer,
-  getInteractiveLegendEvents,
+  // ChartLegend,
+  // ChartLegendTooltip,
+  // ChartScatter,
+  // createContainer,
+  // getInteractiveLegendEvents,
 } from '@patternfly/react-charts';
 
 type Props = {
@@ -38,7 +38,7 @@ type Props = {
 //   return yVal !== null ? yVal : 'no data';
 // }
 
-const CursorVoronoiContainer = createContainer('voronoi', 'cursor');
+// const CursorVoronoiContainer = createContainer('voronoi', 'cursor');
 
 export const OptimizationsBreakdownChart: React.FC<Props> = props => {
   return (

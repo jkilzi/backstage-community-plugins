@@ -81,7 +81,7 @@ const filters: Filter[] = [
 export type ResourceOptimizationIndexPageProps = {};
 
 export function ResourceOptimizationIndexPage(
-  props: ResourceOptimizationIndexPageProps,
+  _props: ResourceOptimizationIndexPageProps,
 ) {
   const api = useApi(optimizationsApiRef);
   const { value, error, loading } = useAsync(async () => {
