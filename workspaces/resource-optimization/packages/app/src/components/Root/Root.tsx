@@ -26,7 +26,8 @@ import {
 } from '@backstage/core-components';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization';
+import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization-react';
+import { useRhdhTheme } from '../../hooks/useRhdhTheme';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -43,6 +44,20 @@ const useSidebarLogoStyles = makeStyles({
   },
 });
 
+const Logo = (props: { isOpen?: boolean }) => {
+  const { isOpen = false } = props;
+  const { isRhdhThemeEnabled, RhdhLogoFull, RhdhLogoIcon } = useRhdhTheme();
+
+  let logo: React.ReactElement | null = null;
+  if (isOpen) {
+    logo = isRhdhThemeEnabled ? <RhdhLogoFull /> : <LogoFull />;
+  } else {
+    logo = isRhdhThemeEnabled ? <RhdhLogoIcon /> : <LogoIcon />;
+  }
+
+  return logo;
+};
+
 const SidebarLogo = () => {
   const classes = useSidebarLogoStyles();
   const { isOpen } = useSidebarOpenState();
@@ -50,7 +65,7 @@ const SidebarLogo = () => {
   return (
     <div className={classes.root}>
       <Link to="/" underline="none" className={classes.link} aria-label="Home">
-        {isOpen ? <LogoFull /> : <LogoIcon />}
+        <Logo isOpen={isOpen} />
       </Link>
     </div>
   );
