@@ -39,8 +39,9 @@
     "export-dynamic": "yarn run -T janus-cli package export-dynamic-plugin --embed-as-dependencies"
   },
   "dependencies": {
-    "@backstage/backend-common": "^0.22.0",
-    "@backstage/backend-defaults": "^0.2.17",
+    "@backstage/backend-common": "^0.23.2",
+    "@backstage/backend-defaults": "^0.3.3",
+    "@backstage/backend-dynamic-feature-service": "^0.2.14",
     "@backstage/backend-plugin-api": "^0.6.18",
     "@backstage/config": "^1.2.0",
     "@types/express": "*",
@@ -61,7 +62,6 @@
   "files": [
     "app-config.rhdh.yaml",
     "dist",
-    "dist-dynamic",
     "config.d.ts"
   ],
   "configSchema": "config.d.ts"
