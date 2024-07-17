@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Autocomplete, AutocompleteProps } from '@material-ui/lab';
 import { useStyles } from './useStyles';
 import { RenderOptionLabel } from './RenderOptionLabel';
-import { useDebouncedEffect } from '@react-hookz/web';
+// import { useDebouncedEffect } from '@react-hookz/web';
 
 type ExcludedAutocompleteProps =
   | 'clearOnEscape'
@@ -31,7 +31,7 @@ export function ComboBox<
   Multiple extends boolean | undefined,
 >(props: ComboBoxProps<T, Multiple>) {
   const classes = useStyles();
-  const [text, setText] = useState('');
+  const [_text, setText] = useState('');
 
   return (
     <Box className={classes.root} pb={1} pt={1}>
