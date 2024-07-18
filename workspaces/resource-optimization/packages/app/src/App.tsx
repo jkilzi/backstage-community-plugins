@@ -38,7 +38,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-resource-optimization';
-import { useRhdhTheme } from './hooks/useRhdhTheme';
+import { useRhdhTheme } from './hooks/rhdh-theme';
 
 const options: Parameters<typeof createApp>[0] = {
   apis,
