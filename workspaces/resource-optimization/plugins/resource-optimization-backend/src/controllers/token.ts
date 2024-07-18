@@ -1,7 +1,7 @@
 import assert from 'assert';
-import { RequestHandler } from 'express';
-import { GetTokenResponse } from '../models/token/GetTokenResponse';
-import { RouterOptions } from '../service/router';
+import type { RequestHandler } from 'express';
+import type { GetTokenResponse } from '../models/token/GetTokenResponse';
+import type { RouterOptions } from '../service/router';
 
 const DEFAULT_SSO_BASE_URL = 'https://sso.redhat.com';
 
