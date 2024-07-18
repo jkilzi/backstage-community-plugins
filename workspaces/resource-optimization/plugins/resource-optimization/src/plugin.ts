@@ -35,11 +35,7 @@ export const resourceOptimizationPlugin = createPlugin({
 export const ResourceOptimizationPage = resourceOptimizationPlugin.provide(
   createRoutableExtension({
     name: 'ResourceOptimizationPage',
-    component: () =>
-      import('./components/Router').then(
-        m => m.Router,
-      ),
+    component: () => import('./components/Router').then(m => m.Router),
     mountPoint: rootRouteRef,
   }),
 );
-

@@ -1,3 +1,2 @@
-
-export type { OptimizationsApi } from "./OptimizationsApi.client";
-export { OptimizationsApiClient } from "./OptimizationsApi.client";
+export type { OptimizationsApi } from './OptimizationsApi.client';
+export { OptimizationsApiClient } from './OptimizationsApi.client';

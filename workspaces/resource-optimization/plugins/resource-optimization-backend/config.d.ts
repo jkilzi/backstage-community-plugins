@@ -2,7 +2,7 @@ export interface Config {
   resourceOptimization: {
     /**
      * @default "https://sso.redhat.com"
-     *  
+     *
      * @visibility backend
      */
     ssoBaseUrl?: string;
