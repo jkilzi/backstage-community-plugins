@@ -27,7 +27,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization-react';
-import { useRhdhTheme } from '../../hooks/useRhdhTheme';
+import { useRhdhTheme } from '../../hooks/rhdh-theme';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
