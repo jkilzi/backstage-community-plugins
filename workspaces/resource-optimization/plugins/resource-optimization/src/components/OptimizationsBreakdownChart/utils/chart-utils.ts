@@ -4,7 +4,6 @@
 // import type { ChartSeries } from '../types/ChartSeries';
 // import type { Formatter, FormatOptions } from '../types/Formatter';
 
-
 // // Returns groups of chart names associated with each data series
 // export const getChartNames = (series: ChartSeries[]) => {
 //   const result = [];
