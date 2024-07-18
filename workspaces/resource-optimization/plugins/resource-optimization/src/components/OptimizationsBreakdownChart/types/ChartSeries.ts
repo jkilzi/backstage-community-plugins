@@ -1,6 +1,6 @@
 import type { VictoryStyleInterface } from 'victory-core';
-import type { ChartData } from "./ChartData";
-import type { ChartLegendItem } from "./ChartLegendItem";
+import type { ChartData } from './ChartData';
+import type { ChartLegendItem } from './ChartLegendItem';
 
 export interface ChartSeries {
   childName?: string;

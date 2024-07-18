@@ -21,7 +21,7 @@ type Props = {
 };
 
 // type ChartDatum {
-  
+
 //   _min
 //   _median
 //   _max
