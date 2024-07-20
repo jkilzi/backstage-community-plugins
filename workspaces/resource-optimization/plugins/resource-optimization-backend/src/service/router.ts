@@ -8,11 +8,13 @@ import Router from 'express-promise-router';
 import { registerHealthRoutes } from '../routes/health';
 import { registerTokenRoutes } from '../routes/token';
 
+/** @public */
 export interface RouterOptions {
   logger: LoggerService;
   config?: RootConfigService;
 }
 
+/** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
