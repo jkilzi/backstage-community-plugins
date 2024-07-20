@@ -6,6 +6,7 @@ import {
   SupportButton,
 } from '@backstage/core-components';
 
+/** @public */
 export function BasePage(
   props: PropsWithChildren<{
     pageThemeId?: string;
