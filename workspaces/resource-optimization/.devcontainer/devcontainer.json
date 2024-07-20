@@ -8,9 +8,7 @@
     "ghcr.io/devcontainers/features/node:1": {},
     "ghcr.io/devcontainers-contrib/features/fzf:1": {},
     "ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {},
-    "ghcr.io/dhoeric/features/act:1": {},
-    "ghcr.io/devcontainers-community/features/deno:1": {},
-    "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {}
+    "ghcr.io/dhoeric/features/act:1": {}
   },
   "forwardPorts": [3000, 7007],
   "customizations": {
@@ -22,12 +20,10 @@
         },
         "typescript.tsdk": "node_modules/typescript/lib",
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true,
-        "editor.formatOnSaveMode": "file"
+        "editor.formatOnSave": true
       },
       "extensions": [
         "dbaeumer.vscode-eslint",
-        "-denoland.vscode-deno",
         "esbenp.prettier-vscode",
         "redhat.vscode-yaml",
         "orta.vscode-jest",
