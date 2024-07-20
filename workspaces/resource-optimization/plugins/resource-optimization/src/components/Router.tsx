@@ -7,6 +7,7 @@ import { ExampleComponent as ResourceOptimizationIndexPage } from './ExampleComp
 // import { OptimizationsBreakdownPage } from './Pages/OptimizationsBreakdown';
 import { RosDetailComponent as OptimizationsBreakdownPage } from './RosDetailComponent'; // TODO(jkilzi): replace with above line after PoC
 
+/** @public */
 export function Router() {
   return (
     <Routes>
