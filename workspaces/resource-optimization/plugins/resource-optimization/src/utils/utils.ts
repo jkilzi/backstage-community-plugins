@@ -1,4 +1,4 @@
-import { RecommendationsRecommendationsCurrent } from '@backstage-community/plugin-resource-optimization-common';
+import { RecommendationsRecommendationsCurrent } from '@backstage-community/plugin-resource-optimization-common/models';
 
 const getPercentage = (oldNumber: number, newNumber: number): number => {
   if (typeof oldNumber !== 'number' || typeof newNumber !== 'number') {
@@ -14,14 +14,10 @@ export const getRecommendedValue = (
   key1: 'limits' | 'requests',
   key2: 'cpu' | 'memory',
 ) => {
-  let currentVal, currentFormat;
-  let recommendedVal, recommendedFormat;
-
-  currentVal = currentValues[key1]?.[key2]?.amount || 0;
-  recommendedVal = recommendedValues[key1]?.[key2]?.amount || 0;
-
-  currentFormat = currentValues[key1]?.[key2]?.format || '';
-  recommendedFormat = recommendedValues[key1]?.[key2]?.format || '';
+  let currentVal = currentValues[key1]?.[key2]?.amount || 0;
+  const currentFormat = currentValues[key1]?.[key2]?.format || '';
+  let recommendedVal = recommendedValues[key1]?.[key2]?.amount || 0;
+  const recommendedFormat = recommendedValues[key1]?.[key2]?.format || '';
 
   if (recommendedVal === 0) {
     return '-';

@@ -12,7 +12,7 @@ import {
 import useAsync from 'react-use/lib/useAsync';
 import { useApi } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../apis';
-import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
+import { Recommendations } from '@backstage-community/plugin-resource-optimization-common/models';
 import { columns } from '../Tables/columns';
 import {
   CatalogFilterLayout,

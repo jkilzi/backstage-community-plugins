@@ -13,7 +13,7 @@ import { ApiProvider } from '@backstage/core-app-api';
 import { optimizationsApiRef } from '../../apis';
 import { searchApiRef } from '@backstage/plugin-search-react';
 import { getRecommendationMockResponse } from './mockResponses';
-import { RecommendationList } from '@backstage-community/plugin-resource-optimization-common';
+import { RecommendationList } from '@backstage-community/plugin-resource-optimization-common/models';
 
 const emptySearchResults = Promise.resolve({
   results: [],

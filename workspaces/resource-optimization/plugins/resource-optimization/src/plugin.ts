@@ -9,6 +9,7 @@ import { OptimizationsClient } from '@backstage-community/plugin-resource-optimi
 import { optimizationsBreakdownRouteRef, rootRouteRef } from './routes';
 import { optimizationsApiRef } from './apis';
 
+/** @public */
 export const resourceOptimizationPlugin = createPlugin({
   id: 'resource-optimization',
   apis: [
@@ -32,6 +33,7 @@ export const resourceOptimizationPlugin = createPlugin({
   },
 });
 
+/** @public */
 export const ResourceOptimizationPage = resourceOptimizationPlugin.provide(
   createRoutableExtension({
     name: 'ResourceOptimizationPage',
