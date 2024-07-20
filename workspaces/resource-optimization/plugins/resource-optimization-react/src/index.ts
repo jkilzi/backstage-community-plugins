@@ -1,4 +1,3 @@
-/***/
 /**
  * Web library for the resource-optimization plugin.
  *

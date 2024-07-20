@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { ComboBox } from './ComboBox';
 
+/** @public */
 export type TableFiltersClassKey = 'root' | 'value' | 'heder' | 'filters';
 const useFilterStyles = makeStyles(
   theme => ({
@@ -36,6 +37,7 @@ const useFilterStyles = makeStyles(
   { name: 'BackstageTableFilters' },
 );
 
+/** @public */
 export type Filter<T extends object = { label: string }> = {
   name: 'cluster' | 'project' | 'workload' | 'type';
   type: 'single' | 'multiple';
@@ -44,7 +46,8 @@ export type Filter<T extends object = { label: string }> = {
 
 type SelectedFilters = Record<Filter['name'], string[]>;
 
-type FiltersProps = {
+/** @public */
+export type FiltersProps = {
   filters: Filter[];
   onChangeFilters: (arg: any) => any;
 };
@@ -56,6 +59,7 @@ const initialState: SelectedFilters = {
   type: [],
 };
 
+/** @public */
 export function Filters(props: FiltersProps) {
   const { onChangeFilters } = props;
   const classes = useFilterStyles();
