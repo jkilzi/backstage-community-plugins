@@ -32,10 +32,10 @@ node_modules/
 .env.test
 
 # Build output
-dist
-dist-types
-dist-dynamic
-dynamic-plugins-root
+dist/
+dist-types/
+dist-dynamic/
+dynamic-plugins-root/
 
 # Temporary change files created by Vim
 *.swp
@@ -54,6 +54,3 @@ site
 
 # E2E test reports
 e2e-test-report/
-
-# vscode workspace configuration
-!.vscode/*.code-workspace
