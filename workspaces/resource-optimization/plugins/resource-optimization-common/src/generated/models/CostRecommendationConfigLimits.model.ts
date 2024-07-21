@@ -6,6 +6,7 @@
 import { CostRecommendationConfigLimitsCpu } from '../models/CostRecommendationConfigLimitsCpu.model';
 import { CostRecommendationConfigLimitsMemory } from '../models/CostRecommendationConfigLimitsMemory.model';
 
+/** @public */
 export interface CostRecommendationConfigLimits {
   cpu?: CostRecommendationConfigLimitsCpu;
   memory?: CostRecommendationConfigLimitsMemory;

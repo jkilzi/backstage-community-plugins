@@ -7,6 +7,7 @@ import { RecommendationListLinks } from '../models/RecommendationListLinks.model
 import { RecommendationListMeta } from '../models/RecommendationListMeta.model';
 import { Recommendations } from '../models/Recommendations.model';
 
+/** @public */
 export interface RecommendationList {
   data?: Array<Recommendations>;
   meta?: RecommendationListMeta;

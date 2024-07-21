@@ -6,6 +6,7 @@
 import { CostRecommendationConfig } from '../models/CostRecommendationConfig.model';
 import { CostRecommendationVariation } from '../models/CostRecommendationVariation.model';
 
+/** @public */
 export interface CostRecommendation {
   config?: CostRecommendationConfig;
   podsCount?: number;
