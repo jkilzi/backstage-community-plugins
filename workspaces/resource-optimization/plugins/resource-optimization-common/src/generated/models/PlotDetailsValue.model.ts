@@ -6,6 +6,7 @@
 import { CpuUsage } from '../models/CpuUsage.model';
 import { MemoryUsage } from '../models/MemoryUsage.model';
 
+/** @public */
 export interface PlotDetailsValue {
   cpuUsage?: CpuUsage;
   memoryUsage?: MemoryUsage;

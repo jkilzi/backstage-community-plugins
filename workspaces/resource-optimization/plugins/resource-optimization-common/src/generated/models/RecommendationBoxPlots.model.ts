@@ -5,6 +5,7 @@
 // ******************************************************************
 import { RecommendationBoxPlotsRecommendations } from '../models/RecommendationBoxPlotsRecommendations.model';
 
+/** @public */
 export interface RecommendationBoxPlots {
   clusterAlias?: string;
   clusterUuid?: string;

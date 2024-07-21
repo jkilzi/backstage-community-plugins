@@ -6,6 +6,7 @@
 import { CostRecommendation } from '../models/CostRecommendation.model';
 import { PerformanceRecommendation } from '../models/PerformanceRecommendation.model';
 
+/** @public */
 export interface LongTermRecommendationRecommendationEngines {
   cost?: CostRecommendation;
   performance?: PerformanceRecommendation;

@@ -6,6 +6,7 @@
 import { PerformanceRecommendationConfig } from '../models/PerformanceRecommendationConfig.model';
 import { PerformanceRecommendationVariation } from '../models/PerformanceRecommendationVariation.model';
 
+/** @public */
 export interface PerformanceRecommendation {
   config?: PerformanceRecommendationConfig;
   podsCount?: number;

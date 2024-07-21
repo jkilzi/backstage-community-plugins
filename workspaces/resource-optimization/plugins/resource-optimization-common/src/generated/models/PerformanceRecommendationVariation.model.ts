@@ -6,6 +6,7 @@
 import { PerformanceRecommendationVariationLimits } from '../models/PerformanceRecommendationVariationLimits.model';
 import { PerformanceRecommendationVariationRequests } from '../models/PerformanceRecommendationVariationRequests.model';
 
+/** @public */
 export interface PerformanceRecommendationVariation {
   limits?: PerformanceRecommendationVariationLimits;
   requests?: PerformanceRecommendationVariationRequests;

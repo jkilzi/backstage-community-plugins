@@ -6,6 +6,7 @@
 import { CostRecommendationVariationLimits } from '../models/CostRecommendationVariationLimits.model';
 import { CostRecommendationVariationRequests } from '../models/CostRecommendationVariationRequests.model';
 
+/** @public */
 export interface CostRecommendationVariation {
   limits?: CostRecommendationVariationLimits;
   requests?: CostRecommendationVariationRequests;

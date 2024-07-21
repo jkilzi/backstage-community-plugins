@@ -6,6 +6,7 @@
 import { CostRecommendationConfigLimits } from '../models/CostRecommendationConfigLimits.model';
 import { CostRecommendationConfigRequests } from '../models/CostRecommendationConfigRequests.model';
 
+/** @public */
 export interface CostRecommendationConfig {
   limits?: CostRecommendationConfigLimits;
   requests?: CostRecommendationConfigRequests;

@@ -32,8 +32,9 @@ export interface RequestOptions {
 
 /**
  * no description
+ * @public
  */
-export class OptimizationsApiClient {
+export class DefaultApiClient {
   private readonly discoveryApi: DiscoveryApi;
   private readonly fetchApi: FetchApi;
 
@@ -48,9 +49,9 @@ export class OptimizationsApiClient {
   /**
    * This feature is in limited preview for select customers
    * Get recommendation for container
-   * @param recommendationId The recommendation UUID
-   * @param memoryUnit unit preference for memory
-   * @param cpuUnit unit preference for cpu
+   * @param recommendationId - The recommendation UUID
+   * @param memoryUnit - unit preference for memory
+   * @param cpuUnit - unit preference for cpu
    */
   public async getRecommendationById(
     // @ts-ignore
@@ -86,17 +87,17 @@ export class OptimizationsApiClient {
   /**
    * This feature is in limited preview for select customers
    * Get all recommendations
-   * @param cluster Cluster alias or UUID
-   * @param workloadType Options are daemonset, deployment, deploymentconfig, replicaset, replicationcontroller, statefulset
-   * @param workload Workload name
-   * @param container Container name
-   * @param project Project name
-   * @param startDate Start date
-   * @param endDate End date
-   * @param offset Pagination offset
-   * @param limit Pagination limit
-   * @param orderBy Options are cluster, project, workload_type, workload, container, last_reported
-   * @param orderHow Options are ASC, DESC
+   * @param cluster - Cluster alias or UUID
+   * @param workloadType - Options are daemonset, deployment, deploymentconfig, replicaset, replicationcontroller, statefulset
+   * @param workload - Workload name
+   * @param container - Container name
+   * @param project - Project name
+   * @param startDate - Start date
+   * @param endDate - End date
+   * @param offset - Pagination offset
+   * @param limit - Pagination limit
+   * @param orderBy - Options are cluster, project, workload_type, workload, container, last_reported
+   * @param orderHow - Options are ASC, DESC
    */
   public async getRecommendationList(
     // @ts-ignore
@@ -134,5 +135,3 @@ export class OptimizationsApiClient {
     });
   }
 }
-
-export type OptimizationsApi = InstanceType<typeof OptimizationsApiClient>;
