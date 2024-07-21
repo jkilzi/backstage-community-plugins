@@ -12,7 +12,7 @@ import {
 import useAsync from 'react-use/lib/useAsync';
 import { useApi } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../apis';
-import { Recommendations } from '@backstage-community/plugin-resource-optimization-common/models';
+import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
 import { columns } from '../Tables/columns';
 import {
   CatalogFilterLayout,
@@ -107,7 +107,7 @@ export const ExampleComponent = () => {
     orderDirectionParam: SortOrder,
   ) => {
     if (orderByParam >= 0) {
-      setOrderBy(`${columns[orderByParam].field}`);
+      setOrderBy(`${String(columns[orderByParam].field)}`);
       setOrderDirection(orderDirectionParam);
     }
   };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import { Link, TableColumn } from '@backstage/core-components';
-import { Recommendations } from '@backstage-community/plugin-resource-optimization-common/models';
+import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
 import { getTimeFromNow } from '../../utils/dates';
 
 export const columns: TableColumn<Recommendations>[] = [

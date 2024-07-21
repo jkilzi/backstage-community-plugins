@@ -23,7 +23,7 @@ import { getTimeFromNow } from '../../utils/dates';
 import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
 import { getRecommendedValue } from '../../utils/utils';
 // import { OptimizationsBreakdownChart } from '../OptimizationsBreakdownChart';
-import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common/models';
+import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common';
 
 type RecommendationTerms =
   keyof RecommendationBoxPlotsRecommendationsRecommendationTerms;
