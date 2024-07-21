@@ -5,7 +5,7 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import { OptimizationsClient } from '@backstage-community/plugin-resource-optimization-common';
+import { OptimizationsApiClient } from '@backstage-community/plugin-resource-optimization-common';
 import { optimizationsBreakdownRouteRef, rootRouteRef } from './routes';
 import { optimizationsApiRef } from './apis';
 
@@ -20,7 +20,7 @@ export const resourceOptimizationPlugin = createPlugin({
         fetchApi: fetchApiRef,
       },
       factory({ discoveryApi, fetchApi }) {
-        return new OptimizationsClient({
+        return new OptimizationsApiClient({
           discoveryApi,
           fetchApi,
         });

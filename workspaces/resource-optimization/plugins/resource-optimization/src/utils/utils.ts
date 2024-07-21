@@ -1,4 +1,4 @@
-import { RecommendationsRecommendationsCurrent } from '@backstage-community/plugin-resource-optimization-common/models';
+import { RecommendationsRecommendationsCurrent } from '@backstage-community/plugin-resource-optimization-common';
 
 const getPercentage = (oldNumber: number, newNumber: number): number => {
   if (typeof oldNumber !== 'number' || typeof newNumber !== 'number') {

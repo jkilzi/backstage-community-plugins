@@ -5,7 +5,7 @@ import {
   Table,
   TableColumn,
 } from '@backstage/core-components';
-import type { Recommendations } from '@backstage-community/plugin-resource-optimization-common/models';
+import type { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
 import {
   BasePage,
   TableToolbar,
