@@ -6,6 +6,7 @@
 import { RecommendationsRecommendationsCurrent } from '../models/RecommendationsRecommendationsCurrent.model';
 import { RecommendationsRecommendationsRecommendationTerms } from '../models/RecommendationsRecommendationsRecommendationTerms.model';
 
+/** @public */
 export interface RecommendationsRecommendations {
   current?: RecommendationsRecommendationsCurrent;
   monitoringEndTime?: Date;

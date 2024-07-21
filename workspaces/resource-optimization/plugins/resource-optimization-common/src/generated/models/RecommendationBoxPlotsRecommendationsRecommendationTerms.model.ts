@@ -7,6 +7,7 @@ import { LongTermRecommendationBoxPlots } from '../models/LongTermRecommendation
 import { MediumTermRecommendationBoxPlots } from '../models/MediumTermRecommendationBoxPlots.model';
 import { ShortTermRecommendationBoxPlots } from '../models/ShortTermRecommendationBoxPlots.model';
 
+/** @public */
 export interface RecommendationBoxPlotsRecommendationsRecommendationTerms {
   longTerm?: LongTermRecommendationBoxPlots;
   mediumTerm?: MediumTermRecommendationBoxPlots;

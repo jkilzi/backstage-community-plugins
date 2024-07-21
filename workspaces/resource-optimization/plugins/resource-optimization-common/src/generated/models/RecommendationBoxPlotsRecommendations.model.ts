@@ -6,6 +6,7 @@
 import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '../models/RecommendationBoxPlotsRecommendationsRecommendationTerms.model';
 import { RecommendationsRecommendationsCurrent } from '../models/RecommendationsRecommendationsCurrent.model';
 
+/** @public */
 export interface RecommendationBoxPlotsRecommendations {
   current?: RecommendationsRecommendationsCurrent;
   monitoringEndTime?: Date;

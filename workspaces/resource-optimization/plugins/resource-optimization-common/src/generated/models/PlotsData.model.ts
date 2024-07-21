@@ -5,6 +5,7 @@
 // ******************************************************************
 import { PlotDetailsValue } from '../models/PlotDetailsValue.model';
 
+/** @public */
 export interface PlotsData {
   datapoints?: number;
   plotsData?: { [key: string]: PlotDetailsValue };

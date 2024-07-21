@@ -6,6 +6,7 @@
 import { RecommendationsRecommendationsCurrentLimitsCpu } from '../models/RecommendationsRecommendationsCurrentLimitsCpu.model';
 import { RecommendationsRecommendationsCurrentLimitsMemory } from '../models/RecommendationsRecommendationsCurrentLimitsMemory.model';
 
+/** @public */
 export interface RecommendationsRecommendationsCurrentLimits {
   cpu?: RecommendationsRecommendationsCurrentLimitsCpu;
   memory?: RecommendationsRecommendationsCurrentLimitsMemory;

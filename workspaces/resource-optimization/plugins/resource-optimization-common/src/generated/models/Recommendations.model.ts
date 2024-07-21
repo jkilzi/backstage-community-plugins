@@ -5,6 +5,7 @@
 // ******************************************************************
 import { RecommendationsRecommendations } from '../models/RecommendationsRecommendations.model';
 
+/** @public */
 export interface Recommendations {
   clusterAlias?: string;
   clusterUuid?: string;

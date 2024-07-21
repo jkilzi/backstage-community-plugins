@@ -6,6 +6,7 @@
 import { LongTermRecommendationRecommendationEngines } from '../models/LongTermRecommendationRecommendationEngines.model';
 import { PlotsData } from '../models/PlotsData.model';
 
+/** @public */
 export interface MediumTermRecommendationBoxPlots {
   durationInHours?: number;
   monitoringStartTime?: Date;

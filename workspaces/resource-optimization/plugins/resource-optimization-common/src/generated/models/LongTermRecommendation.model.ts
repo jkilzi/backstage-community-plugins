@@ -5,6 +5,7 @@
 // ******************************************************************
 import { LongTermRecommendationRecommendationEngines } from '../models/LongTermRecommendationRecommendationEngines.model';
 
+/** @public */
 export interface LongTermRecommendation {
   durationInHours?: number;
   monitoringStartTime?: Date;

@@ -6,6 +6,7 @@
 import { CostRecommendationConfigRequestsCpu } from '../models/CostRecommendationConfigRequestsCpu.model';
 import { CostRecommendationConfigRequestsMemory } from '../models/CostRecommendationConfigRequestsMemory.model';
 
+/** @public */
 export interface CostRecommendationConfigRequests {
   cpu?: CostRecommendationConfigRequestsCpu;
   memory?: CostRecommendationConfigRequestsMemory;

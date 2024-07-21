@@ -6,6 +6,7 @@
 import { PerformanceRecommendationVariationLimitsCpu } from '../models/PerformanceRecommendationVariationLimitsCpu.model';
 import { PerformanceRecommendationVariationLimitsMemory } from '../models/PerformanceRecommendationVariationLimitsMemory.model';
 
+/** @public */
 export interface PerformanceRecommendationVariationLimits {
   cpu?: PerformanceRecommendationVariationLimitsCpu;
   memory?: PerformanceRecommendationVariationLimitsMemory;
