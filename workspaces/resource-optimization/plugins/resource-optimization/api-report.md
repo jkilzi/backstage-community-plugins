@@ -19,7 +19,7 @@ export const ResourceOptimizationPage: Router;
 export const resourceOptimizationPlugin: BackstagePlugin<
   {
     root: RouteRef<undefined>;
-    breakdown: SubRouteRef<PathParams<'/:id'>>;
+    breakdown: SubRouteRef<PathParams<'/:id/*'>>;
   },
   {},
   {}

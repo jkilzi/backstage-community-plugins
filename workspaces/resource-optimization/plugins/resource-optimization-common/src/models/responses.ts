@@ -1,6 +1,6 @@
 /**
  * This is a copy of GetTokenResponse, to avoid importing resource-optimization-backend.
- * 
+ *
  * @public
  */
 export interface GetTokenResponse {
