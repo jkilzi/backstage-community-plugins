@@ -12,7 +12,8 @@ paths:
       summary: Get all recommendations
       description: This feature is in limited preview for select customers
       externalDocs:
-        description: Please refer to this blog post if you want to be included in the
+        description:
+          Please refer to this blog post if you want to be included in the
           preview
         url: https://www.redhat.com/en/blog/red-hat-insights-brings-resource-optimization-red-hat-openshift
       operationId: getRecommendationList
@@ -27,7 +28,8 @@ paths:
               type: string
         - name: workload_type
           in: query
-          description: Options are daemonset, deployment, deploymentconfig, replicaset,
+          description:
+            Options are daemonset, deployment, deploymentconfig, replicaset,
             replicationcontroller, statefulset
           required: false
           schema:
@@ -89,7 +91,8 @@ paths:
             maximum: 100
         - name: order_by
           in: query
-          description: Options are cluster, project, workload_type, workload, container,
+          description:
+            Options are cluster, project, workload_type, workload, container,
             last_reported
           required: false
           schema:
@@ -103,13 +106,13 @@ paths:
             type: string
             example: DESC
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RecommendationList"
-        "401":
+                $ref: '#/components/schemas/RecommendationList'
+        '401':
           description: User is not authorized
           content:
             text/plain:
@@ -120,7 +123,8 @@ paths:
     get:
       description: This feature is in limited preview for select customers
       externalDocs:
-        description: Please refer to this blog post if you want to be included in the
+        description:
+          Please refer to this blog post if you want to be included in the
           preview
         url: https://www.redhat.com/en/blog/red-hat-insights-brings-resource-optimization-red-hat-openshift
       operationId: getRecommendationById
@@ -154,13 +158,13 @@ paths:
             default: cores
       summary: Get recommendation for container
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json; charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/RecommendationBoxPlots"
-        "401":
+                $ref: '#/components/schemas/RecommendationBoxPlots'
+        '401':
           description: User is not authorized
           content:
             text/plain:
@@ -175,7 +179,7 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/Recommendations"
+            $ref: '#/components/schemas/Recommendations'
         meta:
           type: object
           properties:
@@ -279,11 +283,11 @@ components:
               type: object
               properties:
                 long_term:
-                  $ref: "#/components/schemas/LongTermRecommendation"
+                  $ref: '#/components/schemas/LongTermRecommendation'
                 medium_term:
-                  $ref: "#/components/schemas/MediumTermRecommendation"
+                  $ref: '#/components/schemas/MediumTermRecommendation'
                 short_term:
-                  $ref: "#/components/schemas/ShortTermRecommendation"
+                  $ref: '#/components/schemas/ShortTermRecommendation'
         source_id:
           type: string
           example: 0920ff0d-f1d6-4fe2-8bf3-18e6074bd27b
@@ -308,9 +312,9 @@ components:
           type: object
           properties:
             cost:
-              $ref: "#/components/schemas/CostRecommendation"
+              $ref: '#/components/schemas/CostRecommendation'
             performance:
-              $ref: "#/components/schemas/PerformanceRecommendation"
+              $ref: '#/components/schemas/PerformanceRecommendation'
     MediumTermRecommendation:
       type: object
       properties:
@@ -326,9 +330,9 @@ components:
           type: object
           properties:
             cost:
-              $ref: "#/components/schemas/CostRecommendation"
+              $ref: '#/components/schemas/CostRecommendation'
             performance:
-              $ref: "#/components/schemas/PerformanceRecommendation"
+              $ref: '#/components/schemas/PerformanceRecommendation'
     ShortTermRecommendation:
       type: object
       properties:
@@ -344,9 +348,9 @@ components:
           type: object
           properties:
             cost:
-              $ref: "#/components/schemas/CostRecommendation"
+              $ref: '#/components/schemas/CostRecommendation'
             performance:
-              $ref: "#/components/schemas/PerformanceRecommendation"
+              $ref: '#/components/schemas/PerformanceRecommendation'
     CostRecommendation:
       type: object
       properties:
@@ -626,11 +630,11 @@ components:
               type: object
               properties:
                 long_term:
-                  $ref: "#/components/schemas/LongTermRecommendationBoxPlots"
+                  $ref: '#/components/schemas/LongTermRecommendationBoxPlots'
                 medium_term:
-                  $ref: "#/components/schemas/MediumTermRecommendationBoxPlots"
+                  $ref: '#/components/schemas/MediumTermRecommendationBoxPlots'
                 short_term:
-                  $ref: "#/components/schemas/ShortTermRecommendationBoxPlots"
+                  $ref: '#/components/schemas/ShortTermRecommendationBoxPlots'
         source_id:
           type: string
           example: 0920ff0d-f1d6-4fe2-8bf3-18e6074bd27b
@@ -652,14 +656,14 @@ components:
           format: date-time
           example: 2023-06-02T00:45:00Z
         plots:
-          $ref: "#/components/schemas/PlotsData"
+          $ref: '#/components/schemas/PlotsData'
         recommendation_engines:
           type: object
           properties:
             cost:
-              $ref: "#/components/schemas/CostRecommendation"
+              $ref: '#/components/schemas/CostRecommendation'
             performance:
-              $ref: "#/components/schemas/PerformanceRecommendation"
+              $ref: '#/components/schemas/PerformanceRecommendation'
     MediumTermRecommendationBoxPlots:
       type: object
       properties:
@@ -672,14 +676,14 @@ components:
           format: date-time
           example: 2023-06-02T00:45:00Z
         plots:
-          $ref: "#/components/schemas/PlotsData"
+          $ref: '#/components/schemas/PlotsData'
         recommendation_engines:
           type: object
           properties:
             cost:
-              $ref: "#/components/schemas/CostRecommendation"
+              $ref: '#/components/schemas/CostRecommendation'
             performance:
-              $ref: "#/components/schemas/PerformanceRecommendation"
+              $ref: '#/components/schemas/PerformanceRecommendation'
     ShortTermRecommendationBoxPlots:
       type: object
       properties:
@@ -692,14 +696,14 @@ components:
           format: date-time
           example: 2023-06-02T00:45:00Z
         plots:
-          $ref: "#/components/schemas/PlotsData"
+          $ref: '#/components/schemas/PlotsData'
         recommendation_engines:
           type: object
           properties:
             cost:
-              $ref: "#/components/schemas/CostRecommendation"
+              $ref: '#/components/schemas/CostRecommendation'
             performance:
-              $ref: "#/components/schemas/PerformanceRecommendation"
+              $ref: '#/components/schemas/PerformanceRecommendation'
     PlotsData:
       type: object
       properties:
@@ -707,16 +711,16 @@ components:
           type: integer
           example: 4
         plots_data:
-          $ref: "#/components/schemas/PlotDetails"
+          $ref: '#/components/schemas/PlotDetails'
     PlotDetails:
       type: object
       additionalProperties:
         type: object
         properties:
           cpuUsage:
-            $ref: "#/components/schemas/cpuUsage"
+            $ref: '#/components/schemas/cpuUsage'
           memoryUsage:
-            $ref: "#/components/schemas/memoryUsage"
+            $ref: '#/components/schemas/memoryUsage'
     cpuUsage:
       type: object
       properties:
@@ -725,15 +729,15 @@ components:
           example: null
           nullable: true
         max:
-          $ref: "#/components/schemas/cpuUsageFloatComponent"
+          $ref: '#/components/schemas/cpuUsageFloatComponent'
         median:
-          $ref: "#/components/schemas/cpuUsageFloatComponent"
+          $ref: '#/components/schemas/cpuUsageFloatComponent'
         min:
-          $ref: "#/components/schemas/cpuUsageFloatComponent"
+          $ref: '#/components/schemas/cpuUsageFloatComponent'
         q1:
-          $ref: "#/components/schemas/cpuUsageFloatComponent"
+          $ref: '#/components/schemas/cpuUsageFloatComponent'
         q3:
-          $ref: "#/components/schemas/cpuUsageFloatComponent"
+          $ref: '#/components/schemas/cpuUsageFloatComponent'
     memoryUsage:
       type: object
       properties:
@@ -741,15 +745,15 @@ components:
           type: string
           example: Mi
         max:
-          $ref: "#/components/schemas/memoryUsageFloatComponent"
+          $ref: '#/components/schemas/memoryUsageFloatComponent'
         median:
-          $ref: "#/components/schemas/memoryUsageFloatComponent"
+          $ref: '#/components/schemas/memoryUsageFloatComponent'
         min:
-          $ref: "#/components/schemas/memoryUsageFloatComponent"
+          $ref: '#/components/schemas/memoryUsageFloatComponent'
         q1:
-          $ref: "#/components/schemas/memoryUsageFloatComponent"
+          $ref: '#/components/schemas/memoryUsageFloatComponent'
         q3:
-          $ref: "#/components/schemas/memoryUsageFloatComponent"
+          $ref: '#/components/schemas/memoryUsageFloatComponent'
     cpuUsageFloatComponent:
       type: number
       example: 0.05

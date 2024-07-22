@@ -296,7 +296,7 @@ export type OptimizationsApi = Omit<
 >;
 
 // @public
-export class OptimizationsClient implements OptimizationsApi {
+export class OptimizationsApiClient implements OptimizationsApi {
   constructor(options: { discoveryApi: DiscoveryApi; fetchApi: FetchApi });
   // (undocumented)
   getRecommendationById(
