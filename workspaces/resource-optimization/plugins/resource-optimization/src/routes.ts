@@ -7,5 +7,5 @@ export const rootRouteRef = createRouteRef({
 export const optimizationsBreakdownRouteRef = createSubRouteRef({
   id: 'ros.page.breakdown',
   parent: rootRouteRef,
-  path: '/:id',
+  path: '/:id/*',
 });
