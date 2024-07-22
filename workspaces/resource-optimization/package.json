@@ -20,6 +20,7 @@
     "fix": "backstage-cli repo fix",
     "lint": "backstage-cli repo lint --since origin/main",
     "lint:all": "backstage-cli repo lint",
+    "format": "prettier --write \"{packages,plugins}/**/*.{js,jsx,ts,tsx,css,scss,md,mjs,yaml}\"",
     "prettier:check": "prettier --check .",
     "new": "backstage-cli new --scope @backstage-community",
     "export-dynamic": "yarn workspaces foreach -A run export-dynamic"

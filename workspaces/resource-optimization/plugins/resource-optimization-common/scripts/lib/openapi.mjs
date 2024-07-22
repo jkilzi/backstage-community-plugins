@@ -32,12 +32,12 @@ function patchPathRecommendationsList(spec) {
 
   const RECOMMENDATIONS_LIST_PATH = '/recommendations/openshift';
   const recommendationsListDef = spec.paths[RECOMMENDATIONS_LIST_PATH];
-  
+
   // We delete the tags to prevent the generator from making a module
   // named apis/OrchestratorApi.client.ts that doesn't get exposed
   // properly by the generator.
   delete recommendationsListDef.get.tags;
-  
+
   const { parameters = [] } = recommendationsListDef.get;
   const problematicParams = parameters.filter(p =>
     PROBLEMATIC_QUERY_PARAM_NAMES.test(p.name),
@@ -68,12 +68,12 @@ function patchPathRecommendationsById(spec) {
   const recommendationsByIdDef = structuredClone(
     spec.paths[RECOMMENDATION_BY_ID_PATH],
   );
-  
+
   // We delete the tags to prevent the generator from making a module
   // named apis/OrchestratorApi.client.ts that doesn't get exposed
   // properly by the generator.
   delete recommendationsByIdDef.get.tags;
-  
+
   const { parameters = [] } = recommendationsByIdDef.get;
   for (const parameter of parameters) {
     parameter.name = parameter.name.replace('-', '_');
