@@ -17,12 +17,12 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { CodeInfoCard } from '../../CodeInfoCard/CodeInfoCard';
-import { optimizationsApiRef } from '../../../apis';
-import { getTimeFromNow } from '../../../utils/dates';
-import { YAMLCodeDataType } from '../../../utils/generateYAMLCode';
-import { getRecommendedValue } from '../../../utils/utils';
-import { OptimizationsBreakdownChart } from '../../OptimizationsBreakdownChart';
+import { CodeInfoCard } from '../../components/CodeInfoCard/CodeInfoCard';
+import { optimizationsApiRef } from '../../apis';
+import { getTimeFromNow } from '../../utils/dates';
+import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
+import { getRecommendedValue } from '../../utils/utils';
+import { OptimizationsBreakdownChart } from '../../components/OptimizationsBreakdownChart';
 import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common';
 
 type RecommendationTerms =

@@ -98,6 +98,13 @@ paths:
           schema:
             type: string
             example: last_reported
+            enum:
+              - cluster
+              - project
+              - workload_type
+              - workload
+              - container
+              - last_reported
         - name: order_how
           in: query
           description: Options are ASC, DESC
@@ -105,6 +112,9 @@ paths:
           schema:
             type: string
             example: DESC
+            enum:
+              - asc
+              - desc
       responses:
         '200':
           description: OK
@@ -173,6 +183,69 @@ paths:
                 example: User is not authorized to access the resource
 components:
   schemas:
+    CPURequestOptimisedNotification:
+      type: object
+      properties:
+        "323004":
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 323004
+            message:
+              type: string
+              example: Workload is optimised wrt CPU REQUESTS, no changes needed
+            type:
+              type: string
+              example: notice
+    CPULimitOptimisedNotification:
+      type: object
+      properties:
+        "323005":
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 323005
+            message:
+              type: string
+              example: Workload is optimised wrt CPU LIMITS, no changes needed
+            type:
+              type: string
+              example: notice
+    MemoryRequestOptimisedNotification:
+      type: object
+      properties:
+        "324003":
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 324003
+            message:
+              type: string
+              example: Workload is optimised wrt MEMORY REQUESTS, no changes needed
+            type:
+              type: string
+              example: notice
+    MemoryLimitOptimisedNotification:
+      type: object
+      properties:
+        "324004":
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 324004
+            message:
+              type: string
+              example: Workload is optimised wrt MEMORY LIMITS, no changes needed
+            type:
+              type: string
+              example: notice
+    NilNotification:
+      type: object
+      additionalProperties: false
     RecommendationList:
       type: object
       properties:
@@ -401,6 +474,13 @@ components:
                     format:
                       type: string
                       example: Mi
+        notifications:
+          anyOf:
+            - $ref: "#/components/schemas/CPURequestOptimisedNotification"
+            - $ref: "#/components/schemas/CPULimitOptimisedNotification"
+            - $ref: "#/components/schemas/MemoryRequestOptimisedNotification"
+            - $ref: "#/components/schemas/MemoryLimitOptimisedNotification"
+            - $ref: "#/components/schemas/NilNotification"
         pods_count:
           type: integer
           example: 1
@@ -415,7 +495,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: 1.24
+                      example: 94.12
+                      format: float
                     format:
                       type: string
                       example: null
@@ -425,7 +506,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: 1700
+                      example: 40
+                      format: float
                     format:
                       type: string
                       example: Mi
@@ -437,7 +519,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: 1.08
+                      example: 22
+                      format: float
                     format:
                       type: string
                       example: null
@@ -447,7 +530,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: 300
+                      example: 45
+                      format: float
                     format:
                       type: string
                       example: Mi
@@ -468,7 +552,7 @@ components:
                       example: 622
                     format:
                       type: string
-                      example: null
+                      example: m
                       nullable: true
                 memory:
                   type: object
@@ -501,6 +585,13 @@ components:
                     format:
                       type: string
                       example: Mi
+        notifications:
+          anyOf:
+            - $ref: "#/components/schemas/CPURequestOptimisedNotification"
+            - $ref: "#/components/schemas/CPULimitOptimisedNotification"
+            - $ref: "#/components/schemas/MemoryRequestOptimisedNotification"
+            - $ref: "#/components/schemas/MemoryLimitOptimisedNotification"
+            - $ref: "#/components/schemas/NilNotification"
         pods_count:
           type: integer
           example: 1
@@ -515,7 +606,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: -1.468
+                      example: -94
+                      format: float
                     format:
                       type: string
                       example: null
@@ -525,7 +617,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: 200
+                      example: 60
+                      format: float
                     format:
                       type: string
                       example: Mi
@@ -537,7 +630,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: 2
+                      example: 20
+                      format: float
                     format:
                       type: string
                       example: null
@@ -547,7 +641,8 @@ components:
                   properties:
                     amount:
                       type: number
-                      example: 1056
+                      example: 40
+                      format: float
                     format:
                       type: string
                       example: Mi
@@ -726,8 +821,7 @@ components:
       properties:
         format:
           type: string
-          example: null
-          nullable: true
+          example: cores
         max:
           $ref: '#/components/schemas/cpuUsageFloatComponent'
         median:
@@ -743,7 +837,7 @@ components:
       properties:
         format:
           type: string
-          example: Mi
+          example: MiB
         max:
           $ref: '#/components/schemas/memoryUsageFloatComponent'
         median:

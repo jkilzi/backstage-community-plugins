@@ -12,7 +12,10 @@ import {
 import useAsync from 'react-use/lib/useAsync';
 import { useApi } from '@backstage/core-plugin-api';
 import { optimizationsApiRef } from '../../apis';
-import { Recommendations } from '@backstage-community/plugin-resource-optimization-common';
+import {
+  GetRecommendationListRequest,
+  Recommendations,
+} from '@backstage-community/plugin-resource-optimization-common';
 import { columns } from '../Tables/columns';
 import {
   CatalogFilterLayout,
@@ -41,8 +44,10 @@ export const ExampleComponent = () => {
   const [page, setPage] = useState(0); // first page starts at 0
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [orderBy, setOrderBy] = useState('last_reported');
-  const [orderDirection, setOrderDirection] = useState<SortOrder>('desc');
+  const [orderBy, setOrderBy] =
+    useState<GetRecommendationListRequest['query']['orderBy']>('last_reported');
+  const [orderDirection, setOrderDirection] =
+    useState<GetRecommendationListRequest['query']['orderHow']>('desc');
 
   const [filters, setFilers] = useState<filtersType>({
     containerFilter: [],
@@ -55,7 +60,7 @@ export const ExampleComponent = () => {
   const { value, loading, error } = useAsync(async () => {
     const offsetValue = page * rowsPerPage;
 
-    const apiQuery: Parameters<typeof api.getRecommendationList>[0]['query'] = {
+    const apiQuery: GetRecommendationListRequest['query'] = {
       limit: rowsPerPage,
       offset: offsetValue,
       orderBy: orderBy,
@@ -107,8 +112,10 @@ export const ExampleComponent = () => {
     orderDirectionParam: SortOrder,
   ) => {
     if (orderByParam >= 0) {
-      setOrderBy(`${String(columns[orderByParam].field)}`);
-      setOrderDirection(orderDirectionParam);
+      setOrderBy(columns[orderByParam].field as typeof orderBy);
+      setOrderDirection(
+        orderDirectionParam.toUpperCase() as typeof orderDirection,
+      );
     }
   };
 

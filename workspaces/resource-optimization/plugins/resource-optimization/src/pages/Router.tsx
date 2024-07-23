@@ -2,10 +2,10 @@ import { ErrorPage } from '@backstage/core-components';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { optimizationsBreakdownRouteRef } from '../routes';
-// import { ResourceOptimizationIndexPage } from './Pages/ResourceOptimizationIndex';
-import { ExampleComponent as ResourceOptimizationIndexPage } from './ExampleComponent'; // TODO(jkilzi): replace with above line after PoC
-// import { OptimizationsBreakdownPage } from './Pages/OptimizationsBreakdown';
-import { RosDetailComponent as OptimizationsBreakdownPage } from './RosDetailComponent'; // TODO(jkilzi): replace with above line after PoC
+import { ResourceOptimizationIndexPage } from './resource-optimization-index/ResourceOptimizationIndexPage';
+// import { ExampleComponent as ResourceOptimizationIndexPage } from '../components/ExampleComponent'; // TODO(jkilzi): replace with the line above after PoC
+// import { OptimizationsBreakdownPage } from './optimizations-breakdown';
+import { RosDetailComponent as OptimizationsBreakdownPage } from '../components/RosDetailComponent'; // TODO(jkilzi): replace with th eline above after PoC
 
 /** @public */
 export function Router() {

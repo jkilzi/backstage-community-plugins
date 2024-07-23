@@ -2,22 +2,22 @@ import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { deepMapKeys } from '@y0n1/json/deep-map-keys';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
-import { pluginId } from './generated/pluginId';
+import { pluginId } from '../generated/pluginId';
 import {
   DefaultApiClient,
   RequestOptions,
   TypedResponse,
-} from './generated/apis';
+} from '../generated/apis';
 import type {
   GetRecommendationByIdRequest,
   GetRecommendationListRequest,
-} from './models/requests';
-
+} from '../models/requests';
 import type {
   RecommendationBoxPlots,
   RecommendationList,
   GetTokenResponse,
-} from './models/responses';
+} from '../models/responses';
+import { snakeCase } from 'lodash';
 
 /** @public */
 export type OptimizationsApi = Omit<
@@ -94,18 +94,31 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
       this.token = accessToken;
     }
 
-    let response = await asyncOp.call(this.defaultClient, request, {
-      token: this.token,
-    });
+    const snakeCaseTransformedRequest = deepMapKeys(
+      request,
+      snakeCase,
+    ) as TRequest;
+
+    let response = await asyncOp.call(
+      this.defaultClient,
+      snakeCaseTransformedRequest,
+      {
+        token: this.token,
+      },
+    );
 
     if (!response.ok) {
       if (response.status === 401) {
         const { accessToken } = await this.getNewToken();
         this.token = accessToken;
 
-        response = await asyncOp.call(this.defaultClient, request, {
-          token: this.token,
-        });
+        response = await asyncOp.call(
+          this.defaultClient,
+          snakeCaseTransformedRequest,
+          {
+            token: this.token,
+          },
+        );
       } else {
         throw new Error(response.statusText);
       }

@@ -4,9 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Autocomplete, AutocompleteProps } from '@material-ui/lab';
-import { useStyles } from './useStyles';
+import { useComboBoxStyles } from './useComboBoxStyles';
 import { RenderOptionLabel } from './RenderOptionLabel';
-// import { useDebouncedEffect } from '@react-hookz/web';
 
 type ExcludedAutocompleteProps =
   | 'clearOnEscape'
@@ -18,8 +17,13 @@ type ExcludedAutocompleteProps =
   | 'renderOption';
 
 /** @public */
-export type ComboBoxProps<T, Multiple extends boolean | undefined> = Omit<
-  AutocompleteProps<T, Multiple, false, false>,
+export type ComboBoxProps<
+  T,
+  Multiple extends boolean | undefined = undefined,
+  DisableClearable extends boolean | undefined = undefined,
+  FreeSolo extends boolean | undefined = undefined,
+> = Omit<
+  AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>,
   ExcludedAutocompleteProps
 > & {
   label: string;
@@ -27,10 +31,12 @@ export type ComboBoxProps<T, Multiple extends boolean | undefined> = Omit<
 
 /** @public */
 export function ComboBox<
-  T extends { label: string },
-  Multiple extends boolean | undefined,
->(props: ComboBoxProps<T, Multiple>) {
-  const classes = useStyles();
+  T extends string,
+  Multiple extends boolean | undefined = undefined,
+  DisableClearable extends boolean | undefined = undefined,
+  FreeSolo extends boolean | undefined = undefined,
+>(props: ComboBoxProps<T, Multiple, DisableClearable, FreeSolo>) {
+  const classes = useComboBoxStyles();
   const [_text, setText] = useState('');
 
   return (
@@ -38,9 +44,8 @@ export function ComboBox<
       <Typography className={classes.label} variant="button" component="label">
         {props.label}
       </Typography>
-      <Autocomplete
+      <Autocomplete<T, Multiple, DisableClearable, FreeSolo>
         {...props}
-        clearOnEscape
         disableCloseOnSelect={props.multiple}
         includeInputInList
         popupIcon={<ExpandMoreIcon data-testid="expand-icon" />}
@@ -54,9 +59,9 @@ export function ComboBox<
             variant="outlined"
           />
         )}
-        renderOption={(option, { selected }) => (
-          <RenderOptionLabel title={option.label} isSelected={selected} />
-        )}
+        renderOption={(option, { selected }) => !props.freeSolo ? (
+          <RenderOptionLabel title={option} isSelected={selected} />
+        ) : option}
         size="small"
       />
     </Box>

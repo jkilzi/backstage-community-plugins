@@ -5,8 +5,7 @@
 // ******************************************************************
 
 /** @public */
-/** @public */
-export interface PerformanceRecommendationVariationRequestsMemory {
+export interface PerformanceRecommendationVariationRequestsCpu {
   amount?: number;
-  format?: string;
+  format?: string | null;
 }

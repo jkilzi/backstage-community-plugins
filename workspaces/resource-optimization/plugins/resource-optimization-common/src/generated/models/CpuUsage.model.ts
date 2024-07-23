@@ -6,7 +6,7 @@
 
 /** @public */
 export interface CpuUsage {
-  format?: string | null;
+  format?: string;
   max?: number;
   median?: number;
   min?: number;

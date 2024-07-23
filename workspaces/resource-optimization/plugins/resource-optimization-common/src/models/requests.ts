@@ -1,25 +1,11 @@
-/** @public */
-export type GetRecommendationByIdRequest = {
-  path: { recommendationId: string };
-  query: {
-    memoryUnit?: 'bytes' | 'MiB' | 'GiB' | undefined;
-    cpuUnit?: 'millicores' | 'cores' | undefined;
-  };
-};
+import { OptimizationsApi } from '../client';
 
 /** @public */
-export type GetRecommendationListRequest = {
-  query: {
-    cluster?: string[];
-    workloadType?: string[];
-    workload?: string[];
-    container?: string[];
-    project?: string[];
-    startDate?: string;
-    endDate?: string;
-    offset?: number;
-    limit?: number;
-    orderBy?: string;
-    orderHow?: string;
-  };
-};
+export type GetRecommendationByIdRequest = Parameters<
+  OptimizationsApi['getRecommendationById']
+>[0];
+
+/** @public */
+export type GetRecommendationListRequest = Parameters<
+  OptimizationsApi['getRecommendationList']
+>[0];
