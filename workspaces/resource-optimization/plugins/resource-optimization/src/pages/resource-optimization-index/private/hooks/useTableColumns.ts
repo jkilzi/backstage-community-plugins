@@ -3,6 +3,7 @@ import { Recommendations } from '@backstage-community/plugin-resource-optimizati
 import { Link, TableColumn } from '@backstage/core-components';
 import { useRouteRef } from '@backstage/core-plugin-api';
 import { optimizationsBreakdownRouteRef } from '../../../../routes';
+import { getTimeFromNow } from '../../../../utils/dates';
 
 export function useTableColumns(): TableColumn<Recommendations>[] {
   const columns = useMemo<TableColumn<Recommendations>[]>(
@@ -38,6 +39,9 @@ export function useTableColumns(): TableColumn<Recommendations>[] {
       {
         title: 'Last reported',
         field: 'lastReported',
+        render(data, _type) {
+          return getTimeFromNow(data.lastReported?.toString());
+        },
       },
     ],
     [],
