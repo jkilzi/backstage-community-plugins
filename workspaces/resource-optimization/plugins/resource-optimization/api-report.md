@@ -6,11 +6,14 @@
 import { BackstagePlugin } from '@backstage/core-plugin-api';
 import { PathParams } from '@backstage/core-plugin-api';
 import { default as React_2 } from 'react';
-import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization-react';
 import { RouteRef } from '@backstage/core-plugin-api';
 import { SubRouteRef } from '@backstage/core-plugin-api';
+import type { SvgIconProps } from '@material-ui/core/SvgIcon';
 
-export { ResourceOptimizationIconOutlined };
+// @public
+export const ResourceOptimizationIconOutlined: (
+  props: SvgIconProps,
+) => React_2.JSX.Element;
 
 // @public (undocumented)
 export const ResourceOptimizationPage: Router;
