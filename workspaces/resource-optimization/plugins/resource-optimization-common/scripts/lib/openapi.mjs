@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { fetchJson } from './fetch.mjs';
-import { toYaml } from './serializer.mjs';
+import { toYaml } from './yaml.mjs';
 
 function patchTitle(spec) {
   spec.info.title = 'resource-optimization';
