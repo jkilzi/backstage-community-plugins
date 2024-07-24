@@ -33,14 +33,14 @@ function patchPathRecommendationsList(spec) {
   // named apis/OrchestratorApi.client.ts that doesn't get exposed
   // properly by the generator.
   delete recommendationsListDef.get.tags;
-  
+
   // Patch the order_how and order_by parameters to generate enums
   const { parameters = [] } = recommendationsListDef.get;
   for (const parameter of parameters) {
     if (parameter.name === 'order_how') {
       parameter.schema.enum = ['asc', 'desc'];
     }
-    
+
     if (parameter.name === 'order_by') {
       parameter.schema.enum = [
         'cluster',
@@ -52,7 +52,7 @@ function patchPathRecommendationsList(spec) {
       ];
     }
   }
-  
+
   // The following parameters should have been defined as Array<string>
   const PROBLEMATIC_QUERY_PARAM_NAMES =
     /(cluster|workload_type|workload|container|project)/;

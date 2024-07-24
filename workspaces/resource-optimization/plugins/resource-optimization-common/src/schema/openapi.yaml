@@ -186,7 +186,7 @@ components:
     CPURequestOptimisedNotification:
       type: object
       properties:
-        "323004":
+        '323004':
           type: object
           properties:
             code:
@@ -201,7 +201,7 @@ components:
     CPULimitOptimisedNotification:
       type: object
       properties:
-        "323005":
+        '323005':
           type: object
           properties:
             code:
@@ -216,7 +216,7 @@ components:
     MemoryRequestOptimisedNotification:
       type: object
       properties:
-        "324003":
+        '324003':
           type: object
           properties:
             code:
@@ -231,7 +231,7 @@ components:
     MemoryLimitOptimisedNotification:
       type: object
       properties:
-        "324004":
+        '324004':
           type: object
           properties:
             code:
@@ -476,11 +476,11 @@ components:
                       example: Mi
         notifications:
           anyOf:
-            - $ref: "#/components/schemas/CPURequestOptimisedNotification"
-            - $ref: "#/components/schemas/CPULimitOptimisedNotification"
-            - $ref: "#/components/schemas/MemoryRequestOptimisedNotification"
-            - $ref: "#/components/schemas/MemoryLimitOptimisedNotification"
-            - $ref: "#/components/schemas/NilNotification"
+            - $ref: '#/components/schemas/CPURequestOptimisedNotification'
+            - $ref: '#/components/schemas/CPULimitOptimisedNotification'
+            - $ref: '#/components/schemas/MemoryRequestOptimisedNotification'
+            - $ref: '#/components/schemas/MemoryLimitOptimisedNotification'
+            - $ref: '#/components/schemas/NilNotification'
         pods_count:
           type: integer
           example: 1
@@ -587,11 +587,11 @@ components:
                       example: Mi
         notifications:
           anyOf:
-            - $ref: "#/components/schemas/CPURequestOptimisedNotification"
-            - $ref: "#/components/schemas/CPULimitOptimisedNotification"
-            - $ref: "#/components/schemas/MemoryRequestOptimisedNotification"
-            - $ref: "#/components/schemas/MemoryLimitOptimisedNotification"
-            - $ref: "#/components/schemas/NilNotification"
+            - $ref: '#/components/schemas/CPURequestOptimisedNotification'
+            - $ref: '#/components/schemas/CPULimitOptimisedNotification'
+            - $ref: '#/components/schemas/MemoryRequestOptimisedNotification'
+            - $ref: '#/components/schemas/MemoryLimitOptimisedNotification'
+            - $ref: '#/components/schemas/NilNotification'
         pods_count:
           type: integer
           example: 1

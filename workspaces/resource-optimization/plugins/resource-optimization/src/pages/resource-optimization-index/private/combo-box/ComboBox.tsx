@@ -59,9 +59,13 @@ export function ComboBox<
             variant="outlined"
           />
         )}
-        renderOption={(option, { selected }) => !props.freeSolo ? (
-          <RenderOptionLabel title={option} isSelected={selected} />
-        ) : option}
+        renderOption={(option, { selected }) =>
+          !props.freeSolo ? (
+            <RenderOptionLabel title={option} isSelected={selected} />
+          ) : (
+            option
+          )
+        }
         size="small"
       />
     </Box>
