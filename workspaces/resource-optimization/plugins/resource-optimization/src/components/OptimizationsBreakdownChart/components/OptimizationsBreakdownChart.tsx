@@ -10,7 +10,6 @@ import {
   createContainer,
   getInteractiveLegendEvents,
 } from '@patternfly/react-charts';
-import './chart.scss';
 
 import { useIntl } from 'react-intl';
 import messages from '../../../locales/messages';
@@ -33,7 +32,7 @@ import { unitsLookupKey } from '../utils/format';
 import { chartStyles } from './optimizationsBreakdownChart.styles';
 
 interface OptimizationsBreakdownChartOwnProps {
-  baseHeight?: number;
+  baseHeight: number;
   limitData?: any;
   name?: string;
   padding?: any;
@@ -152,7 +151,7 @@ const OptimizationsBreakdownChart: React.FC<
 
   // Returns groups of chart names associated with each data series
   const getChartNames = () => {
-    const result = [];
+    const result: (string | string[] | undefined)[] = [];
 
     if (series) {
       series.map(serie => {
@@ -172,8 +171,19 @@ const OptimizationsBreakdownChart: React.FC<
     // Note: Container order is important
     const CursorVoronoiContainer: any = createContainer('voronoi', 'cursor');
 
-    const labelFormatter = datum => {
-      const formatValue = val => (val !== undefined ? val : '');
+    const labelFormatter = (datum: {
+      childName: string;
+      _min: undefined;
+      _max: undefined;
+      _median: undefined;
+      _q1: undefined;
+      _q3: undefined;
+      yVal: null;
+      units: string;
+      y: any[];
+    }) => {
+      const formatValue = (val: undefined | null) =>
+        val !== undefined ? val : '';
       if (datum.childName === 'scatter') {
         return null;
       } else if (
@@ -278,7 +288,7 @@ const OptimizationsBreakdownChart: React.FC<
         };
   };
 
-  const handleLegendAllowWrap = value => {
+  const handleLegendAllowWrap = (value: number) => {
     if (value !== extraHeight) {
       setExtraHeight(value);
     }
@@ -286,7 +296,7 @@ const OptimizationsBreakdownChart: React.FC<
 
   // Hide each data series individually
   const handleOnLegendClick = (index: number) => {
-    const newHiddenSeries = initHiddenSeries(series, hiddenSeries, index);
+    const newHiddenSeries = initHiddenSeries(hiddenSeries, index);
     setHiddenSeries(newHiddenSeries);
   };
 
@@ -347,9 +357,9 @@ const OptimizationsBreakdownChart: React.FC<
       });
     }
     if (usageData && usageData.length) {
-      const boxPlotData = [];
+      const boxPlotData: any[] = [];
       usageData.map((datum: any) => {
-        if (datum.y.every((val, i, arr) => val === arr[0])) {
+        if (datum.y.every((val: any, i: any, arr: any[]) => val === arr[0])) {
           boxPlotData.push({
             ...datum,
             yVal: datum.y[0],
@@ -384,9 +394,9 @@ const OptimizationsBreakdownChart: React.FC<
       });
 
       // Show dots in place of box plot when all values are equal
-      const scatterData = [];
+      const scatterData: any[] = [];
       usageData.map((datum: any) => {
-        if (datum.y.every((val, i, arr) => val === arr[0])) {
+        if (datum.y.every((val: any, i: any, arr: any[]) => val === arr[0])) {
           scatterData.push({
             ...datum,
             y: datum.y[0],

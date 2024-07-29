@@ -96,4 +96,9 @@ export default defineMessages({
     description: 'Usage',
     id: 'usage',
   },
+  valueUnits: {
+    defaultMessage: '{value} {units}',
+    description: '{value} {units}',
+    id: 'valueUnits',
+  },
 });

@@ -26,6 +26,10 @@ import { getRecommendedValue } from '../../utils/utils';
 import { OptimizationsBreakdownChart } from '../OptimizationsBreakdownChart';
 import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common';
 import { createUsageDatum } from '../OptimizationsBreakdownChart/utils/chart-data-format';
+import {
+  Interval,
+  UsageType,
+} from '../OptimizationsBreakdownChart/types/chart';
 
 type RecommendationTerms =
   keyof RecommendationBoxPlotsRecommendationsRecommendationTerms;
@@ -165,11 +169,12 @@ export const RosDetailComponent = () => {
     };
   };
 
-  const getChart = (
-    usageType: UsageType,
-    recommendationType: RecommendationType,
-  ) => {
-    const usageDatum = createUsageDatum(usageType);
+  const getChart = (usageType: UsageType) => {
+    const usageDatum = createUsageDatum(
+      usageType,
+      Interval.shortTerm,
+      value?.recommendations,
+    );
     // const limitDatum = createRecommendationDatum(recommendationType, ResourceType.limits, usageDatum);
     // const requestDatum = createRecommendationDatum(recommendationType, ResourceType.requests, usageDatum);
 
@@ -268,10 +273,7 @@ export const RosDetailComponent = () => {
                         </Typography>
                       }
                     >
-                      <OptimizationsBreakdownChart
-                        name="CPU utilization"
-                        data={{ limits: {}, requests: {}, usage: {} }}
-                      />
+                      {getChart(UsageType.cpuUsage)}
                     </InfoCard>
                   </Grid>
 
@@ -286,10 +288,7 @@ export const RosDetailComponent = () => {
                         </Typography>
                       }
                     >
-                      <OptimizationsBreakdownChart
-                        name="Memory utilization"
-                        data={{ limits: {}, requests: {}, usage: {} }}
-                      />
+                      {getChart(UsageType.memoryUsage)}
                     </InfoCard>
                   </Grid>
                 </Grid>

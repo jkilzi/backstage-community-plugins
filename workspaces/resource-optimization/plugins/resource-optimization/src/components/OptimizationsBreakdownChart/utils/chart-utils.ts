@@ -88,43 +88,29 @@ export const getDomain = (
 
 // Returns legend data styled per hiddenSeries
 export const getLegendData = (
-  series: ChartSeries[],
-  hiddenSeries: Set<number>,
+  series?: ChartSeries[],
+  hiddenSeries?: Set<number>,
   tooltip: boolean = false,
 ) => {
   if (!series) {
     return undefined;
   }
-  const result: (
-    | {
-        labels?: undefined;
-        symbol?: any;
-        name?: string;
-        childName: string;
-        tooltip?: string;
-      }
-    | {
-        labels: { fill: 'var(--pf-v5-chart-global--label--Fill, #151515)' };
-        symbol: {
-          fill: 'var(--pf-v5-chart-global--label--Fill, #151515)';
-          type: string;
-        };
-        name?: string;
-        childName: string;
-        tooltip?: string;
-      }
-  )[] = [];
+
+  const result: any = [];
+
   series.map((s, index) => {
     if (s.legendItem) {
       const data = {
         childName: s.childName,
         ...s.legendItem, // name property
         ...(tooltip && { name: s.legendItem.tooltip }), // Override name property for tooltip
-        ...getInteractiveLegendItemStyles(hiddenSeries.has(index)), // hidden styles
+        ...getInteractiveLegendItemStyles(hiddenSeries?.has(index)), // hidden styles
       };
+
       result.push(data);
     }
   });
+
   return result;
 };
 
@@ -186,11 +172,7 @@ export const getResizeObserver = (
   };
 };
 
-export const initHiddenSeries = (
-  series: ChartSeries[],
-  hiddenSeries: Set<number>,
-  index: number,
-) => {
+export const initHiddenSeries = (hiddenSeries: Set<number>, index: number) => {
   const result = new Set(hiddenSeries);
   if (!result.delete(index)) {
     result.add(index);
@@ -200,15 +182,15 @@ export const initHiddenSeries = (
 
 // Returns true if at least one data series is available
 export const isDataAvailable = (
-  series: ChartSeries[],
-  hiddenSeries: Set<number>,
+  series?: ChartSeries[],
+  hiddenSeries?: Set<number>,
 ) => {
   const unavailable = []; // API data may not be available (e.g., on 1st of month)
 
   if (series) {
     series.forEach((s: any, index) => {
       if (
-        isSeriesHidden(hiddenSeries, index) ||
+        (hiddenSeries && isSeriesHidden(hiddenSeries, index)) ||
         (s.data && s.data.length === 0)
       ) {
         unavailable.push(index);
@@ -236,10 +218,14 @@ export const isDataHidden = (
         }
       }
 
-      for (const item of series[key.value].data) {
-        if (item.childName) {
-          serieChildName = item.childName;
-          break;
+      const keyValue = key.value;
+
+      if (series[keyValue].data) {
+        for (const item of series[keyValue].data) {
+          if (item.childName) {
+            serieChildName = item.childName;
+            break;
+          }
         }
       }
 

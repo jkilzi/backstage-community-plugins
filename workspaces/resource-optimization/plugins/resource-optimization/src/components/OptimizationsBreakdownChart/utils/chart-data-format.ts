@@ -34,26 +34,29 @@ export const getRecommendationTerm = (
 export const createUsageDatum = (
   usageType: UsageType,
   currentInterval: Interval,
-  recommendations: RecommendationBoxPlotsRecommendations,
+  recommendations?: RecommendationBoxPlotsRecommendations,
 ) => {
-  const term = getRecommendationTerm(recommendations, currentInterval);
-  const plotsData = term?.plots?.plotsData || {};
-
   const datum = [];
-  for (const key of Object.keys(plotsData)) {
-    const data = plotsData?.[key]?.[usageType];
-    const date = new Date(key);
-    const xVal =
-      currentInterval === Interval.shortTerm
-        ? format(date, 'kk:mm')
-        : format(date, 'MMM d');
-    datum.push({
-      key,
-      name: usageType,
-      units: data?.format,
-      x: xVal,
-      y: data ? [data.min, data.median, data.max, data.q1, data.q3] : [null],
-    });
+
+  if (recommendations) {
+    const term = getRecommendationTerm(recommendations, currentInterval);
+    const plotsData = term?.plots?.plotsData || {};
+
+    for (const key of Object.keys(plotsData)) {
+      const data = plotsData?.[key]?.[usageType];
+      const date = new Date(key);
+      const xVal =
+        currentInterval === Interval.shortTerm
+          ? format(date, 'kk:mm')
+          : format(date, 'MMM d');
+      datum.push({
+        key,
+        name: usageType,
+        units: data?.format,
+        x: xVal,
+        y: data ? [data.min, data.median, data.max, data.q1, data.q3] : [null],
+      });
+    }
   }
 
   // Pad dates if plots_data is missing
