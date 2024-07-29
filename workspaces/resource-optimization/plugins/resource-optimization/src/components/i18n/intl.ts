@@ -18,7 +18,7 @@ const intl = createIntl(
     onError: console.log,
     messages: messages.en,
   },
-  cache
+  cache,
 );
 
 export default intl;

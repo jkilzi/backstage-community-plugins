@@ -32,8 +32,6 @@ import ChartTheme from '../theme';
 import { unitsLookupKey } from '../utils/format';
 import { chartStyles } from './optimizationsBreakdownChart.styles';
 
-
-
 interface OptimizationsBreakdownChartOwnProps {
   baseHeight?: number;
   limitData?: any;
@@ -45,14 +43,9 @@ interface OptimizationsBreakdownChartOwnProps {
 
 type OptimizationsBreakdownChartProps = OptimizationsBreakdownChartOwnProps;
 
-const OptimizationsBreakdownChart: React.FC<OptimizationsBreakdownChartProps> = ({
-  baseHeight,
-  name,
-  limitData,
-  padding,
-  requestData,
-  usageData,
-}) => {
+const OptimizationsBreakdownChart: React.FC<
+  OptimizationsBreakdownChartProps
+> = ({ baseHeight, name, limitData, padding, requestData, usageData }) => {
   const [containerRef] = useState(React.createRef<HTMLDivElement>());
   const [cursorVoronoiContainer, setCursorVoronoiContainer] = useState<any>();
   const [extraHeight, setExtraHeight] = useState(0);
@@ -79,12 +72,17 @@ const OptimizationsBreakdownChart: React.FC<OptimizationsBreakdownChartProps> = 
         symbol: {
           fill: 'none',
         },
-      }
+      },
     );
     return cursorVoronoiContainer
       ? React.cloneElement(cursorVoronoiContainer, {
           disable: !isDataAvailable(series, hiddenSeries),
-          labelComponent: <ChartLegendTooltip legendData={legendData} title={datum => datum.x} />,
+          labelComponent: (
+            <ChartLegendTooltip
+              legendData={legendData}
+              title={datum => datum.x}
+            />
+          ),
         } as any)
       : undefined;
   };
@@ -191,10 +189,14 @@ const OptimizationsBreakdownChart: React.FC<OptimizationsBreakdownChartProps> = 
           br: '\n',
           min: formatValue(datum._min !== undefined ? datum._min : datum.yVal),
           max: formatValue(datum._max !== undefined ? datum._max : datum.yVal),
-          median: formatValue(datum._median !== undefined ? datum._median : datum.yVal),
+          median: formatValue(
+            datum._median !== undefined ? datum._median : datum.yVal,
+          ),
           q1: formatValue(datum._q1 !== undefined ? datum._q1 : datum.yVal),
           q3: formatValue(datum._q3 !== undefined ? datum._q3 : datum.yVal),
-          units: intl.formatMessage(messages.units, { units: unitsLookupKey(datum.units) }),
+          units: intl.formatMessage(messages.units, {
+            units: unitsLookupKey(datum.units),
+          }),
         });
       }
 
@@ -211,13 +213,18 @@ const OptimizationsBreakdownChart: React.FC<OptimizationsBreakdownChartProps> = 
        * Example. "45 millicores" is represented as "45m", 64 MiB is represented as "64Mi",
        * 2.3 cores is represented as "2.3" (Note cores is not specified)
        */
-      if ((datum.childName === 'limit' || datum.childName === 'request') && datum.units === '') {
+      if (
+        (datum.childName === 'limit' || datum.childName === 'request') &&
+        datum.units === ''
+      ) {
         units = unitsLookupKey('cores');
       }
       return yVal !== null
         ? intl.formatMessage(messages.valueUnits, {
             value: yVal,
-            units: intl.formatMessage(messages.units, { units: unitsLookupKey(units) }),
+            units: intl.formatMessage(messages.units, {
+              units: unitsLookupKey(units),
+            }),
           })
         : intl.formatMessage(messages.chartNoData);
     };
@@ -300,7 +307,11 @@ const OptimizationsBreakdownChart: React.FC<OptimizationsBreakdownChartProps> = 
         childName: 'request',
         data: requestData,
         legendItem: {
-          name: getDateRangeString(requestData, messages.recommendedRequest, true),
+          name: getDateRangeString(
+            requestData,
+            messages.recommendedRequest,
+            true,
+          ),
           symbol: {
             fill: chartStyles.requestColorScale[0],
             type: 'square',

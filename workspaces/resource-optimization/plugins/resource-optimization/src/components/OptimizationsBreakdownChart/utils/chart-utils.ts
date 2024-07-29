@@ -39,7 +39,11 @@ export const getChartNames = (series: ChartSeries[]) => {
 };
 
 // Note: A series may be grouped in order to be hidden / shown together
-export const getDomain = (series: ChartSeries[] | undefined, hiddenSeries: Set<number>, groupedSeriesCount = 0) => {
+export const getDomain = (
+  series: ChartSeries[] | undefined,
+  hiddenSeries: Set<number>,
+  groupedSeriesCount = 0,
+) => {
   const domain: { x?: DomainTuple; y?: DomainTuple } = { y: [0, 1] };
   let maxValue: number | null = null;
   let minValue: number | null = null;
@@ -51,22 +55,27 @@ export const getDomain = (series: ChartSeries[] | undefined, hiddenSeries: Set<n
       hiddenSeries = new Set();
     }
     series.forEach((s: any, index) => {
-      if (!isSeriesHidden(hiddenSeries, index) && s.data && s.data.length !== 0) {
+      if (
+        !isSeriesHidden(hiddenSeries, index) &&
+        s.data &&
+        s.data.length !== 0
+      ) {
         const { max, min } = getMaxMinValues(s.data);
-        if (max !== null && (maxValue === null || max > maxValue) ) {
+        if (max !== null && (maxValue === null || max > maxValue)) {
           maxValue = max;
         }
-        if ( min !== null && (minValue === null || min < minValue)) {
+        if (min !== null && (minValue === null || min < minValue)) {
           minValue = min;
         }
       }
     });
   }
 
-  if(maxValue && minValue) {
+  if (maxValue && minValue) {
     const threshold = maxValue * 0.05;
     const max = maxValue > 0 ? Math.ceil(maxValue + threshold) : 0;
-    const _min = minValue > 0 ? Math.max(0, Math.floor(minValue - threshold)) : 0;
+    const _min =
+      minValue > 0 ? Math.max(0, Math.floor(minValue - threshold)) : 0;
     const min = _min > 0 ? _min : 0;
 
     if (max > 0) {
@@ -78,11 +87,33 @@ export const getDomain = (series: ChartSeries[] | undefined, hiddenSeries: Set<n
 };
 
 // Returns legend data styled per hiddenSeries
-export const getLegendData = (series: ChartSeries[], hiddenSeries: Set<number>, tooltip: boolean = false) => {
+export const getLegendData = (
+  series: ChartSeries[],
+  hiddenSeries: Set<number>,
+  tooltip: boolean = false,
+) => {
   if (!series) {
     return undefined;
   }
-  const result: ({ labels?: undefined; symbol?: any; name?: string; childName: string; tooltip?: string; } | { labels: { fill: "var(--pf-v5-chart-global--label--Fill, #151515)"; }; symbol: { fill: "var(--pf-v5-chart-global--label--Fill, #151515)"; type: string; }; name?: string; childName: string; tooltip?: string; })[] = [];
+  const result: (
+    | {
+        labels?: undefined;
+        symbol?: any;
+        name?: string;
+        childName: string;
+        tooltip?: string;
+      }
+    | {
+        labels: { fill: 'var(--pf-v5-chart-global--label--Fill, #151515)' };
+        symbol: {
+          fill: 'var(--pf-v5-chart-global--label--Fill, #151515)';
+          type: string;
+        };
+        name?: string;
+        childName: string;
+        tooltip?: string;
+      }
+  )[] = [];
   series.map((s, index) => {
     if (s.legendItem) {
       const data = {
@@ -98,20 +129,34 @@ export const getLegendData = (series: ChartSeries[], hiddenSeries: Set<number>, 
 };
 
 // Note: Forecast is expected to use both datum.y and datum.y0
-export const getTooltipLabel = (datum: any, formatter: Formatter, formatOptions: FormatOptions) => {
+export const getTooltipLabel = (
+  datum: any,
+  formatter: Formatter,
+  formatOptions: FormatOptions,
+) => {
   const tooltipFormatter = getTooltipContent(formatter);
   const dy =
-    datum.y !== undefined && datum.y !== null ? tooltipFormatter(datum.y, datum.units, formatOptions) : undefined;
+    datum.y !== undefined && datum.y !== null
+      ? tooltipFormatter(datum.y, datum.units, formatOptions)
+      : undefined;
   const dy0 =
-    datum.y0 !== undefined && datum.y0 !== null ? tooltipFormatter(datum.y0, datum.units, formatOptions) : undefined;
+    datum.y0 !== undefined && datum.y0 !== null
+      ? tooltipFormatter(datum.y0, datum.units, formatOptions)
+      : undefined;
 
   if (dy !== undefined && dy0 !== undefined) {
-    return intl.formatMessage(messages.chartCostForecastConeTooltip, { value0: dy0, value1: dy });
+    return intl.formatMessage(messages.chartCostForecastConeTooltip, {
+      value0: dy0,
+      value1: dy,
+    });
   }
   return dy !== undefined ? dy : intl.formatMessage(messages.chartNoData);
 };
 
-export const getResizeObserver = (containerRef: HTMLDivElement | null, handleResize: () => void) => {
+export const getResizeObserver = (
+  containerRef: HTMLDivElement | null,
+  handleResize: () => void,
+) => {
   const containerElement = containerRef;
   const { ResizeObserver } = window as any;
   let _resizeObserver;
@@ -141,7 +186,11 @@ export const getResizeObserver = (containerRef: HTMLDivElement | null, handleRes
   };
 };
 
-export const initHiddenSeries = (series: ChartSeries[], hiddenSeries: Set<number>, index: number) => {
+export const initHiddenSeries = (
+  series: ChartSeries[],
+  hiddenSeries: Set<number>,
+  index: number,
+) => {
   const result = new Set(hiddenSeries);
   if (!result.delete(index)) {
     result.add(index);
@@ -150,12 +199,18 @@ export const initHiddenSeries = (series: ChartSeries[], hiddenSeries: Set<number
 };
 
 // Returns true if at least one data series is available
-export const isDataAvailable = (series: ChartSeries[], hiddenSeries: Set<number>) => {
+export const isDataAvailable = (
+  series: ChartSeries[],
+  hiddenSeries: Set<number>,
+) => {
   const unavailable = []; // API data may not be available (e.g., on 1st of month)
 
   if (series) {
     series.forEach((s: any, index) => {
-      if (isSeriesHidden(hiddenSeries, index) || (s.data && s.data.length === 0)) {
+      if (
+        isSeriesHidden(hiddenSeries, index) ||
+        (s.data && s.data.length === 0)
+      ) {
         unavailable.push(index);
       }
     });
@@ -164,7 +219,11 @@ export const isDataAvailable = (series: ChartSeries[], hiddenSeries: Set<number>
 };
 
 // Returns true if data series is hidden
-export const isDataHidden = (series: ChartSeries[], hiddenSeries: Set<number>, data: any) => {
+export const isDataHidden = (
+  series: ChartSeries[],
+  hiddenSeries: Set<number>,
+  data: any,
+) => {
   if (data && data.length) {
     for (let keys = hiddenSeries.keys(), key; !(key = keys.next()).done; ) {
       let dataChildName;
@@ -176,14 +235,14 @@ export const isDataHidden = (series: ChartSeries[], hiddenSeries: Set<number>, d
           break;
         }
       }
-     
+
       for (const item of series[key.value].data) {
         if (item.childName) {
           serieChildName = item.childName;
           break;
         }
       }
-      
+
       if (serieChildName && dataChildName && serieChildName === dataChildName) {
         return true;
       }

@@ -6,13 +6,22 @@ export interface FormatOptions {
   maximumFractionDigits?: number;
 }
 
-export type Formatter = (value: number, units: string, options?: FormatOptions) => string;
-export type PercentageFormatter = (value: number, options?: FormatOptions) => string;
+export type Formatter = (
+  value: number,
+  units: string,
+  options?: FormatOptions,
+) => string;
+export type PercentageFormatter = (
+  value: number,
+  options?: FormatOptions,
+) => string;
 type UnitsFormatter = (value: number, options?: FormatOptions) => string;
 
 // Returns the number of decimals for given string
 export const countDecimals = (value: string, useLocale: boolean = true) => {
-  const decimalSeparator = useLocale ? Number('1.1').toLocaleString(getLocale(), {}).substring(1, 2) : '.';
+  const decimalSeparator = useLocale
+    ? Number('1.1').toLocaleString(getLocale(), {}).substring(1, 2)
+    : '.';
   const decimals = value.split(decimalSeparator);
   return decimals[1] ? decimals[1].length : 0;
 };
@@ -29,7 +38,11 @@ export const countDecimals = (value: string, useLocale: boolean = true) => {
 //
 // Note: Some currencies do not have decimals, such as JPY, and some have 3 decimals such as IQD.
 // See https://docs.adyen.com/development-resources/currency-codes
-export const formatCurrency: Formatter = (value: number, units: string, options: FormatOptions = {}) => {
+export const formatCurrency: Formatter = (
+  value: number,
+  units: string,
+  options: FormatOptions = {},
+) => {
   let fValue = value;
   // Don't show negative zero -- https://issues.redhat.com/browse/COST-3087
   if (!value || Number(value).toFixed(2) === '-0.00') {
@@ -91,7 +104,7 @@ export const formatCurrencyRate: Formatter = (
   options: FormatOptions = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 10,
-  }
+  },
 ) => {
   return formatCurrency(value, units, options);
 };
@@ -104,13 +117,17 @@ export const formatCurrencyRateRaw: Formatter = (
   options: FormatOptions = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 10,
-  }
+  },
 ) => {
   return formatCurrencyRaw(value, units, options);
 };
 
 // Formats without currency symbol
-export const formatCurrencyRaw: Formatter = (value: number, units: string, options: FormatOptions = {}) => {
+export const formatCurrencyRaw: Formatter = (
+  value: number,
+  units: string,
+  options: FormatOptions = {},
+) => {
   return formatCurrency(value, units, {
     currencyDisplay: 'code',
     ...options,
@@ -149,7 +166,7 @@ export const formatPercentage: PercentageFormatter = (
   options: FormatOptions = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  }
+  },
 ) => {
   return value?.toLocaleString(getLocale(), options);
 };
@@ -161,7 +178,7 @@ export const formatPercentageMarkup: PercentageFormatter = (
   options: FormatOptions = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 10,
-  }
+  },
 ) => {
   return value?.toLocaleString(getLocale(), options);
 };
@@ -172,7 +189,7 @@ export const formatOptimization: PercentageFormatter = (
   options: FormatOptions = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 20, // Allow the API to set the number of decimal places
-  }
+  },
 ) => {
   return value?.toLocaleString(getLocale(), options);
 };
@@ -182,7 +199,7 @@ export const formatUsage: UnitsFormatter = (
   options: FormatOptions = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  }
+  },
 ) => {
   return value?.toLocaleString(getLocale(), options);
 };
@@ -200,7 +217,9 @@ export const isCurrencyFormatValid = (value: string) => {
   //
   // See https://stackoverflow.com/questions/2227370/currency-validation
   const regex =
-    decimalSeparator === '.' ? /^-?[0-9]\d*(((,\d{3}){1})*(\.\d*)?)$/ : /^-?[0-9]\d*(((\.\d{3}){1})*(,\d*)?)$/;
+    decimalSeparator === '.'
+      ? /^-?[0-9]\d*(((,\d{3}){1})*(\.\d*)?)$/
+      : /^-?[0-9]\d*(((\.\d{3}){1})*(,\d*)?)$/;
 
   return regex.test(value);
 };
@@ -224,7 +243,9 @@ export const unFormat = (value: string) => {
   const groupSeparator = intl.formatNumber(1111).toString().replace(/1/g, '');
   const decimalSeparator = intl.formatNumber(1.1).toString().replace(/1/g, '');
 
-  let rawValue = value.toString().replace(groupSeparator === ',' ? /,/g : /\./g, '');
+  let rawValue = value
+    .toString()
+    .replace(groupSeparator === ',' ? /,/g : /\./g, '');
   rawValue = rawValue.replace(decimalSeparator === '.' ? /\./g : /,/g, '.');
 
   return Number.isNaN(rawValue) ? '0' : rawValue;

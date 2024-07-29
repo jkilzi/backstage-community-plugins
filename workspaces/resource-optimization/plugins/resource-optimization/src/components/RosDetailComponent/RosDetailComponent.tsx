@@ -61,7 +61,7 @@ export const RosDetailComponent = () => {
     return <ResponseErrorPanel error={error} />;
   }
 
-  console.log("Response Value:", value);
+  console.log('Response Value:', value);
 
   const handleChange = (event: any) => {
     setRecommendationTerm(event.target.value);
@@ -165,7 +165,10 @@ export const RosDetailComponent = () => {
     };
   };
 
-  const getChart = (usageType: UsageType, recommendationType: RecommendationType) => {
+  const getChart = (
+    usageType: UsageType,
+    recommendationType: RecommendationType,
+  ) => {
     const usageDatum = createUsageDatum(usageType);
     // const limitDatum = createRecommendationDatum(recommendationType, ResourceType.limits, usageDatum);
     // const requestDatum = createRecommendationDatum(recommendationType, ResourceType.requests, usageDatum);
@@ -254,32 +257,41 @@ export const RosDetailComponent = () => {
                 </Grid>
 
                 <Grid container>
-                    <Grid item xs={6}>
-                        <InfoCard  title={
-                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                            CPU utilization
-                          </Typography>}>
-                          <OptimizationsBreakdownChart
-                            name="CPU utilization"
-                            data={{ limits: {}, requests: {}, usage: {} }}
-                          />
+                  <Grid item xs={6}>
+                    <InfoCard
+                      title={
+                        <Typography
+                          variant="body1"
+                          style={{ fontWeight: 'bold' }}
+                        >
+                          CPU utilization
+                        </Typography>
+                      }
+                    >
+                      <OptimizationsBreakdownChart
+                        name="CPU utilization"
+                        data={{ limits: {}, requests: {}, usage: {} }}
+                      />
+                    </InfoCard>
+                  </Grid>
 
-                        </InfoCard>
-                        
-                      </Grid>
-                      
-                      <Grid item xs={6}>
-                      <InfoCard title={
-                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                            Memory utilization
-                          </Typography>}>
-                        <OptimizationsBreakdownChart
-                          name="Memory utilization"
-                          data={{ limits: {}, requests: {}, usage: {} }}
-                        />
-                        </InfoCard>
-                      </Grid>
-                   
+                  <Grid item xs={6}>
+                    <InfoCard
+                      title={
+                        <Typography
+                          variant="body1"
+                          style={{ fontWeight: 'bold' }}
+                        >
+                          Memory utilization
+                        </Typography>
+                      }
+                    >
+                      <OptimizationsBreakdownChart
+                        name="Memory utilization"
+                        data={{ limits: {}, requests: {}, usage: {} }}
+                      />
+                    </InfoCard>
+                  </Grid>
                 </Grid>
               </>
             </TabbedLayout.Route>
