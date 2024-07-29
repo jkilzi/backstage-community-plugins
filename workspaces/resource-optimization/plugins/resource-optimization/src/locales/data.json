@@ -427,6 +427,66 @@
                 "type": 5,
                 "value": "units"
             }
-        ]
+      ],
+      "limit": [
+        {
+          "type": 0,
+          "value": "Limit"
+        }
+      ],
+      "recommendedLimit": [
+        {
+          "type": 0,
+          "value": "Recommended limit ("
+        },
+        {
+          "type": 1,
+          "value": "dateRange"
+        },
+        {
+          "type": 0,
+          "value": ")"
+        }
+      ],
+      "recommendedRequest": [
+        {
+          "type": 0,
+          "value": "Recommended request ("
+        },
+        {
+          "type": 1,
+          "value": "dateRange"
+        },
+        {
+          "type": 0,
+          "value": ")"
+        }
+      ],
+      "request": [
+        {
+          "type": 0,
+          "value": "Request"
+        }
+      ],
+      "actualUsage": [
+        {
+          "type": 0,
+          "value": "Actual usage ("
+        },
+        {
+          "type": 1,
+          "value": "dateRange"
+        },
+        {
+          "type": 0,
+          "value": ")"
+        }
+      ],
+      "usage": [
+        {
+          "type": 0,
+          "value": "Usage"
+        }
+      ]
     }
 }

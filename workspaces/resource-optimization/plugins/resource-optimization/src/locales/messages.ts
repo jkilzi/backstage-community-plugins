@@ -66,5 +66,35 @@ export default defineMessages({
         description: 'return the proper unit label based on key: "units"',
         id: 'units',
     },
+    limit: {
+      defaultMessage: 'Limit',
+      description: 'Limit',
+      id: 'limit',
+    },
+    recommendedLimit: {
+      defaultMessage: 'Recommended limit ({dateRange})',
+      description: 'Recommended limit (Jan 1-31)',
+      id: 'recommendedLimit',
+    },
+    recommendedRequest: {
+      defaultMessage: 'Recommended request ({dateRange})',
+      description: 'Recommended request (Jan 1-31)',
+      id: 'recommendedRequest',
+    },
+    request: {
+      defaultMessage: 'Request',
+      description: 'Request',
+      id: 'request',
+    },
+    actualUsage: {
+      defaultMessage: 'Actual usage ({dateRange})',
+      description: 'Actual usage (Jan 1-31)',
+      id: 'actualUsage',
+    },
+    usage: {
+      defaultMessage: 'Usage',
+      description: 'Usage',
+      id: 'usage',
+    }
 });   
 

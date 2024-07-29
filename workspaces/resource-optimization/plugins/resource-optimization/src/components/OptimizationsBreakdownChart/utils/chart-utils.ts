@@ -111,7 +111,7 @@ export const getTooltipLabel = (datum: any, formatter: Formatter, formatOptions:
   return dy !== undefined ? dy : intl.formatMessage(messages.chartNoData);
 };
 
-export const getResizeObserver = (containerRef: HTMLDivElement, handleResize: () => void) => {
+export const getResizeObserver = (containerRef: HTMLDivElement | null, handleResize: () => void) => {
   const containerElement = containerRef;
   const { ResizeObserver } = window as any;
   let _resizeObserver;
