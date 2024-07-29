@@ -8,6 +8,7 @@ import {
   TabbedLayout,
   Progress,
   ResponseErrorPanel,
+  InfoCard,
 } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import FormControl from '@material-ui/core/FormControl';
@@ -16,14 +17,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-// import Paper from '@material-ui/core/Paper';
+import Paper from '@material-ui/core/Paper';
 import { CodeInfoCard } from '../CodeInfoCard/CodeInfoCard';
 import { optimizationsApiRef } from '../../apis';
 import { getTimeFromNow } from '../../utils/dates';
 import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
 import { getRecommendedValue } from '../../utils/utils';
-// import { OptimizationsBreakdownChart } from '../OptimizationsBreakdownChart';
+import { OptimizationsBreakdownChart } from '../OptimizationsBreakdownChart';
 import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common';
+import { createUsageDatum } from '../OptimizationsBreakdownChart/utils/chart-data-format';
 
 type RecommendationTerms =
   keyof RecommendationBoxPlotsRecommendationsRecommendationTerms;
@@ -58,6 +60,8 @@ export const RosDetailComponent = () => {
   if (error) {
     return <ResponseErrorPanel error={error} />;
   }
+
+  console.log("Response Value:", value);
 
   const handleChange = (event: any) => {
     setRecommendationTerm(event.target.value);
@@ -161,6 +165,22 @@ export const RosDetailComponent = () => {
     };
   };
 
+  const getChart = (usageType: UsageType, recommendationType: RecommendationType) => {
+    const usageDatum = createUsageDatum(usageType);
+    // const limitDatum = createRecommendationDatum(recommendationType, ResourceType.limits, usageDatum);
+    // const requestDatum = createRecommendationDatum(recommendationType, ResourceType.requests, usageDatum);
+
+    return (
+      <OptimizationsBreakdownChart
+        baseHeight={350}
+        limitData={[]}
+        name={`utilization-${usageType}`}
+        requestData={[]}
+        usageData={usageDatum}
+      />
+    );
+  };
+
   return (
     <Page themeId="tool">
       <Header
@@ -233,24 +253,34 @@ export const RosDetailComponent = () => {
                   </Grid>
                 </Grid>
 
-                {/* <Grid container>
-                  <Grid item xs={6}>
-                    <Paper>
-                      <OptimizationsBreakdownChart
-                        name="CPU utilization"
-                        data={{ limits: {}, requests: {}, usage: {} }}
-                      />
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Paper>
-                      <OptimizationsBreakdownChart
-                        name="Memory utilization"
-                        data={{ limits: {}, requests: {}, usage: {} }}
-                      />
-                    </Paper>
-                  </Grid>
-                </Grid> */}
+                <Grid container>
+                    <Grid item xs={6}>
+                        <InfoCard  title={
+                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                            CPU utilization
+                          </Typography>}>
+                          <OptimizationsBreakdownChart
+                            name="CPU utilization"
+                            data={{ limits: {}, requests: {}, usage: {} }}
+                          />
+
+                        </InfoCard>
+                        
+                      </Grid>
+                      
+                      <Grid item xs={6}>
+                      <InfoCard title={
+                          <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                            Memory utilization
+                          </Typography>}>
+                        <OptimizationsBreakdownChart
+                          name="Memory utilization"
+                          data={{ limits: {}, requests: {}, usage: {} }}
+                        />
+                        </InfoCard>
+                      </Grid>
+                   
+                </Grid>
               </>
             </TabbedLayout.Route>
 
