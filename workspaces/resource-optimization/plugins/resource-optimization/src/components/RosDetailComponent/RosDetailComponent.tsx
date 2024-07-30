@@ -30,6 +30,8 @@ import {
   Interval,
   UsageType,
 } from '../OptimizationsBreakdownChart/types/chart';
+import { IntlProvider } from 'react-intl';
+import messagesData from '../../locales/data.json';
 
 type RecommendationTerms =
   keyof RecommendationBoxPlotsRecommendationsRecommendationTerms;
@@ -190,57 +192,116 @@ export const RosDetailComponent = () => {
   };
 
   return (
-    <Page themeId="tool">
-      <Header
-        title="Resource Optimization"
-        type="Optimizations"
-        typeLink="/resource-optimization"
-      />
+    <IntlProvider locale="en" messages={messagesData.en}>
+      <Page themeId="tool">
+        <Header
+          title="Resource Optimization"
+          type="Optimizations"
+          typeLink="/resource-optimization"
+        />
 
-      <Content>
-        <Typography variant="h4" paragraph>
-          {value?.container}
-        </Typography>
+        <Content>
+          <Typography variant="h4" paragraph>
+            {value?.container}
+          </Typography>
 
-        <Grid container spacing={1} xs={8}>
-          {containerData.map((item, index) => (
-            <Grid container item xs={9} spacing={1} key={index}>
-              <Grid item xs={4}>
+          <Grid container spacing={1} xs={8}>
+            {containerData.map((item, index) => (
+              <Grid container item xs={9} spacing={1} key={index}>
+                <Grid item xs={4}>
+                  <Typography variant="body1">
+                    <b>{item.key}</b>
+                  </Typography>
+                </Grid>
+                <Grid item xs={5}>
+                  <Typography variant="body1">{item.value}</Typography>
+                </Grid>
+              </Grid>
+            ))}
+            <Grid container item xs={9} spacing={1}>
+              <Grid item xs={6} alignContent="center">
                 <Typography variant="body1">
-                  <b>{item.key}</b>
+                  <b>View optimizations based on</b>
                 </Typography>
               </Grid>
-              <Grid item xs={5}>
-                <Typography variant="body1">{item.value}</Typography>
+              <Grid item xs={3}>
+                <FormControl fullWidth variant="outlined">
+                  <Select
+                    id="dropdown"
+                    value={recommendationTerm}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="shortTerm">Last 24 hrs</MenuItem>
+                    <MenuItem value="mediumTerm">Last 7 days</MenuItem>
+                    <MenuItem value="longTerm">Last 15 days</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
-          ))}
-          <Grid container item xs={9} spacing={1}>
-            <Grid item xs={6} alignContent="center">
-              <Typography variant="body1">
-                <b>View optimizations based on</b>
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <FormControl fullWidth variant="outlined">
-                <Select
-                  id="dropdown"
-                  value={recommendationTerm}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="shortTerm">Last 24 hrs</MenuItem>
-                  <MenuItem value="mediumTerm">Last 7 days</MenuItem>
-                  <MenuItem value="longTerm">Last 15 days</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
           </Grid>
-        </Grid>
 
-        <Box sx={{ marginTop: 16 }}>
-          <TabbedLayout>
-            <TabbedLayout.Route path="/cost?" title="Cost optimizations">
-              <>
+          <Box sx={{ marginTop: 16 }}>
+            <TabbedLayout>
+              <TabbedLayout.Route path="/cost?" title="Cost optimizations">
+                <>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <CodeInfoCard
+                        cardTitle="Current configuration"
+                        showCopyCodeButton={false}
+                        yamlCodeData={getCurrentYAMLCodeData()}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <CodeInfoCard
+                        cardTitle="Recommended configuration"
+                        showCopyCodeButton
+                        yamlCodeData={getRecommendedYAMLCodeData(
+                          recommendationTerm,
+                          'cost',
+                        )}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <InfoCard
+                        title={
+                          <Typography
+                            variant="body1"
+                            style={{ fontWeight: 'bold' }}
+                          >
+                            CPU utilization
+                          </Typography>
+                        }
+                      >
+                        {getChart(UsageType.cpuUsage)}
+                      </InfoCard>
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <InfoCard
+                        title={
+                          <Typography
+                            variant="body1"
+                            style={{ fontWeight: 'bold' }}
+                          >
+                            Memory utilization
+                          </Typography>
+                        }
+                      >
+                        {getChart(UsageType.memoryUsage)}
+                      </InfoCard>
+                    </Grid>
+                  </Grid>
+                </>
+              </TabbedLayout.Route>
+
+              <TabbedLayout.Route
+                path="/performance"
+                title="Performance optimizations"
+              >
                 <Grid container>
                   <Grid item xs={6}>
                     <CodeInfoCard
@@ -255,73 +316,16 @@ export const RosDetailComponent = () => {
                       showCopyCodeButton
                       yamlCodeData={getRecommendedYAMLCodeData(
                         recommendationTerm,
-                        'cost',
+                        'performance',
                       )}
                     />
                   </Grid>
                 </Grid>
-
-                <Grid container>
-                  <Grid item xs={6}>
-                    <InfoCard
-                      title={
-                        <Typography
-                          variant="body1"
-                          style={{ fontWeight: 'bold' }}
-                        >
-                          CPU utilization
-                        </Typography>
-                      }
-                    >
-                      {getChart(UsageType.cpuUsage)}
-                    </InfoCard>
-                  </Grid>
-
-                  <Grid item xs={6}>
-                    <InfoCard
-                      title={
-                        <Typography
-                          variant="body1"
-                          style={{ fontWeight: 'bold' }}
-                        >
-                          Memory utilization
-                        </Typography>
-                      }
-                    >
-                      {getChart(UsageType.memoryUsage)}
-                    </InfoCard>
-                  </Grid>
-                </Grid>
-              </>
-            </TabbedLayout.Route>
-
-            <TabbedLayout.Route
-              path="/performance"
-              title="Performance optimizations"
-            >
-              <Grid container>
-                <Grid item xs={6}>
-                  <CodeInfoCard
-                    cardTitle="Current configuration"
-                    showCopyCodeButton={false}
-                    yamlCodeData={getCurrentYAMLCodeData()}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <CodeInfoCard
-                    cardTitle="Recommended configuration"
-                    showCopyCodeButton
-                    yamlCodeData={getRecommendedYAMLCodeData(
-                      recommendationTerm,
-                      'performance',
-                    )}
-                  />
-                </Grid>
-              </Grid>
-            </TabbedLayout.Route>
-          </TabbedLayout>
-        </Box>
-      </Content>
-    </Page>
+              </TabbedLayout.Route>
+            </TabbedLayout>
+          </Box>
+        </Content>
+      </Page>
+    </IntlProvider>
   );
 };

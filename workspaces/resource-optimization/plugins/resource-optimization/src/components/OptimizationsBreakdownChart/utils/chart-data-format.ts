@@ -44,7 +44,12 @@ export const createUsageDatum = (
 
     for (const key of Object.keys(plotsData)) {
       const data = plotsData?.[key]?.[usageType];
-      const date = new Date(key);
+      let correctedIsoDate = key.replace(
+        /(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(.*)Z/,
+        '$1-$2-$3T$4:$5:$6Z',
+      );
+      console.log('Corrected ISO Date:', correctedIsoDate);
+      const date = new Date(correctedIsoDate);
       const xVal =
         currentInterval === Interval.shortTerm
           ? format(date, 'kk:mm')

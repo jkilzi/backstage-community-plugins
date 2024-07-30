@@ -373,7 +373,7 @@ const OptimizationsBreakdownChart: React.FC<
         childName: 'usage',
         data: boxPlotData as any,
         legendItem: {
-          name: getDateRangeString(limitData, messages.actualUsage),
+          name: getDateRangeString(usageData, messages.actualUsage),
           symbol: {
             fill: chartStyles.usageColorScale[1],
             type: 'square',
