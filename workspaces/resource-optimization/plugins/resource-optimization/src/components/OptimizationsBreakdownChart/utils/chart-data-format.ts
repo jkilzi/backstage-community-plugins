@@ -1,29 +1,34 @@
 import {
   LongTermRecommendationBoxPlots,
   MediumTermRecommendationBoxPlots,
-  PlotsData,
   RecommendationBoxPlotsRecommendations,
   ShortTermRecommendationBoxPlots,
 } from '@backstage-community/plugin-resource-optimization-common';
-import { Interval, UsageType } from '../types/chart';
+import {
+  Interval,
+  OptimizationType,
+  RecommendationType,
+  ResourceType,
+  UsageType,
+} from '../types/chart';
 import { format } from 'date-fns';
 
 export const getRecommendationTerm = (
-  recommendations: RecommendationBoxPlotsRecommendations,
   interval: Interval,
+  recommendations?: RecommendationBoxPlotsRecommendations,
 ):
   | ShortTermRecommendationBoxPlots
   | MediumTermRecommendationBoxPlots
   | LongTermRecommendationBoxPlots => {
   let result;
   switch (interval) {
-    case Interval.shortTerm:
+    case 'shortTerm':
       result = recommendations?.recommendationTerms?.shortTerm;
       break;
-    case Interval.mediumTerm:
+    case 'mediumTerm':
       result = recommendations?.recommendationTerms?.mediumTerm;
       break;
-    case Interval.longTerm:
+    case 'longTerm':
       result = recommendations?.recommendationTerms?.longTerm;
       break;
   }
@@ -39,7 +44,7 @@ export const createUsageDatum = (
   const datum = [];
 
   if (recommendations) {
-    const term = getRecommendationTerm(recommendations, currentInterval);
+    const term = getRecommendationTerm(currentInterval, recommendations);
     const plotsData = term?.plots?.plotsData || {};
 
     for (const key of Object.keys(plotsData)) {
@@ -51,7 +56,7 @@ export const createUsageDatum = (
       console.log('Corrected ISO Date:', correctedIsoDate);
       const date = new Date(correctedIsoDate);
       const xVal =
-        currentInterval === Interval.shortTerm
+        currentInterval === 'shortTerm'
           ? format(date, 'kk:mm')
           : format(date, 'MMM d');
       datum.push({
@@ -66,7 +71,7 @@ export const createUsageDatum = (
 
   // Pad dates if plots_data is missing
   if (datum.length === 0 && recommendations?.monitoringEndTime) {
-    if (currentInterval === Interval.shortTerm) {
+    if (currentInterval === 'shortTerm') {
       const today = new Date(recommendations?.monitoringEndTime);
       for (let hour = 24; hour > 0; hour -= 6) {
         today.setHours(today.getHours() - hour);
@@ -78,11 +83,7 @@ export const createUsageDatum = (
         });
       }
     } else {
-      for (
-        let day = currentInterval === Interval.longTerm ? 15 : 7;
-        day > 0;
-        day--
-      ) {
+      for (let day = currentInterval === 'longTerm' ? 15 : 7; day > 0; day--) {
         const today = new Date(recommendations?.monitoringEndTime);
         today.setDate(today.getDate() - day);
         datum.push({
@@ -95,4 +96,48 @@ export const createUsageDatum = (
     }
   }
   return datum;
+};
+
+export const createRecommendationDatum = (
+  currentInterval: Interval,
+  usageDatum: any,
+  recommendationType: RecommendationType,
+  resourceType: ResourceType,
+  optimizationType: OptimizationType,
+  recommendations?: RecommendationBoxPlotsRecommendations,
+) => {
+  const term = getRecommendationTerm(currentInterval, recommendations);
+  const values =
+    term?.recommendationEngines?.[optimizationType]?.config?.[resourceType]?.[
+      recommendationType
+    ];
+
+  const datum: any[] = [];
+
+  if (values) {
+    usageDatum.forEach((data: any) => {
+      datum.push({
+        ...data,
+        name: resourceType,
+        y: values.amount,
+        units: values.format,
+      });
+    });
+  }
+
+  return datum.length
+    ? [
+        {
+          ...datum[0],
+          key: undefined, // Don't use date here
+          x: 0, // Extends threshold lines to chart edge
+        },
+        ...datum,
+        {
+          ...datum[0],
+          key: undefined, // Don't use date here
+          x: 100,
+        },
+      ]
+    : [];
 };

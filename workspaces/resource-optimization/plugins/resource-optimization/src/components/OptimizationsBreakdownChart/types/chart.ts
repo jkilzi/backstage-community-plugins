@@ -4,8 +4,22 @@ export const enum UsageType {
 }
 
 // eslint-disable-next-line no-shadow
-export const enum Interval {
-  shortTerm = 'shortTerm', // last 24 hrs
-  mediumTerm = 'mediumTerm', // last 7 days
-  longTerm = 'longTerm', // last 15 days
+export type Interval = 'shortTerm' | 'mediumTerm' | 'longTerm';
+
+// eslint-disable-next-line no-shadow
+export const enum OptimizationType {
+  cost = 'cost',
+  performance = 'performance',
+}
+
+// eslint-disable-next-line no-shadow
+export const enum RecommendationType {
+  cpu = 'cpu',
+  memory = 'memory',
+}
+
+// eslint-disable-next-line no-shadow
+export const enum ResourceType {
+  limits = 'limits',
+  requests = 'requests',
 }

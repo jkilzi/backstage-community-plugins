@@ -17,29 +17,29 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { CodeInfoCard } from '../CodeInfoCard/CodeInfoCard';
 import { optimizationsApiRef } from '../../apis';
 import { getTimeFromNow } from '../../utils/dates';
 import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
 import { getRecommendedValue, isEmptyObject } from '../../utils/utils';
 import { OptimizationsBreakdownChart } from '../OptimizationsBreakdownChart';
-import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common';
-import { createUsageDatum } from '../OptimizationsBreakdownChart/utils/chart-data-format';
+import {
+  createRecommendationDatum,
+  createUsageDatum,
+} from '../OptimizationsBreakdownChart/utils/chart-data-format';
 import {
   Interval,
+  OptimizationType,
+  RecommendationType,
+  ResourceType,
   UsageType,
 } from '../OptimizationsBreakdownChart/types/chart';
 import { IntlProvider } from 'react-intl';
 import messagesData from '../../locales/data.json';
 
-type RecommendationTerms =
-  keyof RecommendationBoxPlotsRecommendationsRecommendationTerms;
-type RecommendationEngines = 'cost' | 'performance';
-
 export const RosDetailComponent = () => {
   const [recommendationTerm, setRecommendationTerm] =
-    useState<RecommendationTerms>('shortTerm');
+    useState<Interval>('shortTerm');
 
   // All this can be a dedicated hook, exposed by a provider 🤔... (maybe like, "useRecommendation(id)")
   // `id` must be defined (despite being typed as "string | undefined", otherwise the URL will route the user to the recommendations list)
@@ -126,8 +126,8 @@ export const RosDetailComponent = () => {
 
   // get recommended configuration
   const getRecommendedYAMLCodeData = (
-    duration: RecommendationTerms,
-    type: RecommendationEngines,
+    duration: Interval,
+    type: OptimizationType,
   ) => {
     const currentValues = value?.recommendations?.current;
     const recommendedValues =
@@ -187,21 +187,41 @@ export const RosDetailComponent = () => {
     };
   };
 
-  const getChart = (usageType: UsageType) => {
+  const getChart = (
+    usageType: UsageType,
+    recommendationType: RecommendationType,
+    optimizationType: OptimizationType,
+  ) => {
     const usageDatum = createUsageDatum(
       usageType,
-      Interval.shortTerm,
+      recommendationTerm,
       value?.recommendations,
     );
-    // const limitDatum = createRecommendationDatum(recommendationType, ResourceType.limits, usageDatum);
-    // const requestDatum = createRecommendationDatum(recommendationType, ResourceType.requests, usageDatum);
+
+    const limitDatum = createRecommendationDatum(
+      recommendationTerm,
+      usageDatum,
+      recommendationType,
+      ResourceType.limits,
+      optimizationType,
+      value?.recommendations,
+    );
+
+    const requestDatum = createRecommendationDatum(
+      recommendationTerm,
+      usageDatum,
+      recommendationType,
+      ResourceType.requests,
+      optimizationType,
+      value?.recommendations,
+    );
 
     return (
       <OptimizationsBreakdownChart
         baseHeight={350}
-        limitData={[]}
+        limitData={limitDatum}
         name={`utilization-${usageType}`}
-        requestData={[]}
+        requestData={requestDatum}
         usageData={usageDatum}
       />
     );
@@ -274,7 +294,7 @@ export const RosDetailComponent = () => {
                         showCopyCodeButton
                         yamlCodeData={getRecommendedYAMLCodeData(
                           recommendationTerm,
-                          'cost',
+                          OptimizationType.cost,
                         )}
                       />
                     </Grid>
@@ -292,7 +312,11 @@ export const RosDetailComponent = () => {
                           </Typography>
                         }
                       >
-                        {getChart(UsageType.cpuUsage)}
+                        {getChart(
+                          UsageType.cpuUsage,
+                          RecommendationType.cpu,
+                          OptimizationType.cost,
+                        )}
                       </InfoCard>
                     </Grid>
 
@@ -307,7 +331,11 @@ export const RosDetailComponent = () => {
                           </Typography>
                         }
                       >
-                        {getChart(UsageType.memoryUsage)}
+                        {getChart(
+                          UsageType.memoryUsage,
+                          RecommendationType.memory,
+                          OptimizationType.cost,
+                        )}
                       </InfoCard>
                     </Grid>
                   </Grid>
@@ -318,25 +346,67 @@ export const RosDetailComponent = () => {
                 path="/performance"
                 title="Performance optimizations"
               >
-                <Grid container>
-                  <Grid item xs={6}>
-                    <CodeInfoCard
-                      cardTitle="Current configuration"
-                      showCopyCodeButton={false}
-                      yamlCodeData={getCurrentYAMLCodeData()}
-                    />
+                <>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <CodeInfoCard
+                        cardTitle="Current configuration"
+                        showCopyCodeButton={false}
+                        yamlCodeData={getCurrentYAMLCodeData()}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <CodeInfoCard
+                        cardTitle="Recommended configuration"
+                        showCopyCodeButton
+                        yamlCodeData={getRecommendedYAMLCodeData(
+                          recommendationTerm,
+                          OptimizationType.performance,
+                        )}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6}>
-                    <CodeInfoCard
-                      cardTitle="Recommended configuration"
-                      showCopyCodeButton
-                      yamlCodeData={getRecommendedYAMLCodeData(
-                        recommendationTerm,
-                        'performance',
-                      )}
-                    />
+
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <InfoCard
+                        title={
+                          <Typography
+                            variant="body1"
+                            style={{ fontWeight: 'bold' }}
+                          >
+                            CPU utilization
+                          </Typography>
+                        }
+                      >
+                        {getChart(
+                          UsageType.cpuUsage,
+                          RecommendationType.cpu,
+                          OptimizationType.performance,
+                        )}
+                      </InfoCard>
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <InfoCard
+                        title={
+                          <Typography
+                            variant="body1"
+                            style={{ fontWeight: 'bold' }}
+                          >
+                            Memory utilization
+                          </Typography>
+                        }
+                      >
+                        {getChart(
+                          UsageType.memoryUsage,
+                          RecommendationType.memory,
+                          OptimizationType.performance,
+                        )}
+                      </InfoCard>
+                    </Grid>
                   </Grid>
-                </Grid>
+                </>
               </TabbedLayout.Route>
             </TabbedLayout>
           </Box>
