@@ -9,7 +9,7 @@
     "role": "common-library"
   },
   "dependencies": {
-    "@y0n1/json": "npm:@jsr/y0n1__json@1.0.0-rc.1",
+    "@y0n1/json": "npm:@jsr/y0n1__json@2.0.0",
     "cross-fetch": "^4.0.0",
     "lodash": "^4.17.21",
     "uri-template": "^2.0.0"
@@ -19,6 +19,7 @@
     "@backstage/cli": "^0.26.11",
     "@backstage/types": "^1.1.1",
     "@types/lodash": "^4.17.5",
+    "msw": "^2.3.4",
     "ts-morph": "^23.0.0",
     "yaml": "^2.4.2"
   },

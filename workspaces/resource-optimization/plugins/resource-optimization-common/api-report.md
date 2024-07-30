@@ -363,7 +363,7 @@ export type OptimizationsApi = Omit<
 
 // @public
 export class OptimizationsApiClient implements OptimizationsApi {
-  constructor(options: { discoveryApi: DiscoveryApi; fetchApi: FetchApi });
+  constructor(options: { discoveryApi: DiscoveryApi; fetchApi?: FetchApi });
   // (undocumented)
   getRecommendationById(
     request: GetRecommendationByIdRequest,
