@@ -22,7 +22,7 @@ import { CodeInfoCard } from '../CodeInfoCard/CodeInfoCard';
 import { optimizationsApiRef } from '../../apis';
 import { getTimeFromNow } from '../../utils/dates';
 import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
-import { getRecommendedValue } from '../../utils/utils';
+import { getRecommendedValue, isEmptyObject } from '../../utils/utils';
 import { OptimizationsBreakdownChart } from '../OptimizationsBreakdownChart';
 import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-resource-optimization-common';
 import { createUsageDatum } from '../OptimizationsBreakdownChart/utils/chart-data-format';
@@ -86,13 +86,29 @@ export const RosDetailComponent = () => {
 
   // get current configuration
   const getCurrentYAMLCodeData = () => {
+    // extract cpu & memory limits object
+    const cpuLimits = value?.recommendations?.current?.limits?.cpu;
+    const memoryLimits = value?.recommendations?.current?.limits?.memory;
+
+    // extract cpu & memory requests object
+    const cpuRequests = value?.recommendations?.current?.requests?.cpu;
+    const memoryRequests = value?.recommendations?.current?.requests?.memory;
+
     // limits values
-    const cpuLimitsValue = `${value?.recommendations?.current?.limits?.cpu?.amount}${value?.recommendations?.current?.limits?.cpu?.format}`;
-    const memoryLimitsValue = `${value?.recommendations?.current?.limits?.memory?.amount}${value?.recommendations?.current?.limits?.memory?.format}`;
+    const cpuLimitsValue = isEmptyObject(cpuLimits)
+      ? '-'
+      : `${cpuLimits?.amount}${cpuLimits?.format}`;
+    const memoryLimitsValue = isEmptyObject(memoryLimits)
+      ? '-'
+      : `${memoryLimits?.amount}${memoryLimits?.format}`;
 
     // requests values
-    const cpuRequestsValue = `${value?.recommendations?.current?.requests?.cpu?.amount}${value?.recommendations?.current?.requests?.cpu?.format}`;
-    const memoryRequestsValue = `${value?.recommendations?.current?.requests?.memory?.amount}${value?.recommendations?.current?.requests?.memory?.format}`;
+    const cpuRequestsValue = isEmptyObject(cpuRequests)
+      ? '-'
+      : `${cpuRequests?.amount}${cpuRequests?.format}`;
+    const memoryRequestsValue = isEmptyObject(memoryRequests)
+      ? '-'
+      : `${memoryRequests?.amount}${memoryRequests?.format}`;
 
     const currentYAMLCodeData: YAMLCodeDataType = {
       limits: {
