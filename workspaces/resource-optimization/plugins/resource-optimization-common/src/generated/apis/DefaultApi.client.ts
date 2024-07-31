@@ -112,8 +112,14 @@ export class DefaultApiClient {
         endDate?: string;
         offset?: number;
         limit?: number;
-        orderBy?: string;
-        orderHow?: string;
+        orderBy?:
+          | 'cluster'
+          | 'project'
+          | 'workload_type'
+          | 'workload'
+          | 'container'
+          | 'last_reported';
+        orderHow?: 'asc' | 'desc';
       };
     },
     options?: RequestOptions,

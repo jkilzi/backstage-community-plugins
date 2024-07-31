@@ -2,22 +2,22 @@ import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { deepMapKeys } from '@y0n1/json/deep-map-keys';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
-import { pluginId } from './generated/pluginId';
+import { pluginId } from '../generated/pluginId';
 import {
   DefaultApiClient,
   RequestOptions,
   TypedResponse,
-} from './generated/apis';
+} from '../generated/apis';
 import type {
   GetRecommendationByIdRequest,
   GetRecommendationListRequest,
-} from './models/requests';
-
+} from '../models/requests';
 import type {
   RecommendationBoxPlots,
   RecommendationList,
   GetTokenResponse,
-} from './models/responses';
+} from '../models/responses';
+import { snakeCase } from 'lodash';
 
 /** @public */
 export type OptimizationsApi = Omit<
@@ -30,16 +30,26 @@ export type OptimizationsApi = Omit<
  * It provides the following additional functionality:
  *   1. Routes calls through the backend's proxy.
  *   2. Implements a token renewal mechanism.
+ *   3. Handles case conversion
  *
  * @public
  */
 export class OptimizationsApiClientProxy implements OptimizationsApi {
+  private static requestKeysToSkip = {
+    getRecommendationById: [/path\.recommendationId$/],
+  };
+  private static responseKeysToSkip = {
+    getRecommendationById: [
+      /recommendations\.recommendation_terms\.(long|medium|short)_term\.plots\.plots_data\."\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"$/,
+    ],
+  };
+
   private readonly discoveryApi: DiscoveryApi;
   private readonly fetchApi: FetchApi;
   private readonly defaultClient: DefaultApiClient;
   private token?: string;
 
-  constructor(options: { discoveryApi: DiscoveryApi; fetchApi: FetchApi }) {
+  constructor(options: { discoveryApi: DiscoveryApi; fetchApi?: FetchApi }) {
     this.defaultClient = new DefaultApiClient({
       fetchApi: options.fetchApi,
       discoveryApi: {
@@ -56,23 +66,55 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
   public async getRecommendationById(
     request: GetRecommendationByIdRequest,
   ): Promise<TypedResponse<RecommendationBoxPlots>> {
+    const snakeCaseTransformedRequest = deepMapKeys(
+      request,
+      snakeCase,
+      OptimizationsApiClientProxy.requestKeysToSkip.getRecommendationById,
+    ) as GetRecommendationByIdRequest;
+
     const response = await this.fetchWithToken(
       this.defaultClient.getRecommendationById,
-      request,
+      snakeCaseTransformedRequest,
     );
 
-    return response;
+    return {
+      ...response,
+      json: async () => {
+        const data = await response.json();
+        const camelCaseTransformedResponse = deepMapKeys(
+          data,
+          camelCase,
+          OptimizationsApiClientProxy.responseKeysToSkip.getRecommendationById,
+        ) as RecommendationBoxPlots;
+        return camelCaseTransformedResponse;
+      },
+    };
   }
 
   public async getRecommendationList(
     request: GetRecommendationListRequest,
   ): Promise<TypedResponse<RecommendationList>> {
+    const snakeCaseTransformedRequest = deepMapKeys(
+      request,
+      snakeCase,
+    ) as GetRecommendationListRequest;
+
     const response = await this.fetchWithToken(
       this.defaultClient.getRecommendationList,
-      request,
+      snakeCaseTransformedRequest,
     );
 
-    return response;
+    return {
+      ...response,
+      json: async () => {
+        const data = await response.json();
+        const camelCaseTransformedResponse = deepMapKeys(
+          data,
+          camelCase,
+        ) as RecommendationList;
+        return camelCaseTransformedResponse;
+      },
+    };
   }
 
   private async getNewToken(): Promise<GetTokenResponse> {
@@ -114,9 +156,8 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
     return {
       ...response,
       json: async () => {
-        const data = await response.json();
-        const transformedData = deepMapKeys(data, camelCase) as TResponse;
-        return transformedData;
+        const data = (await response.json()) as TResponse;
+        return data;
       },
     };
   }

@@ -1,5 +1,9 @@
 //
 
+export * from '../models/CPULimitOptimisedNotification.model';
+export * from '../models/CPULimitOptimisedNotification323005.model';
+export * from '../models/CPURequestOptimisedNotification.model';
+export * from '../models/CPURequestOptimisedNotification323004.model';
 export * from '../models/CostRecommendation.model';
 export * from '../models/CostRecommendationConfig.model';
 export * from '../models/CostRecommendationConfigLimits.model';
@@ -8,6 +12,7 @@ export * from '../models/CostRecommendationConfigLimitsMemory.model';
 export * from '../models/CostRecommendationConfigRequests.model';
 export * from '../models/CostRecommendationConfigRequestsCpu.model';
 export * from '../models/CostRecommendationConfigRequestsMemory.model';
+export * from '../models/CostRecommendationNotifications.model';
 export * from '../models/CostRecommendationVariation.model';
 export * from '../models/CostRecommendationVariationLimits.model';
 export * from '../models/CostRecommendationVariationLimitsCpu.model';
@@ -21,6 +26,10 @@ export * from '../models/LongTermRecommendationBoxPlots.model';
 export * from '../models/LongTermRecommendationRecommendationEngines.model';
 export * from '../models/MediumTermRecommendation.model';
 export * from '../models/MediumTermRecommendationBoxPlots.model';
+export * from '../models/MemoryLimitOptimisedNotification.model';
+export * from '../models/MemoryLimitOptimisedNotification324004.model';
+export * from '../models/MemoryRequestOptimisedNotification.model';
+export * from '../models/MemoryRequestOptimisedNotification324003.model';
 export * from '../models/MemoryUsage.model';
 export * from '../models/PerformanceRecommendation.model';
 export * from '../models/PerformanceRecommendationConfig.model';
@@ -35,7 +44,7 @@ export * from '../models/PerformanceRecommendationVariationLimits.model';
 export * from '../models/PerformanceRecommendationVariationLimitsCpu.model';
 export * from '../models/PerformanceRecommendationVariationLimitsMemory.model';
 export * from '../models/PerformanceRecommendationVariationRequests.model';
-export * from '../models/PerformanceRecommendationVariationRequestsMemory.model';
+export * from '../models/PerformanceRecommendationVariationRequestsCpu.model';
 export * from '../models/PlotDetailsValue.model';
 export * from '../models/PlotsData.model';
 export * from '../models/RecommendationBoxPlots.model';

@@ -5,7 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import { useStyles } from './useStyles';
+import { useComboBoxStyles } from './useComboBoxStyles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -30,7 +30,7 @@ export type RenderOptionLabelProps = {
 };
 
 export function RenderOptionLabel(props: RenderOptionLabelProps) {
-  const classes = useStyles();
+  const classes = useComboBoxStyles();
   return (
     <Box className={classes.fullWidth}>
       <FixedWidthFormControlLabel
