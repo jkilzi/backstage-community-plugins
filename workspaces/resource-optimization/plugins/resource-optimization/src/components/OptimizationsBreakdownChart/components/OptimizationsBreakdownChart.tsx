@@ -79,7 +79,7 @@ const OptimizationsBreakdownChart: React.FC<
           labelComponent: (
             <ChartLegendTooltip
               legendData={legendData}
-              title={datum => datum.x}
+              title={datum => `${datum.x}`}
             />
           ),
         } as any)
@@ -99,6 +99,7 @@ const OptimizationsBreakdownChart: React.FC<
           />
         );
       }
+      return;
     });
   };
 
@@ -115,6 +116,7 @@ const OptimizationsBreakdownChart: React.FC<
           />
         );
       }
+      return;
     });
   };
 
@@ -130,6 +132,7 @@ const OptimizationsBreakdownChart: React.FC<
           />
         );
       }
+      return;
     });
   };
 
@@ -146,6 +149,7 @@ const OptimizationsBreakdownChart: React.FC<
           />
         );
       }
+      return;
     });
   };
 
@@ -242,7 +246,7 @@ const OptimizationsBreakdownChart: React.FC<
     return (
       <CursorVoronoiContainer
         cursorDimension="x"
-        labels={({ datum }) => labelFormatter(datum)}
+        labels={({ datum }: any) => labelFormatter(datum)}
         mouseFollowTooltips
         voronoiDimension="x"
         voronoiPadding={getPadding()}
@@ -359,7 +363,7 @@ const OptimizationsBreakdownChart: React.FC<
     if (usageData && usageData.length) {
       const boxPlotData: any[] = [];
       usageData.map((datum: any) => {
-        if (datum.y.every((val: any, i: any, arr: any[]) => val === arr[0])) {
+        if (datum.y.every((val: any, _i: any, arr: any[]) => val === arr[0])) {
           boxPlotData.push({
             ...datum,
             yVal: datum.y[0],
@@ -396,7 +400,7 @@ const OptimizationsBreakdownChart: React.FC<
       // Show dots in place of box plot when all values are equal
       const scatterData: any[] = [];
       usageData.map((datum: any) => {
-        if (datum.y.every((val: any, i: any, arr: any[]) => val === arr[0])) {
+        if (datum.y.every((val: any, _i: any, arr: any[]) => val === arr[0])) {
           scatterData.push({
             ...datum,
             y: datum.y[0],

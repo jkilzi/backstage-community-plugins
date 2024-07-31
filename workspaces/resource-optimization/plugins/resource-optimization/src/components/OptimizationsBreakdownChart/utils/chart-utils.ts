@@ -145,7 +145,7 @@ export const getResizeObserver = (
 ) => {
   const containerElement = containerRef;
   const { ResizeObserver } = window as any;
-  let _resizeObserver;
+  let _resizeObserver: any;
 
   if (containerElement && ResizeObserver) {
     const resizeObserver = new ResizeObserver((entries: string | any[]) => {
@@ -220,11 +220,14 @@ export const isDataHidden = (
 
       const keyValue = key.value;
 
-      if (series[keyValue].data) {
-        for (const item of series[keyValue].data) {
-          if (item.childName) {
-            serieChildName = item.childName;
-            break;
+      if (series && keyValue && series[keyValue]?.data) {
+        const seriesData = series[keyValue]?.data;
+        if (seriesData) {
+          for (const item of seriesData) {
+            if (item.childName) {
+              serieChildName = item.childName;
+              break;
+            }
           }
         }
       }
