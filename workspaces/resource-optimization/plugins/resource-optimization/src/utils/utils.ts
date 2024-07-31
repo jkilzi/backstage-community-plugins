@@ -1,11 +1,11 @@
 import { RecommendationsRecommendationsCurrent } from '@backstage-community/plugin-resource-optimization-common';
 
-const getPercentage = (oldNumber: number, newNumber: number): number => {
-  if (typeof oldNumber !== 'number' || typeof newNumber !== 'number') {
+const getPercentage = (currentVal: number, recommendedVal: number): number => {
+  if (currentVal === 0) {
     return 0;
   }
-  const changeValue = newNumber - oldNumber;
-  return parseFloat(((changeValue / oldNumber) * 100).toFixed(2));
+  const changeValue = recommendedVal - currentVal;
+  return parseFloat(((changeValue / currentVal) * 100).toFixed(2));
 };
 
 export const getRecommendedValue = (
@@ -24,7 +24,11 @@ export const getRecommendedValue = (
   }
 
   // Convert units if not the same
-  if (currentFormat !== recommendedFormat) {
+  if (
+    currentFormat &&
+    recommendedFormat &&
+    currentFormat !== recommendedFormat
+  ) {
     if (key2 === 'cpu') {
       // Convert cores to millicores
       //
@@ -80,4 +84,12 @@ export const getRecommendedValue = (
     `${recommendedVal}${recommendedFormat}`.padEnd(paddingValue[key2]);
   const formattedPercentageValue = `# ${percentageSign}${percentage}%`;
   return `${formattedRecommendedValue}${formattedPercentageValue}`;
+};
+
+export const isEmptyObject = (obj?: {}): boolean => {
+  if (obj) {
+    return Object.keys(obj).length === 0;
+  }
+
+  return true;
 };
