@@ -30,6 +30,7 @@ import ChartTheme from '../theme';
 
 import { unitsLookupKey } from '../utils/format';
 import { chartStyles } from './optimizationsBreakdownChart.styles';
+import { useOptimizationsBreakdownChartStyles } from './OptimizationsBreakdownChartStyles';
 
 interface OptimizationsBreakdownChartOwnProps {
   baseHeight: number;
@@ -52,6 +53,7 @@ const OptimizationsBreakdownChart: React.FC<
   const [series, setSeries] = useState<ChartSeries[]>();
   const [width, setWidth] = useState(0);
   const intl = useIntl();
+  const classes = useOptimizationsBreakdownChartStyles();
 
   // Clone original container. See https://issues.redhat.com/browse/COST-762
   const cloneContainer = () => {
@@ -441,7 +443,7 @@ const OptimizationsBreakdownChart: React.FC<
   const chartHeight = getHeight();
 
   return (
-    <div className="chartOverride" ref={containerRef}>
+    <div className={classes.chartOverride} ref={containerRef}>
       <div style={{ height: chartHeight }}>
         <Chart
           containerComponent={cloneContainer()}

@@ -67,8 +67,6 @@ export const RosDetailComponent = () => {
     return <ResponseErrorPanel error={error} />;
   }
 
-  console.log('Response Value:', value);
-
   const handleChange = (event: any) => {
     setRecommendationTerm(event.target.value);
   };
