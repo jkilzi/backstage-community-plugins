@@ -1,3 +1,3 @@
-export { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization-react';
-export { Router } from './components/Router';
+export { ResourceOptimizationIconOutlined } from './components/resource-optimization-icon';
+export { Router } from './pages/Router';
 export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';

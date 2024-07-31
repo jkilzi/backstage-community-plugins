@@ -12,6 +12,5 @@ yarn lint
 echo "yarn prettier:check"
 yarn run -T prettier --check plugins/resource-optimization*
 
-
 echo "yarn test:all"
 yarn test:all

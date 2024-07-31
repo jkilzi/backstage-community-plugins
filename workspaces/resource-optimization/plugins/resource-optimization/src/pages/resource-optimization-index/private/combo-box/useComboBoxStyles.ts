@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 /** @public */
-export type AutocompleteSearchFilterClassKey = 'input';
+export type ComboBoxClassKey = 'input';
 
-export const useStyles = makeStyles(
+export const useComboBoxStyles = makeStyles(
   {
     root: {},
     label: {},
@@ -16,6 +16,6 @@ export const useStyles = makeStyles(
     },
   },
   {
-    name: 'AutocompleteSearchFilter',
+    name: 'ComboBox',
   },
 );

@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { fetchJson } from './fetch.mjs';
-import { toYaml } from './serializer.mjs';
+import { toYaml } from './yaml.mjs';
 
 function patchTitle(spec) {
   spec.info.title = 'resource-optimization';
@@ -26,10 +26,6 @@ function patchComponentSchemaPlotDetails(spec) {
 }
 
 function patchPathRecommendationsList(spec) {
-  // The following query parameters should have been defined as Array<string>
-  const PROBLEMATIC_QUERY_PARAM_NAMES =
-    /(cluster|workload_type|workload|container|project)/;
-
   const RECOMMENDATIONS_LIST_PATH = '/recommendations/openshift';
   const recommendationsListDef = spec.paths[RECOMMENDATIONS_LIST_PATH];
 
@@ -38,7 +34,28 @@ function patchPathRecommendationsList(spec) {
   // properly by the generator.
   delete recommendationsListDef.get.tags;
 
+  // Patch the order_how and order_by parameters to generate enums
   const { parameters = [] } = recommendationsListDef.get;
+  for (const parameter of parameters) {
+    if (parameter.name === 'order_how') {
+      parameter.schema.enum = ['asc', 'desc'];
+    }
+
+    if (parameter.name === 'order_by') {
+      parameter.schema.enum = [
+        'cluster',
+        'project',
+        'workload_type',
+        'workload',
+        'container',
+        'last_reported',
+      ];
+    }
+  }
+
+  // The following parameters should have been defined as Array<string>
+  const PROBLEMATIC_QUERY_PARAM_NAMES =
+    /(cluster|workload_type|workload|container|project)/;
   const problematicParams = parameters.filter(p =>
     PROBLEMATIC_QUERY_PARAM_NAMES.test(p.name),
   );

@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useCallback } from 'react';
-import { MTableToolbar } from 'material-table';
+import { MTableToolbar } from '@material-table/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const StyledMTableToolbar = withStyles(
@@ -45,20 +45,19 @@ export interface TableToolbarProps {
  * @public
  */
 export function TableToolbar(toolbarProps: TableToolbarProps) {
-  const { toolbarRef, setSearch } = toolbarProps;
-  const onSearchChanged = useCallback(
+  const { toolbarRef, onSearchChanged } = toolbarProps;
+  const handleSearchChanged = useCallback(
     (searchText: string) => {
-      toolbarProps.onSearchChanged(searchText);
-      setSearch(searchText);
+      onSearchChanged(searchText);
     },
-    [toolbarProps, setSearch],
+    [onSearchChanged],
   );
 
   return (
     <StyledMTableToolbar
       {...toolbarProps}
       ref={toolbarRef}
-      onSearchChanged={onSearchChanged}
+      onSearchChanged={handleSearchChanged}
     />
   );
 }

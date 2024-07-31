@@ -5,8 +5,8 @@
 // ******************************************************************
 
 /** @public */
-/** @public */
-export interface PerformanceRecommendationVariationRequestsMemory {
-  amount?: number;
-  format?: string;
+export interface MemoryLimitOptimisedNotification324004 {
+  code?: number;
+  message?: string;
+  type?: string;
 }

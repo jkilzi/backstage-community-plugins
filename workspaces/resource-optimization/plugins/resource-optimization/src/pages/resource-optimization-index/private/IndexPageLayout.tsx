@@ -67,7 +67,7 @@ export function Table(props: { children: React.ReactNode }) {
   );
 }
 
-export function PageLayout(props: { children: React.ReactNode }) {
+export function IndexPageLayout(props: { children: React.ReactNode }) {
   return (
     <Grid container style={{ position: 'relative' }}>
       {props.children}
@@ -75,5 +75,5 @@ export function PageLayout(props: { children: React.ReactNode }) {
   );
 }
 
-PageLayout.Filters = Filters;
-PageLayout.Table = Table;
+IndexPageLayout.Filters = Filters;
+IndexPageLayout.Table = Table;

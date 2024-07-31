@@ -11,6 +11,8 @@ export interface CostRecommendation {
   // (undocumented)
   config?: CostRecommendationConfig;
   // (undocumented)
+  notifications?: CostRecommendationNotifications;
+  // (undocumented)
   podsCount?: number;
   // (undocumented)
   variation?: CostRecommendationVariation;
@@ -73,6 +75,18 @@ export interface CostRecommendationConfigRequestsMemory {
 }
 
 // @public (undocumented)
+export interface CostRecommendationNotifications {
+  // (undocumented)
+  _323004?: CPURequestOptimisedNotification323004;
+  // (undocumented)
+  _323005?: CPULimitOptimisedNotification323005;
+  // (undocumented)
+  _324003?: MemoryRequestOptimisedNotification324003;
+  // (undocumented)
+  _324004?: MemoryLimitOptimisedNotification324004;
+}
+
+// @public (undocumented)
 export interface CostRecommendationVariation {
   // (undocumented)
   limits?: CostRecommendationVariationLimits;
@@ -129,9 +143,41 @@ export interface CostRecommendationVariationRequestsMemory {
 }
 
 // @public (undocumented)
+export interface CPULimitOptimisedNotification {
+  // (undocumented)
+  _323005?: CPULimitOptimisedNotification323005;
+}
+
+// @public (undocumented)
+export interface CPULimitOptimisedNotification323005 {
+  // (undocumented)
+  code?: number;
+  // (undocumented)
+  message?: string;
+  // (undocumented)
+  type?: string;
+}
+
+// @public (undocumented)
+export interface CPURequestOptimisedNotification {
+  // (undocumented)
+  _323004?: CPURequestOptimisedNotification323004;
+}
+
+// @public (undocumented)
+export interface CPURequestOptimisedNotification323004 {
+  // (undocumented)
+  code?: number;
+  // (undocumented)
+  message?: string;
+  // (undocumented)
+  type?: string;
+}
+
+// @public (undocumented)
 export interface CpuUsage {
   // (undocumented)
-  format?: string | null;
+  format?: string;
   // (undocumented)
   max?: number;
   // (undocumented)
@@ -178,8 +224,14 @@ export class DefaultApiClient {
         endDate?: string;
         offset?: number;
         limit?: number;
-        orderBy?: string;
-        orderHow?: string;
+        orderBy?:
+          | 'cluster'
+          | 'project'
+          | 'workload_type'
+          | 'workload'
+          | 'container'
+          | 'last_reported';
+        orderHow?: 'asc' | 'desc';
       };
     },
     options?: RequestOptions,
@@ -187,32 +239,14 @@ export class DefaultApiClient {
 }
 
 // @public (undocumented)
-export type GetRecommendationByIdRequest = {
-  path: {
-    recommendationId: string;
-  };
-  query: {
-    memoryUnit?: 'bytes' | 'MiB' | 'GiB' | undefined;
-    cpuUnit?: 'millicores' | 'cores' | undefined;
-  };
-};
+export type GetRecommendationByIdRequest = Parameters<
+  OptimizationsApi['getRecommendationById']
+>[0];
 
 // @public (undocumented)
-export type GetRecommendationListRequest = {
-  query: {
-    cluster?: string[];
-    workloadType?: string[];
-    workload?: string[];
-    container?: string[];
-    project?: string[];
-    startDate?: string;
-    endDate?: string;
-    offset?: number;
-    limit?: number;
-    orderBy?: string;
-    orderHow?: string;
-  };
-};
+export type GetRecommendationListRequest = Parameters<
+  OptimizationsApi['getRecommendationList']
+>[0];
 
 // @public
 export interface GetTokenResponse {
@@ -274,6 +308,38 @@ export interface MediumTermRecommendationBoxPlots {
 }
 
 // @public (undocumented)
+export interface MemoryLimitOptimisedNotification {
+  // (undocumented)
+  _324004?: MemoryLimitOptimisedNotification324004;
+}
+
+// @public (undocumented)
+export interface MemoryLimitOptimisedNotification324004 {
+  // (undocumented)
+  code?: number;
+  // (undocumented)
+  message?: string;
+  // (undocumented)
+  type?: string;
+}
+
+// @public (undocumented)
+export interface MemoryRequestOptimisedNotification {
+  // (undocumented)
+  _324003?: MemoryRequestOptimisedNotification324003;
+}
+
+// @public (undocumented)
+export interface MemoryRequestOptimisedNotification324003 {
+  // (undocumented)
+  code?: number;
+  // (undocumented)
+  message?: string;
+  // (undocumented)
+  type?: string;
+}
+
+// @public (undocumented)
 export interface MemoryUsage {
   // (undocumented)
   format?: string;
@@ -297,7 +363,7 @@ export type OptimizationsApi = Omit<
 
 // @public
 export class OptimizationsApiClient implements OptimizationsApi {
-  constructor(options: { discoveryApi: DiscoveryApi; fetchApi: FetchApi });
+  constructor(options: { discoveryApi: DiscoveryApi; fetchApi?: FetchApi });
   // (undocumented)
   getRecommendationById(
     request: GetRecommendationByIdRequest,
@@ -312,6 +378,8 @@ export class OptimizationsApiClient implements OptimizationsApi {
 export interface PerformanceRecommendation {
   // (undocumented)
   config?: PerformanceRecommendationConfig;
+  // (undocumented)
+  notifications?: CostRecommendationNotifications;
   // (undocumented)
   podsCount?: number;
   // (undocumented)
@@ -409,17 +477,17 @@ export interface PerformanceRecommendationVariationLimitsMemory {
 // @public (undocumented)
 export interface PerformanceRecommendationVariationRequests {
   // (undocumented)
-  cpu?: RecommendationsRecommendationsCurrentLimitsCpu;
+  cpu?: PerformanceRecommendationVariationRequestsCpu;
   // (undocumented)
-  memory?: PerformanceRecommendationVariationRequestsMemory;
+  memory?: CostRecommendationVariationLimitsMemory;
 }
 
 // @public (undocumented)
-export interface PerformanceRecommendationVariationRequestsMemory {
+export interface PerformanceRecommendationVariationRequestsCpu {
   // (undocumented)
   amount?: number;
   // (undocumented)
-  format?: string;
+  format?: string | null;
 }
 
 // @public (undocumented)
