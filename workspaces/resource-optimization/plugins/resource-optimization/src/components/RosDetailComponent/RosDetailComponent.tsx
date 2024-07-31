@@ -239,7 +239,7 @@ export const RosDetailComponent = () => {
             {value?.container}
           </Typography>
 
-          <Grid container spacing={1} xs={8}>
+          <Grid container item spacing={1} xs={8}>
             {containerData.map((item, index) => (
               <Grid container item xs={9} spacing={1} key={index}>
                 <Grid item xs={4}>
@@ -253,7 +253,7 @@ export const RosDetailComponent = () => {
               </Grid>
             ))}
             <Grid container item xs={9} spacing={1}>
-              <Grid item xs={6} alignContent="center">
+              <Grid container item xs={6} alignContent="center">
                 <Typography variant="body1">
                   <b>View optimizations based on</b>
                 </Typography>

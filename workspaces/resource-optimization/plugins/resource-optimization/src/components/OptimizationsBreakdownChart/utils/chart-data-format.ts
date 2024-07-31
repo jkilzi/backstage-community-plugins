@@ -21,6 +21,7 @@ export const getRecommendationTerm = (
   | MediumTermRecommendationBoxPlots
   | LongTermRecommendationBoxPlots => {
   let result;
+  // eslint-disable-next-line default-case
   switch (interval) {
     case 'shortTerm':
       result = recommendations?.recommendationTerms?.shortTerm;
