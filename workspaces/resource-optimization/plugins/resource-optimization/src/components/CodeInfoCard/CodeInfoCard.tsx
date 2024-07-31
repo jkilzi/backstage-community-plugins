@@ -6,14 +6,14 @@ import {
   generateYAMLCode,
 } from '../../utils/generateYAMLCode';
 
-const sampleYAMLCodeData = {
+const defaultYAMLCodeData = {
   limits: {
     cpu: '-',
-    memory: '500Mi  # -85.1%',
+    memory: '-',
   },
   requests: {
-    cpu: 0.1,
-    memory: '20Mi  # -86.1%',
+    cpu: '-',
+    memory: '-',
   },
 };
 
@@ -28,7 +28,7 @@ export const CodeInfoCard: React.FC<CodeInfoCardProps> = ({
   showCopyCodeButton,
   yamlCodeData,
 }) => {
-  const YAMLCode = generateYAMLCode(yamlCodeData || sampleYAMLCodeData);
+  const YAMLCode = generateYAMLCode(yamlCodeData || defaultYAMLCodeData);
 
   return (
     <InfoCard

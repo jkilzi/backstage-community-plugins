@@ -19,7 +19,9 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "4.0.0-alpha.61",
     "@patternfly/react-charts": "^7.3.0",
+    "date-fns": "^3.6.0",
     "lodash": "^4.17.21",
+    "react-intl": "^6.6.8",
     "react-use": "^17.2.4",
     "yaml": "^2.4.5"
   },
