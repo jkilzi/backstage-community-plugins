@@ -2,7 +2,7 @@
 
 Welcome to the Resource Optimization plugin!
 
-Based on [Project Koku](https://github.com/project-koku/koku), the Resource Optimization plugin allows users to receive optimization recommendations for all your containers running on OpenShift clusters.
+Based on [Project Koku](https://github.com/project-koku/koku), the Resource Optimization plugin allows users to visualize usage trends and receive optimization recommendations for containers running on OpenShift clusters.
 
 ## Getting started
 
