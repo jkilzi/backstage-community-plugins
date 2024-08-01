@@ -1,5 +1,7 @@
-# @backstage-community/plugin-resource-optimization-common
+# Resource Optimization Common
 
-Welcome to the common package for the resource-optimization plugin!
+Shared isomorphic code for the resource-optimization plugin.
 
-_This plugin was created through the Backstage CLI_
+## Links
+
+- [Resource Optimization front-end plugin](../resource-optimization/README.md)
