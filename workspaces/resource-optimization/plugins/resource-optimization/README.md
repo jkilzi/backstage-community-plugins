@@ -124,14 +124,9 @@ dynamicPlugins:
 
 ### Configuration
 
-#### Step 1: Create a service account in [Red Hat Hybrid Cloud Console (RHHCC)](https://console.redhat.com/application-services/service-accounts)
+#### Step 1: Create a service account in Red Hat Hybrid Cloud Console (RHHCC)
 
-The plugin consumes services from [Red Hat Hybrid Cloud Console](https://console.redhat.com/openshift/cost-management/optimizations), therefore it is necessary that your clusters are registered in the Red Hat Hybrid Cloud Console.
-Here are the RHHCC's RBAC requirements for that service account:
-
-1. req1: group? role?
-2. req2
-3. ...
+The plugin consumes services from [Red Hat Hybrid Cloud Console](https://console.redhat.com/openshift/cost-management/optimizations), therefore your clusters must be registered in the Red Hat Hybrid Cloud Console and the service account you'll create must be assigned the `Cost OpenShift Viewer` role. Follow [this link](https://console.redhat.com/application-services/service-accounts) to learn more on how to create the service account.
 
 #### Step 2: Update the `app-config.yaml`
 
@@ -160,4 +155,4 @@ resourceOptimization:
 
 - [License Apache 2.0](../../LICENSE.md)
 - [DCO](../../DCO.md)
-- More details in the [Resource Optimization back-end](../resource-optimization-backend/README.md) part of this plugin.
+- Find more details in the [Resource Optimization back-end](../resource-optimization-backend/README.md) part of this plugin.
