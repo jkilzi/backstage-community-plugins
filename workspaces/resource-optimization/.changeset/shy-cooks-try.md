@@ -6,4 +6,4 @@
 
 Adds the resource-optimization plugin
 
-This is the first iteration for this plugin. Your feedback is more than welcome!  
+This is the first iteration for this plugin. Your feedback is more than welcome!
