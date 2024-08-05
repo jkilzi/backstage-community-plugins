@@ -37,7 +37,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-resource-optimization';
-import { useRhdhTheme } from './hooks/rhdh-theme';
+import { useRhdhTheme } from './hooks/useRhdhTheme';
 
 const options: Parameters<typeof createApp>[0] = {
   apis,
@@ -64,9 +64,9 @@ const options: Parameters<typeof createApp>[0] = {
 };
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
-const { isRhdhThemeEnabled, theme } = useRhdhTheme();
-if (isRhdhThemeEnabled) {
-  options.themes = theme;
+const rhdhTheme = useRhdhTheme();
+if (rhdhTheme !== null) {
+  options.themes = rhdhTheme.themes;
 }
 
 const app = createApp(options);

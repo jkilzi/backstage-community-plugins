@@ -27,7 +27,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-resource-optimization';
-import { useRhdhTheme } from '../../hooks/rhdh-theme';
+import { useRhdhTheme } from '../../hooks/useRhdhTheme';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -46,13 +46,15 @@ const useSidebarLogoStyles = makeStyles({
 
 const Logo = (props: { isOpen?: boolean }) => {
   const { isOpen = false } = props;
-  const { isRhdhThemeEnabled, RhdhLogoFull, RhdhLogoIcon } = useRhdhTheme();
+  const rhdhTheme = useRhdhTheme();
+  const isRhdhThemeEnabled = rhdhTheme !== null;
 
   let logo: React.ReactElement | null = null;
-  if (isOpen) {
-    logo = isRhdhThemeEnabled ? <RhdhLogoFull /> : <LogoFull />;
+  if (isRhdhThemeEnabled) {
+    const { RhdhLogoFull, RhdhLogoIcon } = rhdhTheme;
+    logo = isOpen ? <RhdhLogoFull /> : <RhdhLogoIcon />;
   } else {
-    logo = isRhdhThemeEnabled ? <RhdhLogoIcon /> : <LogoIcon />;
+    logo = isOpen ? <LogoFull /> : <LogoIcon />;
   }
 
   return logo;

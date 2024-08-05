@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-const LogoIcon = () => {
+const RhdhLogoIcon = () => {
   const classes = useStyles();
 
   return (
@@ -29,4 +29,4 @@ const LogoIcon = () => {
   );
 };
 
-export default LogoIcon;
+export default RhdhLogoIcon;

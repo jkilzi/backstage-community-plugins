@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     fill: '#7df3e1',
   },
 });
-const LogoFull = () => {
+const RhdhLogoFull = () => {
   const classes = useStyles();
 
   return (
@@ -38,4 +38,4 @@ const LogoFull = () => {
   );
 };
 
-export default LogoFull;
+export default RhdhLogoFull;
