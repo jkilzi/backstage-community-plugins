@@ -1,10 +1,6 @@
-# [Backstage](https://backstage.io)
+# Welcome to the Resource Optimization plugin workspace
 
-This is your newly scaffolded Backstage App, Good Luck!
-
-To start the app, run:
-
-```sh
-yarn install
-yarn dev
-```
+Follow these links to learn more about this plugin:
+1. [Front-end](./plugins/resource-optimization/README.md)
+2. [Backend-end](./plugins/resource-optimization-backend/README.md)
+3. [Common](./plugins/resource-optimization-common/README.md)

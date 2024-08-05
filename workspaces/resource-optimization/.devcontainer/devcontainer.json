@@ -11,9 +11,11 @@
     "ghcr.io/dhoeric/features/act:1": {}
   },
   "forwardPorts": [3000, 7007],
+  "postCreateCommand": "/workspaces/community-plugins/workspaces/resource-optimization/.devcontainer/scripts/post_create_command.sh",
   "customizations": {
     "vscode": {
       "settings": {
+        "git.alwaysSignOff": true,
         "jest.jestCommandLine": "node_modules/.bin/jest --config node_modules/@backstage/cli/config/jest.js",
         "jest.runMode": {
           "type": "on-demand"
