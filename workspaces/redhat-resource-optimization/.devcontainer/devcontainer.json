@@ -3,15 +3,13 @@
   "name": "Ubuntu",
   "image": "mcr.microsoft.com/devcontainers/base:jammy",
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-    "ghcr.io/devcontainers/features/java:1": {},
     "ghcr.io/devcontainers/features/node:1": {},
-    "ghcr.io/devcontainers-contrib/features/fzf:1": {},
-    "ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {},
-    "ghcr.io/dhoeric/features/act:1": {}
+    "ghcr.io/devcontainers/features/java:1": {
+      "jdkDistro": "tem",
+      "version":  "17"
+    }
   },
-  "forwardPorts": [3000, 7007],
-  "postCreateCommand": ".devcontainer/scripts/post_create_command.sh",
+  "postCreateCommand": ".devcontainer/scripts/post_create.sh",
   "customizations": {
     "vscode": {
       "settings": {
@@ -29,7 +27,6 @@
         "esbenp.prettier-vscode",
         "redhat.vscode-yaml",
         "orta.vscode-jest",
-        "rangav.vscode-thunder-client",
         "eamodio.gitlens",
         "-vscjava.vscode-java-pack",
         "Intility.vscode-backstage"
