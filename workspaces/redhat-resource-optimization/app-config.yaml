@@ -82,20 +82,20 @@ auth:
   providers:
     oidc:
       development:
-        metadataUrl: http://localhost:8080/realms/local-rhdh-realm
-        clientId: local-rhdh-client
-        clientSecret: QxF9UAFokSfvIm7lsBz7dS2BznDm5alB
+        metadataUrl: http://localhost:8080/realms/master
+        callbackUrl: http://localhost:3000/api/auth/oidc/handler/frame
+        clientId: test-rhdh
+        clientSecret: VL80y37z4bOZyRaY39Q5HnAKO8mwqBx9
         prompt: auto # recommended to use auto
         ## uncomment for additional configuration options
-        # callbackUrl: ${AUTH_OIDC_CALLBACK_URL}
         # tokenEndpointAuthMethod: ${AUTH_OIDC_TOKEN_ENDPOINT_METHOD}
         # tokenSignedResponseAlg: ${AUTH_OIDC_SIGNED_RESPONSE_ALG}
         # scope: ${AUTH_OIDC_SCOPE}
         ## Auth provider will try each resolver until it succeeds. Uncomment the resolvers you want to use to override the default resolver: `emailLocalPartMatchingUserEntityName`
-        signIn:
-          resolvers:
+        #signIn:
+        #  resolvers:
         #    - resolver: preferredUsernameMatchingUserEntityName
-            - resolver: emailMatchingUserEntityProfileEmail
+        #    - resolver: emailMatchingUserEntityProfileEmail
         #    - resolver: emailLocalPartMatchingUserEntityName
 
 scaffolder:

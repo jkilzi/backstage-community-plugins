@@ -37,7 +37,7 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis, rhKeycloakOIDCAuthAPiRef } from './apis';
+import { apis, rhKeycloakOIDCAuthApiRef } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
@@ -57,9 +57,9 @@ import { useRhdhTheme } from './hooks/useRhdhTheme';
 
 const keycloakProvider: SignInProviderConfig = {
   id: 'oidc',
-  title: 'Keycloak SSO',
-  message: 'Sign in with Keycloak SSO',
-  apiRef: rhKeycloakOIDCAuthAPiRef,
+  title: 'Red Hat Keycloak SSO',
+  message: 'Sign in with Red Hat Keycloak SSO',
+  apiRef: rhKeycloakOIDCAuthApiRef,
 };
 
 

@@ -33,7 +33,7 @@ import {
 } from '@backstage/core-plugin-api';
 import { OAuth2 } from '@backstage/core-app-api';
 
-export const rhKeycloakOIDCAuthAPiRef: ApiRef<
+export const rhKeycloakOIDCAuthApiRef: ApiRef<
   OpenIdConnectApi & ProfileInfoApi & BackstageIdentityApi & SessionApi
 > = createApiRef({
   id: 'auth.rhkeycloak.oidc'
@@ -41,7 +41,7 @@ export const rhKeycloakOIDCAuthAPiRef: ApiRef<
 
 export const apis: AnyApiFactory[] = [
   createApiFactory({
-    api: rhKeycloakOIDCAuthAPiRef,
+    api: rhKeycloakOIDCAuthApiRef,
     deps: {
       discoveryApi: discoveryApiRef,
       oauthRequestApi: oauthRequestApiRef,
