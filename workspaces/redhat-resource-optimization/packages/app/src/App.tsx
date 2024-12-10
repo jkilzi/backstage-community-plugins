@@ -53,8 +53,7 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-redhat-resource-optimization';
 import { useRhdhTheme } from './hooks/useRhdhTheme';
-
-
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
 
 const options: Parameters<typeof createApp>[0] = {
   apis,
@@ -76,15 +75,26 @@ const options: Parameters<typeof createApp>[0] = {
     });
   },
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={
-    [
-      {
-        id: 'oidc',
-        title: 'Red Hat Keycloak SSO',
-        message: 'Sign in with Red Hat Keycloak SSO',
-        apiRef: rhKeycloakOIDCAuthApiRef,
-      }
-    ]} />,
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        auto
+        providers={[
+          // {
+          //   id: 'oidc',
+          //   title: 'Red Hat Keycloak SSO',
+          //   message: 'Sign in with Red Hat Keycloak SSO',
+          //   apiRef: rhKeycloakOIDCAuthApiRef,
+          // },
+          {
+            id: 'github',
+            title: 'Github',
+            message: 'Sign in with Github',
+            apiRef: githubAuthApiRef,
+          },
+        ]}
+      />
+    ),
   },
 };
 
@@ -95,7 +105,6 @@ if (rhdhTheme !== null) {
 }
 
 const app = createApp(options);
-
 
 const routes = (
   <FlatRoutes>

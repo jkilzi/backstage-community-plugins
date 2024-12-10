@@ -74,6 +74,16 @@ techdocs:
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+
 # auth:
 #   environment: development
 #   # Providing an auth.session.secret will enable session support in the auth-backend
@@ -84,8 +94,8 @@ techdocs:
 #       development:
 #         metadataUrl: http://localhost:8080/realms/master
 #         callbackUrl: http://localhost:3000/api/auth/oidc/handler/frame
-#         clientId: test-rhdh
-#         clientSecret: VL80y37z4bOZyRaY39Q5HnAKO8mwqBx9
+#         clientId: ${AUTH_KEYCLOAK_CLIENT_ID}
+#         clientSecret: ${AUTH_KEYCLOAK_CLIENT_SECRET}
 #         prompt: auto # recommended to use auto
         ## uncomment for additional configuration options
         # tokenEndpointAuthMethod: ${AUTH_OIDC_TOKEN_ENDPOINT_METHOD}

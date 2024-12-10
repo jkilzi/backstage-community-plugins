@@ -21,10 +21,13 @@ import {
   createOAuthProviderFactory,
 } from '@backstage/plugin-auth-node';
 import { oidcAuthenticator } from '@backstage/plugin-auth-backend-module-oidc-provider';
-import { DEFAULT_NAMESPACE, stringifyEntityRef } from '@backstage/catalog-model';
+import {
+  DEFAULT_NAMESPACE,
+  stringifyEntityRef,
+} from '@backstage/catalog-model';
+import { githubAuthenticator } from '@backstage/plugin-auth-backend-module-github-provider';
 
-
-const myAuthProviderModule = createBackendModule({
+const customOIDCAuthProviderModule = createBackendModule({
   // This ID must be exactly "auth" because that's the plugin it targets
   pluginId: 'auth',
   // This ID must be unique, but can be anything
@@ -43,8 +46,8 @@ const myAuthProviderModule = createBackendModule({
             // For more info about authenticators please see https://backstage.io/docs/auth/add-auth-provider/#adding-an-oauth-based-provider
             authenticator: oidcAuthenticator,
             async signInResolver(info, ctx) {
-              console.log("Preeti Logging...")
-              console.log("Sign in done:", info);
+              console.log('Preeti Logging...');
+              console.log('Sign in done:', info);
               const userRef = stringifyEntityRef({
                 kind: 'User',
                 name: info.result.fullProfile.userinfo.name as string,
@@ -54,6 +57,69 @@ const myAuthProviderModule = createBackendModule({
                 claims: {
                   sub: userRef, // The user's own identity
                   ent: [userRef], // A list of identities that the user claims ownership through
+                },
+              });
+            },
+          }),
+        });
+      },
+    });
+  },
+});
+
+const customGithubAuthModule = createBackendModule({
+  // This ID must be exactly "auth" because that's the plugin it targets
+  pluginId: 'auth',
+  // This ID must be unique, but can be anything
+  moduleId: 'custom-auth-provider',
+  register(reg) {
+    reg.registerInit({
+      deps: { providers: authProvidersExtensionPoint },
+      async init({ providers }) {
+        providers.registerProvider({
+          // This ID must match the actual provider config, e.g. addressing
+          // auth.providers.azure means that this must be "azure".
+          providerId: 'github',
+          // Use createProxyAuthProviderFactory instead if it's one of the proxy
+          // based providers rather than an OAuth based one
+          factory: createOAuthProviderFactory({
+            // For more info about authenticators please see https://backstage.io/docs/auth/add-auth-provider/#adding-an-oauth-based-provider
+            authenticator: githubAuthenticator,
+            async signInResolver(info, ctx) {
+              console.log('Preeti Logging...');
+              console.log('Sign in done:', info);
+              const {
+                profile: { email },
+              } = info;
+
+              // Profiles are not always guaranteed to to have an email address.
+              // You can also find more provider-specific information in `info.result`.
+              // It typically contains a `fullProfile` object as well as ID and/or access
+              // tokens that you can use for additional lookups.
+              if (!email) {
+                throw new Error('User profile contained no email');
+              }
+
+              // This example resolver simply uses the local part of the email as the name.
+              const [name] = email.split('@');
+
+              // This helper function handles sign-in by looking up a user in the catalog.
+              // The lookup can be done either by reference, annotations, or custom filters.
+              //
+              // The helper also issues a token for the user, using the standard group
+              // membership logic to determine the ownership references of the user.
+              //
+              // There are a number of other methods on the ctx, feel free to explore them!
+              const userEntity = stringifyEntityRef({
+                kind: 'User',
+                name: name,
+                namespace: DEFAULT_NAMESPACE,
+              });
+
+              return ctx.issueToken({
+                claims: {
+                  sub: userEntity, // The user's own identity
+                  ent: [userEntity], // A list of identities that the user claims ownership through
                 },
               });
             },
@@ -80,6 +146,7 @@ backend.add(import('@backstage/plugin-auth-backend'));
 // See https://backstage.io/docs/backend-system/building-backends/migrating#the-auth-plugin
 backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 // See https://backstage.io/docs/auth/guest/provider
+// backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend/alpha'));
@@ -97,6 +164,7 @@ backend.add(
 backend.add(import('@backstage/plugin-search-backend/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
-backend.add(myAuthProviderModule);
+// backend.add(customOIDCAuthProviderModule);
+backend.add(customGithubAuthModule);
 
 backend.start();
