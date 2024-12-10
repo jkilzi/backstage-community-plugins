@@ -45,7 +45,6 @@ import {
   AlertDisplay,
   OAuthRequestDialog,
   SignInPage,
-  SignInProviderConfig,
 } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
@@ -55,12 +54,6 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { ResourceOptimizationPage } from '@backstage-community/plugin-redhat-resource-optimization';
 import { useRhdhTheme } from './hooks/useRhdhTheme';
 
-const keycloakProvider: SignInProviderConfig = {
-  id: 'oidc',
-  title: 'Red Hat Keycloak SSO',
-  message: 'Sign in with Red Hat Keycloak SSO',
-  apiRef: rhKeycloakOIDCAuthApiRef,
-};
 
 
 const options: Parameters<typeof createApp>[0] = {
@@ -83,7 +76,15 @@ const options: Parameters<typeof createApp>[0] = {
     });
   },
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
+    SignInPage: props => <SignInPage {...props} auto providers={
+    [
+      {
+        id: 'oidc',
+        title: 'Red Hat Keycloak SSO',
+        message: 'Sign in with Red Hat Keycloak SSO',
+        apiRef: rhKeycloakOIDCAuthApiRef,
+      }
+    ]} />,
   },
 };
 
@@ -93,37 +94,8 @@ if (rhdhTheme !== null) {
   options.themes = rhdhTheme.themes;
 }
 
-// const app = createApp(options);
+const app = createApp(options);
 
-const app = createApp({
-  components: {
-    SignInPage: props => (
-      <SignInPage
-        {...props}
-        auto
-        provider={keycloakProvider}
-      />
-    ),
-  },
-  apis,
-  bindRoutes({ bind }) {
-    bind(catalogPlugin.externalRoutes, {
-      createComponent: scaffolderPlugin.routes.root,
-      viewTechDoc: techdocsPlugin.routes.docRoot,
-      createFromTemplate: scaffolderPlugin.routes.selectedTemplate,
-    });
-    bind(apiDocsPlugin.externalRoutes, {
-      registerApi: catalogImportPlugin.routes.importPage,
-    });
-    bind(scaffolderPlugin.externalRoutes, {
-      registerComponent: catalogImportPlugin.routes.importPage,
-      viewTechDoc: techdocsPlugin.routes.docRoot,
-    });
-    bind(orgPlugin.externalRoutes, {
-      catalogIndex: catalogPlugin.routes.catalogIndex,
-    });
-  },
-});
 
 const routes = (
   <FlatRoutes>

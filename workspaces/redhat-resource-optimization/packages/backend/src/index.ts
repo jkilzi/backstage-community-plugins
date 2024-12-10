@@ -43,6 +43,7 @@ const myAuthProviderModule = createBackendModule({
             // For more info about authenticators please see https://backstage.io/docs/auth/add-auth-provider/#adding-an-oauth-based-provider
             authenticator: oidcAuthenticator,
             async signInResolver(info, ctx) {
+              console.log("Preeti Logging...")
               console.log("Sign in done:", info);
               const userRef = stringifyEntityRef({
                 kind: 'User',
