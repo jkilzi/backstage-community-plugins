@@ -12,9 +12,10 @@
   "dependencies": {
     "@backstage/backend-defaults": "^0.5.2",
     "@backstage/backend-dynamic-feature-service": "^0.4.3",
-    "@backstage/backend-plugin-api": "^1.0.1",
+    "@backstage/backend-plugin-api": "^1.0.2",
     "@backstage/config": "^1.2.0",
     "@backstage/plugin-auth-backend-module-github-provider": "^0.2.2",
+    "@backstage/plugin-permission-node": "^0.8.4",
     "@types/express": "*",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
