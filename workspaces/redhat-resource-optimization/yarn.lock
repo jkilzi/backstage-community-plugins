@@ -2770,6 +2770,7 @@ __metadata:
     "@backstage/plugin-auth-backend": ^0.23.1
     "@backstage/plugin-auth-backend-module-github-provider": ^0.2.2
     "@backstage/plugin-auth-backend-module-guest-provider": ^0.2.1
+    "@backstage/plugin-permission-node": ^0.8.4
     "@backstage/plugin-proxy-backend": ^0.5.7
     "@types/express": "*"
     "@types/supertest": ^6.0.0
@@ -2788,6 +2789,7 @@ __metadata:
   resolution: "@backstage-community/plugin-redhat-resource-optimization-common@workspace:plugins/redhat-resource-optimization-common"
   dependencies:
     "@backstage/cli": ^0.28.0
+    "@backstage/plugin-permission-common": ^0.8.1
     "@backstage/types": ^1.1.1
     "@testing-library/jest-dom": ^6.0.0
     "@types/lodash": ^4.17.5
