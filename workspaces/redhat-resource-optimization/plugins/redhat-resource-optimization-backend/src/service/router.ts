@@ -13,20 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type {
-  LoggerService,
-  RootConfigService,
-} from '@backstage/backend-plugin-api';
 import express from 'express';
 import Router from 'express-promise-router';
-import { registerHealthRoutes } from '../routes/health';
-import { registerTokenRoutes } from '../routes/token';
-
-/** @public */
-export interface RouterOptions {
-  logger: LoggerService;
-  config?: RootConfigService;
-}
+import type { RouterOptions } from '../models/RouterOptions';
+import { getToken } from '../routes/token';
 
 /** @public */
 export async function createRouter(
@@ -35,8 +25,10 @@ export async function createRouter(
   const router = Router();
   router.use(express.json());
 
-  registerHealthRoutes(router, options);
-  registerTokenRoutes(router, options);
+  router.get('/health', (_req, res) => {
+    res.json({ status: 'ok' });
+  });
+  router.get('/token', getToken(options));
 
   return router;
 }
