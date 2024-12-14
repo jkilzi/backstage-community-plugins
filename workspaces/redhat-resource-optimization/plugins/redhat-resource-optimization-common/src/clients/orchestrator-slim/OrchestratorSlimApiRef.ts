@@ -13,4 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './OptimizationsApiClientProxy';
+import { createApiRef } from '@backstage/core-plugin-api';
+import { OrchestratorSlimApi } from './OrchestratorSlimApi';
+
+export const orchestratorSlimApiRef = createApiRef<OrchestratorSlimApi>({
+  id: 'plugin.redhat-orchestrator-slim.api',
+});

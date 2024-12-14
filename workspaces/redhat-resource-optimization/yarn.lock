@@ -2787,6 +2787,7 @@ __metadata:
   resolution: "@backstage-community/plugin-redhat-resource-optimization-common@workspace:plugins/redhat-resource-optimization-common"
   dependencies:
     "@backstage/cli": ^0.28.0
+    "@backstage/core-plugin-api": ^1.10.0
     "@backstage/types": ^1.1.1
     "@testing-library/jest-dom": ^6.0.0
     "@types/lodash": ^4.17.5

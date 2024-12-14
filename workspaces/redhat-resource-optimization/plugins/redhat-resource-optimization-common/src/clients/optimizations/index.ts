@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * @public
- */
-export interface GetTokenResponse {
-  accessToken: string;
-  /** The Unix Epoch at which the token will expire  */
-  expiresAt: number;
-}
+export * from './OptimizationsClient';
+export * from './OptimizationsApi';
+export * from './OptimizationsApiRef';
