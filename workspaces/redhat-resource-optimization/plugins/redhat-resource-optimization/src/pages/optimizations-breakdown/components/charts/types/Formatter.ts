@@ -13,5 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components/icon';
-export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';
+export interface FormatOptions {
+  minimumFractionDigits?: number;
+  maximumFractionDigits?: number;
+}
+
+export type Formatter = (
+  value: number,
+  units: string,
+  options?: FormatOptions,
+) => string;

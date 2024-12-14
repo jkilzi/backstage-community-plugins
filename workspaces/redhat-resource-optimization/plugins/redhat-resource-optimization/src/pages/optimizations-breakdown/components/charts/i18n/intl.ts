@@ -13,5 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components/icon';
-export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';
+import { createIntl, createIntlCache } from 'react-intl';
+
+// eslint-disable-next-line no-restricted-imports
+import messages from './data.json';
+
+const locale = window.navigator.language.split(/[-_]/)[0] || 'en';
+export const getLocale = () => {
+  return locale;
+};
+
+const cache = createIntlCache();
+
+const intl = createIntl(
+  {
+    defaultLocale: 'en',
+    locale,
+    // eslint-disable-next-line no-console
+    onError: console.log,
+    messages: messages.en,
+  },
+  cache,
+);
+
+export default intl;

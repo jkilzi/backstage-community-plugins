@@ -13,5 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components/icon';
-export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+
+interface InfoCardTitleProps {
+  title: React.ReactNode;
+}
+
+export const InfoCardTitle = (props: InfoCardTitleProps) => {
+  return (
+    <Typography variant="body1">
+      <b>{props.title}</b>
+    </Typography>
+  );
+};

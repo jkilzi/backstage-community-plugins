@@ -13,5 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components/icon';
-export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';
+import getTheme from './theme-utils';
+
+const ChartTheme = getTheme();
+
+export default ChartTheme;
