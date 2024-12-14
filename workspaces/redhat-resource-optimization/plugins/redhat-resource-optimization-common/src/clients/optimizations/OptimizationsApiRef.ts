@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export interface FormatOptions {
-  minimumFractionDigits?: number;
-  maximumFractionDigits?: number;
-}
+import { createApiRef } from '@backstage/core-plugin-api';
+import type { OptimizationsApi } from './OptimizationsApi';
 
-export type Formatter = (
-  value: number,
-  units: string,
-  options?: FormatOptions,
-) => string;
+export const optimizationsApiRef = createApiRef<OptimizationsApi>({
+  id: 'plugin.redhat-resource-optimization.api',
+});

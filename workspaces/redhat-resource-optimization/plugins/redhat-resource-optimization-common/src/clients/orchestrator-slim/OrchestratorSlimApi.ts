@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { makeStyles } from '@material-ui/core/styles';
+import type { JsonObject } from '@backstage/types';
 
-export const useOptimizationsBreakdownChartStyles = makeStyles(() => ({
-  chartOverride: {
-    '& > div > div > svg': {
-      overflow: 'visible',
-    },
-  },
-}));
+export interface OrchestratorSlimApi {
+  executeWorkflow<D = JsonObject>(
+    workflowId: string,
+    workflowInputData: D,
+  ): Promise<{ id: string }>;
+}
