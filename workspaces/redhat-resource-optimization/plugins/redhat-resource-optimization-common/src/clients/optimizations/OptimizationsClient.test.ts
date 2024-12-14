@@ -16,11 +16,24 @@
 
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { OptimizationsApiClientProxy } from '../OptimizationsApiClientProxy';
+import { OptimizationsClient } from './OptimizationsClient';
 import { DiscoveryApi } from '../../generated/types/discovery';
 import { GetRecommendationByIdRequest } from '../../models/requests';
-import { makePlotsDataPropertyPathWithTerm } from './test-helpers';
 import * as GetRecommendationByIdMockResponse from './fixtures/GetRecommendationByIdMockResponse.json';
+
+function makePlotsDataPropertyPathWithTerm(
+  term: 'short' | 'medium' | 'long',
+  dateString: string,
+) {
+  return [
+    'recommendations',
+    'recommendationTerms',
+    `${term}Term`,
+    'plots',
+    'plotsData',
+    dateString,
+  ];
+}
 
 const MOCK_BASE_URL = 'http://backstage:1234/api/proxy';
 const mockDiscoveryApi: DiscoveryApi = {
@@ -39,11 +52,11 @@ const server = setupServer(
 
 // eslint-disable-next-line jest/no-disabled-tests
 describe.skip('OptimizationsApiClientProxy.ts', () => {
-  let client: OptimizationsApiClientProxy;
+  let client: OptimizationsClient;
 
   beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
   beforeEach(() => {
-    client = new OptimizationsApiClientProxy({
+    client = new OptimizationsClient({
       discoveryApi: mockDiscoveryApi,
     });
   });

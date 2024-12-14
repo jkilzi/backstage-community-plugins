@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { OptimizationsApi } from '../client';
+import { OptimizationsApi } from '../clients/optimizations';
 
 /** @public */
 export type GetRecommendationByIdRequest = Parameters<

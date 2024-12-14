@@ -17,28 +17,32 @@ import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { deepMapKeys } from '@y0n1/json/deep-map-keys';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
-import { pluginId } from '../generated/pluginId';
+import { pluginId } from '../../generated/pluginId';
 import {
   DefaultApiClient,
   RequestOptions,
   TypedResponse,
-} from '../generated/apis';
+} from '../../generated/apis';
 import type {
   GetRecommendationByIdRequest,
   GetRecommendationListRequest,
-} from '../models/requests';
+} from '../../models/requests';
 import type {
   RecommendationBoxPlots,
   RecommendationList,
   GetTokenResponse,
-} from '../models/responses';
+} from '../../models/responses';
 import { snakeCase } from 'lodash';
+import type { OptimizationsApi } from './OptimizationsApi';
 
-/** @public */
-export type OptimizationsApi = Omit<
-  InstanceType<typeof DefaultApiClient>,
-  'fetchApi' | 'discoveryApi'
->;
+type DefaultApiClientOpFunc<
+  TRequest = GetRecommendationByIdRequest | GetRecommendationListRequest,
+  TResponse = RecommendationBoxPlots | RecommendationList,
+> = (
+  this: DefaultApiClient,
+  request: TRequest,
+  options?: RequestOptions,
+) => Promise<TypedResponse<TResponse>>;
 
 /**
  * This class is a proxy for the original Optimizations client.
@@ -49,7 +53,7 @@ export type OptimizationsApi = Omit<
  *
  * @public
  */
-export class OptimizationsApiClientProxy implements OptimizationsApi {
+export class OptimizationsClient implements OptimizationsApi {
   private static requestKeysToSkip = {
     getRecommendationById: [/path\.recommendationId$/],
   };
@@ -84,7 +88,7 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
     const snakeCaseTransformedRequest = deepMapKeys(
       request,
       snakeCase,
-      OptimizationsApiClientProxy.requestKeysToSkip.getRecommendationById,
+      OptimizationsClient.requestKeysToSkip.getRecommendationById,
     ) as GetRecommendationByIdRequest;
 
     const response = await this.fetchWithToken(
@@ -99,7 +103,7 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
         const camelCaseTransformedResponse = deepMapKeys(
           data,
           camelCase,
-          OptimizationsApiClientProxy.responseKeysToSkip.getRecommendationById,
+          OptimizationsClient.responseKeysToSkip.getRecommendationById,
         ) as RecommendationBoxPlots;
         return camelCaseTransformedResponse;
       },
@@ -177,12 +181,3 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
     };
   }
 }
-
-type DefaultApiClientOpFunc<
-  TRequest = GetRecommendationByIdRequest | GetRecommendationListRequest,
-  TResponse = RecommendationBoxPlots | RecommendationList,
-> = (
-  this: DefaultApiClient,
-  request: TRequest,
-  options?: RequestOptions,
-) => Promise<TypedResponse<TResponse>>;

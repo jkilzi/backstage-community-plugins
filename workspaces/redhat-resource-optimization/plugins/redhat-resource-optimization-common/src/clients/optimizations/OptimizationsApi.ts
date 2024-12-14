@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import getTheme from './theme-utils';
 
-const ChartTheme = getTheme();
+import { DefaultApiClient } from '../../generated/apis/DefaultApi.client';
 
-export default ChartTheme;
+export type OptimizationsApi = Omit<
+  InstanceType<typeof DefaultApiClient>,
+  'fetchApi' | 'discoveryApi'
+>;
