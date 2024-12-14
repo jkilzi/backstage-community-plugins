@@ -8,6 +8,7 @@
     ],
     "role": "frontend-plugin"
   },
+  "configSchema": "config.d.ts",
   "dependencies": {
     "@backstage-community/plugin-redhat-resource-optimization-common": "workspace:^",
     "@backstage/core-components": "^0.15.1",
