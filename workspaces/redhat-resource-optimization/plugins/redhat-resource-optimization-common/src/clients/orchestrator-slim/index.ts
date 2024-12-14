@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { OptimizationsApi } from '@backstage-community/plugin-redhat-resource-optimization-common';
-import { createApiRef } from '@backstage/core-plugin-api';
-
-export const optimizationsApiRef = createApiRef<OptimizationsApi>({
-  id: 'plugin.redhat-resource-optimization.api',
-});
+export * from './OrchestratorSlimApi';
+export * from './OrchestratorSlimApiRef';
+export * from './OrchestratorSlimClient';
