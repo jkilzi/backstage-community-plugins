@@ -13,43 +13,108 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useAsync from 'react-use/esm/useAsync';
+import useAsyncFn from 'react-use/esm/useAsyncFn';
 import {
-  Page,
-  Header,
-  Content,
   TabbedLayout,
   Progress,
   ResponseErrorPanel,
 } from '@backstage/core-components';
-import { useApi } from '@backstage/core-plugin-api';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import { configApiRef, useApi } from '@backstage/core-plugin-api';
 import Grid from '@material-ui/core/Grid';
-import { CodeInfoCard } from '../../components/CodeInfoCard/CodeInfoCard';
-import { optimizationsApiRef } from '../../apis';
+import {
+  optimizationsApiRef,
+  orchestratorSlimApiRef,
+  type RecommendationBoxPlots,
+} from '@backstage-community/plugin-redhat-resource-optimization-common';
+import { CodeInfoCard } from './components/CodeInfoCard';
 import { getTimeFromNow } from '../../utils/dates';
-import { YAMLCodeDataType } from '../../utils/generateYAMLCode';
-import { getRecommendedValue } from '../../utils/utils';
-import { RecommendationBoxPlotsRecommendationsRecommendationTerms } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import {
+  Interval,
+  OptimizationType,
+  RecommendationType,
+} from './components/charts/types/ChartEnums';
+import { BasePage } from '../../components/BasePage';
+import { ContainerInfoCard } from './components/ContainerInfoCard';
+import { ChartInfoCard } from './components/ChartInfoCard';
+import {
+  getCurrentYAMLCodeData,
+  getRecommendedYAMLCodeData,
+} from './models/YamlCodeData';
+import type { YamlCodeData } from './models/YamlCodeData';
 
-type RecommendationTerms =
-  keyof RecommendationBoxPlotsRecommendationsRecommendationTerms;
-type RecommendationEngines = 'cost' | 'performance';
+type SanitizedRecommendedConfiguration = {
+  requests?: Partial<YamlCodeData['requests']>;
+  limits?: Partial<YamlCodeData['limits']>;
+};
+
+const SANITATION_REGEX = /(^[-]$|\s+#.+$)/;
+
+const sanitizeRecommendedConfiguration = (
+  config: YamlCodeData,
+): SanitizedRecommendedConfiguration => {
+  const cpuLimits = config.limits.cpu.toString().replace(SANITATION_REGEX, '');
+  const memoryLimits = config.limits.memory
+    .toString()
+    .replace(SANITATION_REGEX, '');
+  const cpuRequests = config.requests.cpu
+    .toString()
+    .replace(SANITATION_REGEX, '');
+  const memoryRequests = config.requests.memory
+    .toString()
+    .replace(SANITATION_REGEX, '');
+
+  const sanitizedData: SanitizedRecommendedConfiguration = {};
+  if (cpuLimits.length > 0 || memoryLimits.length > 0) {
+    sanitizedData.limits = {};
+    if (cpuLimits.length > 0) {
+      sanitizedData.limits.cpu = cpuLimits;
+    }
+    if (memoryLimits.length > 0) {
+      sanitizedData.limits.memory = memoryLimits;
+    }
+  }
+
+  if (cpuRequests.length > 0 || memoryRequests.length > 0) {
+    sanitizedData.requests = {};
+    if (cpuRequests.length > 0) {
+      sanitizedData.requests.cpu = cpuRequests;
+    }
+    if (memoryRequests.length > 0) {
+      sanitizedData.requests.memory = memoryRequests;
+    }
+  }
+
+  return sanitizedData;
+};
+
+const getContainerData = (value: RecommendationBoxPlots) => [
+  { key: 'Cluster', value: value?.clusterAlias },
+  { key: 'Project', value: value?.project },
+  { key: 'Workload', value: value?.workload },
+  { key: 'Type', value: value?.workloadType },
+  {
+    key: 'Last reported',
+    value: getTimeFromNow(value?.lastReported?.toString()),
+  },
+];
 
 export const OptimizationsBreakdownPage = () => {
   const [recommendationTerm, setRecommendationTerm] =
-    useState<RecommendationTerms>('shortTerm');
+    useState<Interval>('shortTerm');
+  const loc = useLocation();
 
-  // All this can be a dedicated hook, exposed by a provider 🤔... (maybe like, "useRecommendation(id)")
-  // `id` must be defined (despite being typed as "string | undefined", otherwise the URL will route the user to the recommendations list)
+  const configApi = useApi(configApiRef);
+  const workflowIdRef = useRef<string>(
+    configApi.getOptionalString(
+      'resourceOptimization.optimizationWorkflowId',
+    ) ?? '',
+  );
+
   const { id } = useParams();
-  const api = useApi(optimizationsApiRef);
+  const optimizationsApi = useApi(optimizationsApiRef);
   const { value, loading, error } = useAsync(async () => {
     const apiQuery = {
       path: {
@@ -58,11 +123,58 @@ export const OptimizationsBreakdownPage = () => {
       query: {},
     };
 
-    const response = await api.getRecommendationById(apiQuery);
+    const response = await optimizationsApi.getRecommendationById(apiQuery);
     const payload = await response.json();
 
     return payload;
   }, []);
+
+  const recommendedConfiguration = useMemo(
+    () =>
+      getRecommendedYAMLCodeData(
+        value!,
+        recommendationTerm,
+        loc.pathname.endsWith('performance')
+          ? OptimizationType.performance
+          : OptimizationType.cost,
+      ),
+    [recommendationTerm, loc.pathname, value],
+  );
+
+  const currentConfiguration = useMemo(
+    () => getCurrentYAMLCodeData(value!),
+    [value],
+  );
+
+  const orchestratorSlimApi = useApi(orchestratorSlimApiRef);
+  const [_, applyRecommendation] = useAsyncFn(async () => {
+    const workflowId = workflowIdRef.current;
+    const workflowData = sanitizeRecommendedConfiguration(
+      recommendedConfiguration,
+    );
+
+    const payload = await orchestratorSlimApi.executeWorkflow(workflowId, {
+      inputData: {
+        name: 'Optimizations Plugin', // TODO(jkilzi): DELETEME...
+        language: 'Spanish', // TODO(jkilzi): DELETEME...
+        optimization: workflowData,
+      },
+    });
+    return payload;
+  }, [recommendedConfiguration]);
+
+  const navigate = useNavigate();
+  const handleApplyRecommendation = useCallback(() => {
+    applyRecommendation().then(response => {
+      navigate(`/orchestrator/instances/${response.id}`);
+    });
+  }, [applyRecommendation, navigate]);
+
+  const handleRecommendationTermChange = useCallback((event: any) => {
+    setRecommendationTerm(event.target.value);
+  }, []);
+
+  const containerData = useMemo(() => getContainerData(value!), [value]);
 
   if (loading) {
     return <Progress />;
@@ -72,209 +184,113 @@ export const OptimizationsBreakdownPage = () => {
     return <ResponseErrorPanel error={error} />;
   }
 
-  const handleChange = (event: any) => {
-    setRecommendationTerm(event.target.value);
-  };
-
-  const containerData = [
-    {
-      key: 'Last reported:',
-      value: getTimeFromNow(value?.lastReported?.toString()),
-    },
-    { key: 'Cluster name:', value: value?.clusterAlias },
-    { key: 'Project name:', value: value?.project },
-    { key: 'Workload type:', value: value?.workloadType },
-    { key: 'Workload name:', value: value?.workload },
-  ];
-
-  // get current configuration
-  const getCurrentYAMLCodeData = () => {
-    // limits values
-    const cpuLimitsValue = `${value?.recommendations?.current?.limits?.cpu?.amount}${value?.recommendations?.current?.limits?.cpu?.format}`;
-    const memoryLimitsValue = `${value?.recommendations?.current?.limits?.memory?.amount}${value?.recommendations?.current?.limits?.memory?.format}`;
-
-    // requests values
-    const cpuRequestsValue = `${value?.recommendations?.current?.requests?.cpu?.amount}${value?.recommendations?.current?.requests?.cpu?.format}`;
-    const memoryRequestsValue = `${value?.recommendations?.current?.requests?.memory?.amount}${value?.recommendations?.current?.requests?.memory?.format}`;
-
-    const currentYAMLCodeData: YAMLCodeDataType = {
-      limits: {
-        cpu: cpuLimitsValue,
-        memory: memoryLimitsValue,
-      },
-      requests: {
-        cpu: cpuRequestsValue,
-        memory: memoryRequestsValue,
-      },
-    };
-
-    return currentYAMLCodeData;
-  };
-
-  // get recommended configuration
-  const getRecommendedYAMLCodeData = (
-    duration: RecommendationTerms,
-    type: RecommendationEngines,
-  ) => {
-    const currentValues = value?.recommendations?.current;
-    const recommendedValues =
-      value?.recommendations?.recommendationTerms?.[duration]
-        ?.recommendationEngines?.[type]?.config;
-
-    if (currentValues && recommendedValues) {
-      const cpuLimitsValue = getRecommendedValue(
-        currentValues,
-        recommendedValues,
-        'limits',
-        'cpu',
-      );
-      const memoryLimitsValue = getRecommendedValue(
-        currentValues,
-        recommendedValues,
-        'limits',
-        'memory',
-      );
-
-      const cpuRequestsValue = getRecommendedValue(
-        currentValues,
-        recommendedValues,
-        'requests',
-        'cpu',
-      );
-      const memoryRequestsValue = getRecommendedValue(
-        currentValues,
-        recommendedValues,
-        'requests',
-        'memory',
-      );
-
-      const recommendedYAMLCodeData: YAMLCodeDataType = {
-        limits: {
-          cpu: cpuLimitsValue,
-          memory: memoryLimitsValue,
-        },
-        requests: {
-          cpu: cpuRequestsValue,
-          memory: memoryRequestsValue,
-        },
-      };
-
-      return recommendedYAMLCodeData;
-    }
-
-    return {
-      limits: {
-        cpu: '',
-        memory: '',
-      },
-      requests: {
-        cpu: '',
-        memory: '',
-      },
-    };
-  };
-
   return (
-    <Page themeId="tool">
-      <Header
-        title="Resource Optimization"
-        type="Optimizations"
-        typeLink="/redhat-resource-optimization"
-      />
-
-      <Content>
-        <Typography variant="h4" paragraph>
-          {value?.container}
-        </Typography>
-
-        <Grid container spacing={1} xs={8}>
-          {containerData.map((item, index) => (
-            <Grid container item xs={9} spacing={1} key={index}>
-              <Grid item xs={4}>
-                <Typography variant="body1">
-                  <b>{item.key}</b>
-                </Typography>
-              </Grid>
-              <Grid item xs={5}>
-                <Typography variant="body1">{item.value}</Typography>
-              </Grid>
+    <BasePage
+      pageThemeId="tool"
+      pageTitle={value?.container ?? '🤔'}
+      pageType="Optimizations"
+      pageTypeLink="/redhat-resource-optimization"
+    >
+      <TabbedLayout>
+        <TabbedLayout.Route path="/cost?" title="Cost optimizations">
+          <Grid container>
+            <Grid item xs={12}>
+              <ContainerInfoCard
+                containerData={containerData}
+                recommendationTerm={recommendationTerm}
+                onRecommendationTermChange={handleRecommendationTermChange}
+                workflowId={workflowIdRef.current}
+                onApplyRecommendation={handleApplyRecommendation}
+              />
             </Grid>
-          ))}
-          <Grid container item xs={9} spacing={1}>
-            <Grid item xs={6} alignContent="center">
-              <Typography variant="body1">
-                <b>View optimizations based on</b>
-              </Typography>
+
+            <Grid item xs={6}>
+              <CodeInfoCard
+                cardTitle="Current configuration"
+                showCopyCodeButton={false}
+                yamlCodeData={currentConfiguration}
+              />
             </Grid>
-            <Grid item xs={3}>
-              <FormControl fullWidth variant="outlined">
-                <Select
-                  id="dropdown"
-                  value={recommendationTerm}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="shortTerm">Last 24 hrs</MenuItem>
-                  <MenuItem value="mediumTerm">Last 7 days</MenuItem>
-                  <MenuItem value="longTerm">Last 15 days</MenuItem>
-                </Select>
-              </FormControl>
+            <Grid item xs={6}>
+              <CodeInfoCard
+                cardTitle="Recommended configuration"
+                showCopyCodeButton
+                yamlCodeData={recommendedConfiguration}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <ChartInfoCard
+                title="CPU utilization"
+                chartData={value!}
+                recommendationTerm={recommendationTerm}
+                optimizationType={OptimizationType.cost}
+                resourceType={RecommendationType.cpu}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <ChartInfoCard
+                title="Memory utilization"
+                chartData={value!}
+                recommendationTerm={recommendationTerm}
+                optimizationType={OptimizationType.cost}
+                resourceType={RecommendationType.memory}
+              />
             </Grid>
           </Grid>
-        </Grid>
+        </TabbedLayout.Route>
 
-        <Box sx={{ marginTop: 16 }}>
-          <TabbedLayout>
-            <TabbedLayout.Route path="/cost?" title="Cost optimizations">
-              <>
-                <Grid container>
-                  <Grid item xs={6}>
-                    <CodeInfoCard
-                      cardTitle="Current configuration"
-                      showCopyCodeButton={false}
-                      yamlCodeData={getCurrentYAMLCodeData()}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <CodeInfoCard
-                      cardTitle="Recommended configuration"
-                      showCopyCodeButton
-                      yamlCodeData={getRecommendedYAMLCodeData(
-                        recommendationTerm,
-                        'cost',
-                      )}
-                    />
-                  </Grid>
-                </Grid>
-              </>
-            </TabbedLayout.Route>
+        <TabbedLayout.Route
+          path="/performance"
+          title="Performance optimizations"
+        >
+          <Grid container>
+            <Grid item xs={12}>
+              <ContainerInfoCard
+                containerData={containerData}
+                recommendationTerm={recommendationTerm}
+                onRecommendationTermChange={handleRecommendationTermChange}
+                workflowId={workflowIdRef.current}
+                onApplyRecommendation={handleApplyRecommendation}
+              />
+            </Grid>
 
-            <TabbedLayout.Route
-              path="/performance"
-              title="Performance optimizations"
-            >
-              <Grid container>
-                <Grid item xs={6}>
-                  <CodeInfoCard
-                    cardTitle="Current configuration"
-                    showCopyCodeButton={false}
-                    yamlCodeData={getCurrentYAMLCodeData()}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <CodeInfoCard
-                    cardTitle="Recommended configuration"
-                    showCopyCodeButton
-                    yamlCodeData={getRecommendedYAMLCodeData(
-                      recommendationTerm,
-                      'performance',
-                    )}
-                  />
-                </Grid>
-              </Grid>
-            </TabbedLayout.Route>
-          </TabbedLayout>
-        </Box>
-      </Content>
-    </Page>
+            <Grid item xs={6}>
+              <CodeInfoCard
+                cardTitle="Current configuration"
+                showCopyCodeButton={false}
+                yamlCodeData={currentConfiguration}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CodeInfoCard
+                cardTitle="Recommended configuration"
+                showCopyCodeButton
+                yamlCodeData={recommendedConfiguration}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <ChartInfoCard
+                title="CPU utilization"
+                chartData={value!}
+                recommendationTerm={recommendationTerm}
+                optimizationType={OptimizationType.performance}
+                resourceType={RecommendationType.cpu}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <ChartInfoCard
+                title="Memory utilization"
+                chartData={value!}
+                recommendationTerm={recommendationTerm}
+                optimizationType={OptimizationType.performance}
+                resourceType={RecommendationType.memory}
+              />
+            </Grid>
+          </Grid>
+        </TabbedLayout.Route>
+      </TabbedLayout>
+    </BasePage>
   );
 };
+OptimizationsBreakdownPage.displayName = 'OptimizationsBreakdownPage';
