@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Router } from 'express';
-import type { RouterOptions } from '../service/router';
-import { getHealth } from '../controllers/health';
 
-export const registerHealthRoutes = (
-  router: Router,
-  options: RouterOptions,
-) => {
-  router.get('/health', getHealth(options));
-};
+/**
+ * @public
+ */
+export interface GetTokenResponse {
+  accessToken: string;
+  /** The Unix Epoch at which the token will expire  */
+  expiresAt: number;
+}

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { RequestHandler } from 'express';
-import type { RouterOptions } from '../service/router';
+import type {
+  LoggerService,
+  RootConfigService,
+} from '@backstage/backend-plugin-api';
 
-export const getHealth: (options: RouterOptions) => RequestHandler =
-  options => (_, response) => {
-    const { logger } = options;
-
-    logger.info('PONG!');
-    response.json({ status: 'ok' });
-  };
+/** @public */
+export interface RouterOptions {
+  logger: LoggerService;
+  config?: RootConfigService;
+}
