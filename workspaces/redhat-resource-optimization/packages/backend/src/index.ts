@@ -154,9 +154,11 @@ backend.add(
   import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 );
 
-// permission plugin
-backend.add(import('@backstage/plugin-permission-backend'));
-backend.add(import('./extensions/permissionsPolicyExtension'));
+// RBAC permission plugin
+backend.add(import('@backstage-community/plugin-rbac-backend'));
+
+// backend.add(import('@backstage/plugin-permission-backend/alpha'));
+// backend.add(import('./extensions/permissionsPolicyExtension'));
 // backend.add(
 //   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
 // );

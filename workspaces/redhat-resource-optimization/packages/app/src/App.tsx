@@ -54,6 +54,7 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { ResourceOptimizationPage } from '@backstage-community/plugin-redhat-resource-optimization';
 import { useRhdhTheme } from './hooks/useRhdhTheme';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { RbacPage } from '@backstage-community/plugin-rbac';
 
 const options: Parameters<typeof createApp>[0] = {
   apis,
@@ -144,6 +145,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/rbac" element={<RbacPage />} />;
     <Route
       path="/redhat-resource-optimization"
       element={<ResourceOptimizationPage />}
