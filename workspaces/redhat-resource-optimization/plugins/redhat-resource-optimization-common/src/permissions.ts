@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './models';
-export * from './generated/apis';
-export * from './generated/pluginId';
-export * from './permissions';
-export { OptimizationsApiClientProxy as OptimizationsApiClient } from './client/OptimizationsApiClientProxy';
-export type { OptimizationsApi } from './client/OptimizationsApiClientProxy';
+import { createPermission } from '@backstage/plugin-permission-common';
+
+export const rosListReadPermission = createPermission({
+  name: 'ros.cluster.read',
+  attributes: { action: 'read' },
+});
+
+export const rosListPermissions = [rosListReadPermission];

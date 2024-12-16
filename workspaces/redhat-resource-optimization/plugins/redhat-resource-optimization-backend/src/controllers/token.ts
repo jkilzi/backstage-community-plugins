@@ -22,6 +22,8 @@ const DEFAULT_SSO_BASE_URL = 'https://sso.redhat.com';
 
 export const getToken: (options: RouterOptions) => RequestHandler =
   options => async (_, response) => {
+    console.log('Token API:', _.headers);
+
     const { logger, config } = options;
 
     assert(typeof config !== 'undefined', 'Config is undefined');

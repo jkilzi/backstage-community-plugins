@@ -14,26 +14,38 @@
  * limitations under the License.
  */
 import type {
+  HttpAuthService,
   LoggerService,
+  PermissionsService,
   RootConfigService,
 } from '@backstage/backend-plugin-api';
 import express from 'express';
 import Router from 'express-promise-router';
+import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { registerHealthRoutes } from '../routes/health';
 import { registerTokenRoutes } from '../routes/token';
+// import { rosListPermissions } from '../../../redhat-resource-optimization-common/src/permissions';
 
 /** @public */
 export interface RouterOptions {
   logger: LoggerService;
   config?: RootConfigService;
+  httpAuth: HttpAuthService;
+  permissions: PermissionsService;
 }
 
 /** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
+  // const permissionIntegrationRouter = createPermissionIntegrationRouter({
+  //   permissions: [rosListPermissions],
+  // });
+
   const router = Router();
   router.use(express.json());
+
+  // router.use(permissionIntegrationRouter);
 
   registerHealthRoutes(router, options);
   registerTokenRoutes(router, options);

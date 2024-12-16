@@ -37,7 +37,7 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis } from './apis';
+import { apis, rhKeycloakOIDCAuthApiRef } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
@@ -53,6 +53,8 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-redhat-resource-optimization';
 import { useRhdhTheme } from './hooks/useRhdhTheme';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { RbacPage } from '@backstage-community/plugin-rbac';
 
 const options: Parameters<typeof createApp>[0] = {
   apis,
@@ -74,7 +76,26 @@ const options: Parameters<typeof createApp>[0] = {
     });
   },
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        auto
+        providers={[
+          // {
+          //   id: 'oidc',
+          //   title: 'Red Hat Keycloak SSO',
+          //   message: 'Sign in with Red Hat Keycloak SSO',
+          //   apiRef: rhKeycloakOIDCAuthApiRef,
+          // },
+          {
+            id: 'github',
+            title: 'Github',
+            message: 'Sign in with Github',
+            apiRef: githubAuthApiRef,
+          },
+        ]}
+      />
+    ),
   },
 };
 
@@ -124,6 +145,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/rbac" element={<RbacPage />} />;
     <Route
       path="/redhat-resource-optimization"
       element={<ResourceOptimizationPage />}
