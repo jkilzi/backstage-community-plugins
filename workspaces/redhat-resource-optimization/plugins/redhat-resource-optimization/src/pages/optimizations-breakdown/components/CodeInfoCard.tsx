@@ -38,13 +38,13 @@ const generateYAMLCode = (yamlCodeData?: YamlCodeData) => {
 
 interface CodeInfoCardProps {
   cardTitle: string;
-  showCopyCodeButton: boolean;
+  showCopyCodeButton?: boolean;
   yamlCodeData?: YamlCodeData;
 }
 
 export const CodeInfoCard: React.FC<CodeInfoCardProps> = ({
   cardTitle,
-  showCopyCodeButton,
+  showCopyCodeButton = false,
   yamlCodeData,
 }) => {
   const YAMLCode = useMemo(
