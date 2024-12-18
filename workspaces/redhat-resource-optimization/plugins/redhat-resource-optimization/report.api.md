@@ -8,7 +8,19 @@ import { PathParams } from '@backstage/core-plugin-api';
 import { default as React_2 } from 'react';
 import { RouteRef } from '@backstage/core-plugin-api';
 import { SubRouteRef } from '@backstage/core-plugin-api';
-import type { SvgIconProps } from '@material-ui/core/SvgIcon';
+import { SvgIconProps } from '@material-ui/core/SvgIcon';
+
+// @public
+export const ResourceOptimizationIcon: (
+  props: SvgIconProps & {
+    variant?: 'outlined' | 'filled';
+  },
+) => React_2.JSX.Element;
+
+// @public
+export const ResourceOptimizationIconFilled: (
+  props: SvgIconProps,
+) => React_2.JSX.Element;
 
 // @public
 export const ResourceOptimizationIconOutlined: (

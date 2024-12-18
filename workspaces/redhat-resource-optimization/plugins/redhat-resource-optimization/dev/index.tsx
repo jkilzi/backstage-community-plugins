@@ -19,7 +19,7 @@ import {
   resourceOptimizationPlugin,
   ResourceOptimizationPage,
 } from '../src/plugin';
-import { ResourceOptimizationIconOutlined } from '../src/components/resource-optimization-icon/ResourceOptimizationIconOutlined';
+import { ResourceOptimizationIconOutlined } from '../src/components/icon/ResourceOptimizationIconOutlined';
 
 createDevApp()
   .registerPlugin(resourceOptimizationPlugin)

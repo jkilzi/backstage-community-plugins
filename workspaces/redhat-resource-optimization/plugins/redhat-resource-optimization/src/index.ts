@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 export * from './components/icon';
+export { Router } from './Router';
 export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';
