@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ChartThemeColor, getCustomTheme } from '@patternfly/react-charts';
+import {
+  ChartThemeColor,
+  getCustomTheme,
+} from '@patternfly/react-charts/victory';
 
 import { default as ChartTheme } from './theme-koku-mfe';
 
