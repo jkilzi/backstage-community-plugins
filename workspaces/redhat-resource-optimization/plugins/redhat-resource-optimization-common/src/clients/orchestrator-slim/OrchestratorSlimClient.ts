@@ -21,6 +21,7 @@ import {
 import type { OrchestratorSlimApi } from './OrchestratorSlimApi';
 import type { JsonObject } from '@backstage/types';
 
+/** @public */
 export class OrchestratorSlimClient implements OrchestratorSlimApi {
   private readonly discoveryApi: DiscoveryApi;
   private readonly fetchApi: FetchApi;
@@ -37,6 +38,7 @@ export class OrchestratorSlimClient implements OrchestratorSlimApi {
     this.identityApi = options.identityApi;
   }
 
+  /** @public */
   async executeWorkflow<D = JsonObject>(
     workflowId: string,
     workflowInputData: D,

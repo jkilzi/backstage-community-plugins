@@ -4,24 +4,10 @@
 
 ```ts
 import { BackendFeature } from '@backstage/backend-plugin-api';
-import express from 'express';
-import type { LoggerService } from '@backstage/backend-plugin-api';
-import type { RootConfigService } from '@backstage/backend-plugin-api';
-
-// @public (undocumented)
-export function createRouter(options: RouterOptions): Promise<express.Router>;
 
 // @public
 const resourceOptimizationPlugin: BackendFeature;
 export default resourceOptimizationPlugin;
-
-// @public (undocumented)
-export interface RouterOptions {
-  // (undocumented)
-  config?: RootConfigService;
-  // (undocumented)
-  logger: LoggerService;
-}
 
 // (No @packageDocumentation comment for this package)
 ```

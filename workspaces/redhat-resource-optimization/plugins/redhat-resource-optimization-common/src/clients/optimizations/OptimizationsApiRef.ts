@@ -16,6 +16,7 @@
 import { createApiRef } from '@backstage/core-plugin-api';
 import type { OptimizationsApi } from './OptimizationsApi';
 
+/** @public */
 export const optimizationsApiRef = createApiRef<OptimizationsApi>({
   id: 'plugin.redhat-resource-optimization.api',
 });
