@@ -26,11 +26,11 @@ import {
   ChartScatter,
   createContainer,
   getInteractiveLegendEvents,
-} from '@patternfly/react-charts';
+} from '@patternfly/react-charts/victory';
 import { chart_color_blue_100 } from '@patternfly/react-tokens/dist/js/chart_color_blue_100';
 import { chart_color_blue_200 } from '@patternfly/react-tokens/dist/js/chart_color_blue_200';
 import { chart_color_blue_400 } from '@patternfly/react-tokens/dist/js/chart_color_blue_400';
-import { chart_color_red_200 } from '@patternfly/react-tokens/dist/js/chart_color_red_200';
+import { chart_color_red_orange_200 } from '@patternfly/react-tokens/dist/js/chart_color_red_orange_200';
 import { ChartSeries } from './types/ChartSeries';
 import {
   getDomain,
@@ -57,7 +57,7 @@ export const chartStyles = {
   limit: {
     fill: 'none',
   },
-  limitColorScale: [chart_color_red_200.value],
+  limitColorScale: [chart_color_red_orange_200.value],
   request: {
     fill: 'none',
   },
@@ -114,6 +114,7 @@ const OptimizationsBreakdownChart: React.FC<
           labelComponent: (
             <ChartLegendTooltip
               legendData={legendData}
+              // @ts-ignore
               title={datum => `${datum.x}`}
             />
           ),
@@ -325,7 +326,7 @@ const OptimizationsBreakdownChart: React.FC<
     return (
       <ChartLegend
         data={getLegendData(series, hiddenSeries)}
-        height={25}
+        // height={25}
         gutter={20}
         name={`${name}-legend`}
         y={320}
