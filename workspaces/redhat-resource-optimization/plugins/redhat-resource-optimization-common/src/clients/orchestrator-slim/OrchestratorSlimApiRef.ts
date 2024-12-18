@@ -16,6 +16,7 @@
 import { createApiRef } from '@backstage/core-plugin-api';
 import { OrchestratorSlimApi } from './OrchestratorSlimApi';
 
+/** @public */
 export const orchestratorSlimApiRef = createApiRef<OrchestratorSlimApi>({
   id: 'plugin.redhat-orchestrator-slim.api',
 });

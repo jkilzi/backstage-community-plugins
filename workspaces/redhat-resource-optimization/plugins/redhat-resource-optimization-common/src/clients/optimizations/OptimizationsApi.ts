@@ -16,6 +16,7 @@
 
 import { DefaultApiClient } from '../../generated/apis/DefaultApi.client';
 
+/** @public */
 export type OptimizationsApi = Omit<
   InstanceType<typeof DefaultApiClient>,
   'fetchApi' | 'discoveryApi'

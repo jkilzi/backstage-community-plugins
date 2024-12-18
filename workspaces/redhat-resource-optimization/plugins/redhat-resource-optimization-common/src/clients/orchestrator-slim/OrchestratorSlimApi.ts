@@ -15,6 +15,7 @@
  */
 import type { JsonObject } from '@backstage/types';
 
+/** @public */
 export interface OrchestratorSlimApi {
   executeWorkflow<D = JsonObject>(
     workflowId: string,
