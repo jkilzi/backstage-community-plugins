@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getInteractiveLegendItemStyles } from '@patternfly/react-charts';
+import { getInteractiveLegendItemStyles } from '@patternfly/react-charts/victory';
 import { intl } from '../i18n';
 import messages from '../i18n/messages';
 import type { FormatOptions, Formatter } from './format';
