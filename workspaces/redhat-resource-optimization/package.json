@@ -13,7 +13,7 @@
     "start:be-plugin": "yarn workspace @backstage-community/plugin-redhat-resource-optimization-backend start",
     "start:dev": "concurrently -c auto -n \"fe,be\" -p \"{name}:{pid}\" \"yarn start:fe-plugin\" \"yarn start:be-plugin\"",
     "tsc": "tsc",
-    "tsc:full": "tsc --skipLibCheck false --incremental false",
+    "tsc:full": "tsc --incremental false",
     "build:all": "backstage-cli repo build --all",
     "build:api-reports": "yarn build:api-reports:only --tsc",
     "build:api-reports:only": "backstage-repo-tools api-reports -o ae-wrong-input-file-type,ae-undocumented --validate-release-tags",
