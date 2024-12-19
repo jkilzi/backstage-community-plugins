@@ -21,7 +21,6 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Button,
   InputLabel,
   makeStyles,
 } from '@material-ui/core';
@@ -55,8 +54,6 @@ interface ContainerInfoCardProps {
     child: React.ReactNode,
   ) => void;
   recommendationTerm: Interval;
-  onApplyRecommendation?: React.MouseEventHandler<HTMLButtonElement>;
-  workflowId?: string;
 }
 
 export const ContainerInfoCard = (props: ContainerInfoCardProps) => {
@@ -80,16 +77,6 @@ export const ContainerInfoCard = (props: ContainerInfoCardProps) => {
             <MenuItem value="longTerm">Last 15 days</MenuItem>
           </Select>
         </FormControl>
-      }
-      actions={
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={props.onApplyRecommendation}
-          disabled={!props.workflowId}
-        >
-          Apply recommendation
-        </Button>
       }
     >
       <Grid container spacing={2}>

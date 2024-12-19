@@ -36,24 +36,25 @@ const generateYAMLCode = (yamlCodeData?: YamlCodeData) => {
   return yamlCodeString;
 };
 
+type InfoCardProps = Parameters<typeof InfoCard>[0];
+
 interface CodeInfoCardProps {
   cardTitle: string;
   showCopyCodeButton?: boolean;
   yamlCodeData?: YamlCodeData;
+  action?: InfoCardProps['action'];
 }
 
-export const CodeInfoCard: React.FC<CodeInfoCardProps> = ({
-  cardTitle,
-  showCopyCodeButton = false,
-  yamlCodeData,
-}) => {
+export const CodeInfoCard: React.FC<CodeInfoCardProps> = props => {
+  const { cardTitle, showCopyCodeButton = false, yamlCodeData } = props;
+
   const YAMLCode = useMemo(
     () => generateYAMLCode(yamlCodeData),
     [yamlCodeData],
   );
 
   return (
-    <InfoCard title={<InfoCardTitle title={cardTitle} />}>
+    <InfoCard title={<InfoCardTitle title={cardTitle} />} action={props.action}>
       <CodeSnippet
         text={YAMLCode}
         language="yaml"

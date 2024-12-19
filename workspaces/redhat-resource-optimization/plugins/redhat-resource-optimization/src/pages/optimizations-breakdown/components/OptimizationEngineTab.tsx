@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { RecommendationType } from './charts/types/ChartEnums';
 import { ChartInfoCard } from './ChartInfoCard';
 import { CodeInfoCard } from './CodeInfoCard';
@@ -29,6 +29,8 @@ interface OptimizationEngineTabProps extends ContainerInfoCardProps {
   recommendedConfiguration: CodeInfoCardProps['yamlCodeData'];
   chartData: ChartInfoCardProps['chartData'];
   optimizationType: ChartInfoCardProps['optimizationType'];
+  onApplyRecommendation?: React.MouseEventHandler<HTMLButtonElement>;
+  workflowId?: string;
 }
 
 export const OptimizationEngineTab = (props: OptimizationEngineTabProps) => {
@@ -39,8 +41,6 @@ export const OptimizationEngineTab = (props: OptimizationEngineTabProps) => {
           containerData={props.containerData}
           recommendationTerm={props.recommendationTerm}
           onRecommendationTermChange={props.onRecommendationTermChange}
-          workflowId={props.workflowId}
-          onApplyRecommendation={props.onApplyRecommendation}
         />
       </Grid>
 
@@ -55,6 +55,16 @@ export const OptimizationEngineTab = (props: OptimizationEngineTabProps) => {
           cardTitle="Recommended configuration"
           showCopyCodeButton
           yamlCodeData={props.recommendedConfiguration}
+          action={
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={props.onApplyRecommendation}
+              disabled={!props.workflowId}
+            >
+              Apply recommendation
+            </Button>
+          }
         />
       </Grid>
 
