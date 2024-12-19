@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 import '@testing-library/jest-dom';
-
 // eslint-disable-next-line no-restricted-imports
 import { TextEncoder } from 'util';
+// eslint-disable-next-line no-restricted-imports
+import { BroadcastChannel } from 'worker_threads';
+// eslint-disable-next-line no-restricted-imports
+import { TransformStream } from 'stream/web';
 
 // Also used in browser-based APIs for hashing.
 Object.defineProperty(global.self, 'TextEncoder', {
   value: TextEncoder,
+});
+
+Object.defineProperty(global.self, 'BroadcastChannel', {
+  value: BroadcastChannel,
+});
+
+Object.defineProperty(global.self, 'TransformStream', {
+  value: TransformStream,
 });
