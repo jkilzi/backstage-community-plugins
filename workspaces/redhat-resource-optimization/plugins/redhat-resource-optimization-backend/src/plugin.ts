@@ -38,6 +38,7 @@ export const resourceOptimizationPlugin = createBackendPlugin({
           logger,
           config,
         });
+        // @ts-ignore
         httpRouter.use(router);
         httpRouter.addAuthPolicy({
           path: '/health',

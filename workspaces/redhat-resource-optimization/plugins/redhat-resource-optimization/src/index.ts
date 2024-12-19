@@ -13,6 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { ResourceOptimizationIconOutlined } from './components/resource-optimization-icon';
-export { Router } from './pages/Router';
+export * from './components/icon';
+export { Router } from './Router';
 export { resourceOptimizationPlugin, ResourceOptimizationPage } from './plugin';
