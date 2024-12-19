@@ -114,7 +114,6 @@ const OptimizationsBreakdownChart: React.FC<
           labelComponent: (
             <ChartLegendTooltip
               legendData={legendData}
-              // @ts-ignore
               title={datum => `${datum.x}`}
             />
           ),
