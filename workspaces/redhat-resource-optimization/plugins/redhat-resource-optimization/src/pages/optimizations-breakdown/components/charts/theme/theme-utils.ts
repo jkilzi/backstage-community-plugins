@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import express from 'express';
-import Router from 'express-promise-router';
-import type { RouterOptions } from '../models/RouterOptions';
-import { getToken } from '../routes/token';
+import {
+  ChartThemeColor,
+  getCustomTheme,
+} from '@patternfly/react-charts/victory';
 
-/** @public */
-export async function createRouter(
-  options: RouterOptions,
-): Promise<express.Router> {
-  const router = Router();
-  router.use(express.json());
+import { default as ChartTheme } from './theme-koku-mfe';
 
-  router.get('/health', (_req, res) => {
-    res.json({ status: 'ok' });
-  });
-  router.get('/token', getToken(options));
+// Applies theme color and variant to base theme
+const getTheme = () => getCustomTheme(ChartThemeColor.default, ChartTheme);
 
-  return router;
-}
+export default getTheme;

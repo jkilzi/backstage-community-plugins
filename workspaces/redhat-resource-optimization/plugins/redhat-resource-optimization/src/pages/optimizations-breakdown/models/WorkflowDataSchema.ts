@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import express from 'express';
-import Router from 'express-promise-router';
-import type { RouterOptions } from '../models/RouterOptions';
-import { getToken } from '../routes/token';
+import { YamlCodeData } from './YamlCodeData';
 
-/** @public */
-export async function createRouter(
-  options: RouterOptions,
-): Promise<express.Router> {
-  const router = Router();
-  router.use(express.json());
-
-  router.get('/health', (_req, res) => {
-    res.json({ status: 'ok' });
-  });
-  router.get('/token', getToken(options));
-
-  return router;
-}
+export type WorkflowDataSchema = {
+  clusterName: string;
+  clusterUuid: string;
+  project: string;
+  workload: string;
+  container: string;
+} & YamlCodeData;

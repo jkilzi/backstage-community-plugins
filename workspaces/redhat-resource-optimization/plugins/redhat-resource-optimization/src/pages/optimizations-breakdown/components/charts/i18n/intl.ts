@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import express from 'express';
-import Router from 'express-promise-router';
-import type { RouterOptions } from '../models/RouterOptions';
-import { getToken } from '../routes/token';
+import { createIntl, createIntlCache } from 'react-intl';
 
-/** @public */
-export async function createRouter(
-  options: RouterOptions,
-): Promise<express.Router> {
-  const router = Router();
-  router.use(express.json());
+// eslint-disable-next-line no-restricted-imports
+import messages from './data.json';
 
-  router.get('/health', (_req, res) => {
-    res.json({ status: 'ok' });
-  });
-  router.get('/token', getToken(options));
+const locale = window.navigator.language.split(/[-_]/)[0] || 'en';
+export const getLocale = () => {
+  return locale;
+};
 
-  return router;
-}
+const cache = createIntlCache();
+
+const intl = createIntl(
+  {
+    defaultLocale: 'en',
+    locale,
+    // eslint-disable-next-line no-console
+    onError: console.log,
+    messages: messages.en,
+  },
+  cache,
+);
+
+export default intl;
