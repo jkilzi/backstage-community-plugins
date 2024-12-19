@@ -57,8 +57,13 @@
     "typescript": "~5.3.0"
   },
   "resolutions": {
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-common": "github:jkilzi/artifacts#rhdh-plugins/orchestrator-common/1.24.3",
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-api": "github:jkilzi/artifacts#rhdh-plugins/orchestrator-form-api/1.4.2",
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-react": "github:jkilzi/artifacts#rhdh-plugins/orchestrator-form-react/1.4.5",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {

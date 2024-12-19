@@ -22,6 +22,12 @@ backend.add(
   import('@backstage-community/plugin-redhat-resource-optimization-backend'),
 );
 
+backend.add(
+  import('@red-hat-developer-hub/backstage-plugin-orchestrator-backend'),
+);
+backend.add(import('@backstage/plugin-notifications-backend'));
+backend.add(import('@backstage/plugin-signals-backend'));
+
 backend.add(import('@backstage/plugin-app-backend/alpha'));
 backend.add(import('@backstage/plugin-proxy-backend/alpha'));
 backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
