@@ -11177,9 +11177,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@red-hat-developer-hub/backstage-plugin-orchestrator-backend@github:jkilzi/artifacts#rhdh-plugins/orchestrator-backend/5.0.1":
-  version: 5.0.1
-  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-backend@https://github.com/jkilzi/artifacts.git#commit=f2097d8cce7c2ce8e4f30ee6071112415cf9e089"
+"@red-hat-developer-hub/backstage-plugin-orchestrator-backend@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-backend@npm:5.1.1"
   dependencies:
     "@backstage/backend-common": ^0.25.0
     "@backstage/backend-defaults": ^0.5.2
@@ -11193,61 +11193,57 @@ __metadata:
     "@backstage/plugin-permission-node": ^0.8.4
     "@backstage/plugin-scaffolder-backend": ^1.26.2
     "@backstage/plugin-scaffolder-node": ^0.5.0
-    "@red-hat-developer-hub/backstage-plugin-orchestrator-common": ^1.24.3
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-common": ^1.25.1
     "@urql/core": ^4.1.4
     ajv-formats: ^2.1.1
     cloudevents: ^8.0.0
-    express: ^4.18.2
+    express: ^4.21.2
     express-promise-router: ^4.1.1
     fs-extra: ^10.1.0
     isomorphic-git: ^1.23.0
-    json-schema: ^0.4.0
     moment: ^2.29.4
     openapi-backend: ^5.10.5
     yn: ^5.0.0
   peerDependencies:
     "@backstage-community/plugin-rbac-common": ^1.12.1
     "@janus-idp/backstage-plugin-audit-log-node": ^1.7.1
-  checksum: 556683e77a7a3c604e225d6fde5b515c27c1c4c9b1b7ec6143bd713094997529c4f018268f9860b55dae5b1e5a896786e3f0b48b31870a673aa67d0790ab72e2
+  checksum: c78dc306f4abb59b74ae342b4979b13587d6eea441dc069b39659e2f3ff9d39cd4bf4ca1982a37e80a914201c784e79a24eb8497e0f89aa141fbbf201e76c3d8
   languageName: node
   linkType: hard
 
-"@red-hat-developer-hub/backstage-plugin-orchestrator-common@github:jkilzi/artifacts#rhdh-plugins/orchestrator-common/1.24.3":
-  version: 1.24.3
-  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-common@https://github.com/jkilzi/artifacts.git#commit=555e159a92755634bb5e06023584064010de4781"
-  peerDependencies:
+"@red-hat-developer-hub/backstage-plugin-orchestrator-common@npm:^1.25.1":
+  version: 1.25.1
+  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-common@npm:1.25.1"
+  dependencies:
     "@backstage/plugin-permission-common": ^0.8.1
-    "@backstage/types": ^1.1.1
     "@severlessworkflow/sdk-typescript": ^3.0.3
-    axios: ^1.7.4
+    axios: ^1.7.9
     js-yaml: ^4.1.0
-  checksum: 8a98460861b3bce22011d9ec818f366d196ac331d8ed4916c7dc6639fee3b427f1ae12eac83ab54635fed654300ea7acc4db54cc70842800555f9fba43137b77
+  checksum: 025bf6032391c0d7a0782f4416c3795c7adc463c2b2e38149c46050953c3232120c837e458fc981488ecedf81d0463ed81a8707da34b21bc1fcb097de3efaa07
   languageName: node
   linkType: hard
 
-"@red-hat-developer-hub/backstage-plugin-orchestrator-form-api@github:jkilzi/artifacts#rhdh-plugins/orchestrator-form-api/1.4.2":
-  version: 1.4.2
-  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-form-api@https://github.com/jkilzi/artifacts.git#commit=e1f9da79430c505cafe52b6a6efcd345fc3936e4"
+"@red-hat-developer-hub/backstage-plugin-orchestrator-form-api@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-form-api@npm:1.4.3"
   dependencies:
     "@backstage/core-plugin-api": ^1.10.0
-    "@backstage/types": ^1.1.1
     "@rjsf/core": ^5.21.2
     "@rjsf/utils": ^5.21.2
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
-  checksum: 7646bc760dfc4e454e8c513798131842ecdb3ab2ff0489f1e98004b3378856b5c46d7c6b73e4d16838f8ec46d17e5a654a240bba4bfde7b108806f5a4ae20b86
+  checksum: 1a8fefa5737512e585a0dd23558221211fe65f102c502ac75e0d859cac37abce20d699a21666d328b5d09d51bf1814a2259598c15654c9f1f78b265133dc925d
   languageName: node
   linkType: hard
 
-"@red-hat-developer-hub/backstage-plugin-orchestrator-form-react@github:jkilzi/artifacts#rhdh-plugins/orchestrator-form-react/1.4.5":
-  version: 1.4.5
-  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-form-react@https://github.com/jkilzi/artifacts.git#commit=6743ecf9a7976b191d5f2ea642826bda68afde44"
+"@red-hat-developer-hub/backstage-plugin-orchestrator-form-react@npm:^1.4.6":
+  version: 1.4.6
+  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator-form-react@npm:1.4.6"
   dependencies:
     "@backstage/core-components": ^0.15.1
     "@backstage/core-plugin-api": ^1.10.0
-    "@backstage/types": ^1.1.1
     "@material-ui/core": ^4.12.4
-    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-api": ^1.4.2
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-api": ^1.4.3
     "@rjsf/core": ^5.21.2
     "@rjsf/material-ui": ^5.21.2
     "@rjsf/utils": ^5.21.2
@@ -11256,18 +11252,19 @@ __metadata:
     lodash: ^4.17.21
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
-  checksum: a408966851eb4451fd46ab4f309292faa951b2cdaed751730915fa67e5e04c9e3c6a7dd62e0d5eac5fb29ae033146de3f338599de17ab46975a7f56b8ce475e6
+  checksum: 87bffa5c1cabc72cb47b408ce673535119affdfb61e477b55ae73fa10d2714a7b63baa8a579d8c95d4b88f6bf47a9a7a51d4be2f59b1530db62da738858556f0
   languageName: node
   linkType: hard
 
-"@red-hat-developer-hub/backstage-plugin-orchestrator@github:jkilzi/artifacts#rhdh-plugins/orchestrator/2.4.3":
-  version: 2.4.3
-  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator@https://github.com/jkilzi/artifacts.git#commit=ba079ecac081f4465f46014b93cd705a9f69ddc2"
+"@red-hat-developer-hub/backstage-plugin-orchestrator@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "@red-hat-developer-hub/backstage-plugin-orchestrator@npm:2.5.1"
   dependencies:
     "@backstage/core-components": 0.15.1
     "@backstage/core-plugin-api": 1.10.0
     "@backstage/errors": 1.2.4
     "@backstage/plugin-catalog": 1.24.0
+    "@backstage/plugin-permission-common": ^0.8.1
     "@backstage/plugin-permission-react": 0.4.27
     "@kie-tools-core/editor": ^0.32.0
     "@kie-tools-core/notifications": ^0.32.0
@@ -11276,12 +11273,12 @@ __metadata:
     "@kie-tools/serverless-workflow-language-service": ^0.32.0
     "@kie-tools/serverless-workflow-service-catalog": ^0.32.0
     "@monaco-editor/react": ^4.6.0
-    "@red-hat-developer-hub/backstage-plugin-orchestrator-common": ^1.24.3
-    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-api": ^1.4.2
-    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-react": ^1.4.5
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-common": ^1.25.1
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-api": ^1.4.3
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-form-react": ^1.4.6
     axios: ^1.7.7
     moment: ^2.29.4
-    monaco-editor: ^0.49.0
+    monaco-editor: ^0.52.2
     react-json-view: ^1.21.3
     react-moment: ^1.1.3
     react-use: ^17.4.0
@@ -11295,8 +11292,8 @@ __metadata:
     "@mui/icons-material": ^5.15.8
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
-    react-router-dom: ^6.0.0
-  checksum: 3afa46aa3f595c8597c62cbd568561321c0a21b3f88100e2c07657c15b184cac87fb0800e96af898df3d116e994a521f2c0d31bfcfb4c03fa35338be7cb97d12
+    react-router-dom: ^6.3.0
+  checksum: ae724f1c49be965d63fcc1aba8bf3147dfb7079422cd8ca5264e747965959815ab6d4d7f85b385e35d5f4b536cf9c5bd7d5e97244b8560c6636cb48f911414d2
   languageName: node
   linkType: hard
 
@@ -16219,7 +16216,7 @@ __metadata:
     "@mui/icons-material": ^5.16.1
     "@mui/material": ^5.16.1
     "@playwright/test": ^1.32.3
-    "@red-hat-developer-hub/backstage-plugin-orchestrator": "github:jkilzi/artifacts#rhdh-plugins/orchestrator/2.4.3"
+    "@red-hat-developer-hub/backstage-plugin-orchestrator": ^2.5.1
     "@redhat-developer/red-hat-developer-hub-theme": ^0.4.0
     "@testing-library/dom": ^9.0.0
     "@testing-library/jest-dom": ^6.0.0
@@ -16790,7 +16787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.0.0, axios@npm:^1.6.0, axios@npm:^1.7.4, axios@npm:^1.7.7":
+"axios@npm:^1.0.0, axios@npm:^1.6.0, axios@npm:^1.7.4, axios@npm:^1.7.7, axios@npm:^1.7.9":
   version: 1.7.9
   resolution: "axios@npm:1.7.9"
   dependencies:
@@ -17003,7 +17000,7 @@ __metadata:
     "@backstage/plugin-signals-backend": ^0.2.3
     "@backstage/plugin-techdocs-backend": ^1.11.1
     "@janus-idp/backstage-plugin-audit-log-node": ^1.8.0
-    "@red-hat-developer-hub/backstage-plugin-orchestrator-backend": "github:jkilzi/artifacts#rhdh-plugins/orchestrator-backend/5.0.1"
+    "@red-hat-developer-hub/backstage-plugin-orchestrator-backend": ^5.1.1
     "@types/dockerode": ^3.3.0
     "@types/express": ^4.17.21
     "@types/express-serve-static-core": ^4.17.5
@@ -28488,10 +28485,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"monaco-editor@npm:^0.49.0":
-  version: 0.49.0
-  resolution: "monaco-editor@npm:0.49.0"
-  checksum: 133b41b2b32d120ff6bc12d68a72501c90ff6de2e15e915a44c25f3f3ab29d164bd94ba501e13329e855b3000bd035319b01be122e76ab7f3fab6731cf0a323c
+"monaco-editor@npm:^0.52.2":
+  version: 0.52.2
+  resolution: "monaco-editor@npm:0.52.2"
+  checksum: d5ff7b7a469afee25ac708d9ace0dcc5ef24ed328dfc526a52944a497f0d826cfb0685a778ff4b7becc0a8f7843f260c17ea6de3f6719481d53501d79ebb1260
   languageName: node
   linkType: hard
 
