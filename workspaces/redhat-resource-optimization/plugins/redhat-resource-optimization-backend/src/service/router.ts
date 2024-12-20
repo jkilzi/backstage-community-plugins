@@ -24,7 +24,14 @@ import Router from 'express-promise-router';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { registerHealthRoutes } from '../routes/health';
 import { registerTokenRoutes } from '../routes/token';
-// import { rosListPermissions } from '../../../redhat-resource-optimization-common/src/permissions';
+import { rosListPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import { Request as HttpRequest } from 'express-serve-static-core';
+import {
+  AuthorizePermissionRequest,
+  AuthorizePermissionResponse,
+  AuthorizeResult,
+  BasicPermission,
+} from '@backstage/plugin-permission-common';
 
 /** @public */
 export interface RouterOptions {
@@ -34,18 +41,47 @@ export interface RouterOptions {
   permissions: PermissionsService;
 }
 
+export const authorize = async (
+  request: HttpRequest,
+  anyOfPermissions: BasicPermission[],
+  permissionsSvc: PermissionsService,
+  httpAuth: HttpAuthService,
+): Promise<AuthorizePermissionResponse> => {
+  const credentials = await httpAuth.credentials(request);
+
+  const decisionResponses: AuthorizePermissionResponse[][] = await Promise.all(
+    anyOfPermissions.map(permission =>
+      permissionsSvc.authorize([{ permission }], {
+        credentials,
+      }),
+    ),
+  );
+
+  const decisions: AuthorizePermissionResponse[] = decisionResponses.map(
+    d => d[0],
+  );
+
+  console.log('Permissions Decision:', decisions);
+
+  const allow = decisions.find(d => d.result === AuthorizeResult.ALLOW);
+  return (
+    allow || {
+      result: AuthorizeResult.DENY,
+    }
+  );
+};
+
 /** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  // const permissionIntegrationRouter = createPermissionIntegrationRouter({
-  //   permissions: [rosListPermissions],
-  // });
-
   const router = Router();
-  router.use(express.json());
+  const permissionsIntegrationRouter = createPermissionIntegrationRouter({
+    permissions: rosListPermissions,
+  });
 
-  // router.use(permissionIntegrationRouter);
+  router.use(express.json());
+  router.use(permissionsIntegrationRouter);
 
   registerHealthRoutes(router, options);
   registerTokenRoutes(router, options);

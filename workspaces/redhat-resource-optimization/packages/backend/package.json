@@ -21,6 +21,7 @@
     "build-image": "docker build ../.. -f Dockerfile --tag backstage"
   },
   "dependencies": {
+    "@backstage-community/plugin-catalog-backend-module-keycloak": "^3.2.3",
     "@backstage-community/plugin-rbac-backend": "^5.2.7",
     "@backstage-community/plugin-redhat-resource-optimization-backend": "workspace:^",
     "@backstage/backend-defaults": "^0.5.2",
@@ -38,7 +39,7 @@
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.2.1",
     "@backstage/plugin-permission-backend": "^0.5.50",
     "@backstage/plugin-permission-backend-module-allow-all-policy": "^0.2.1",
-    "@backstage/plugin-permission-common": "^0.8.1",
+    "@backstage/plugin-permission-common": "^0.8.3",
     "@backstage/plugin-permission-node": "^0.8.4",
     "@backstage/plugin-proxy-backend": "^0.5.7",
     "@backstage/plugin-scaffolder-backend": "^1.26.2",
