@@ -24,7 +24,11 @@ import Router from 'express-promise-router';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { registerHealthRoutes } from '../routes/health';
 import { registerTokenRoutes } from '../routes/token';
-import { rosListPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import {
+  rosClusterSpecificPermission,
+  rosPluginPermissions,
+  rosProjectSpecificPermission,
+} from '@backstage-community/plugin-redhat-resource-optimization-common';
 import { Request as HttpRequest } from 'express-serve-static-core';
 import {
   AuthorizePermissionRequest,
@@ -32,6 +36,7 @@ import {
   AuthorizeResult,
   BasicPermission,
 } from '@backstage/plugin-permission-common';
+import { registerAccessRoutes } from '../routes/access';
 
 /** @public */
 export interface RouterOptions {
@@ -71,13 +76,83 @@ export const authorize = async (
   );
 };
 
+export const filterAuthorizedClusterIds = async (
+  request: HttpRequest,
+  permissionsSvc: PermissionsService,
+  httpAuth: HttpAuthService,
+  clusterIds: string[],
+): Promise<string[]> => {
+  const credentials = await httpAuth.credentials(request);
+  // const generiClusterPermissionDecision = await permissionsSvc.authorize(
+  //   [{ permission: rosListReadPermission }],
+  //   {
+  //     credentials,
+  //   },
+  // );
+
+  // if (generiClusterPermissionDecision[0].result === AuthorizeResult.ALLOW) {
+  //   // The user can see all clusters
+  //   return [];
+  // }
+
+  const specificClusterRequests: AuthorizePermissionRequest[] = clusterIds.map(
+    clusterId => ({
+      permission: rosClusterSpecificPermission(clusterId),
+    }),
+  );
+
+  const decisions = await permissionsSvc.authorize(specificClusterRequests, {
+    credentials,
+  });
+
+  return clusterIds.filter(
+    (_, idx) => decisions[idx].result === AuthorizeResult.ALLOW,
+  );
+};
+
+export const filterAuthorizedProjectIds = async (
+  request: HttpRequest,
+  permissionsSvc: PermissionsService,
+  httpAuth: HttpAuthService,
+  projectIds: string[],
+): Promise<string[]> => {
+  const credentials = await httpAuth.credentials(request);
+  // const generiClusterPermissionDecision = await permissionsSvc.authorize(
+  //   [{ permission: rosListReadPermission }],
+  //   {
+  //     credentials,
+  //   },
+  // );
+
+  // if (generiClusterPermissionDecision[0].result === AuthorizeResult.ALLOW) {
+  //   // The user can see all projects
+  //   return [];
+  // }
+
+  const specificProjectRequests: AuthorizePermissionRequest[] = projectIds.map(
+    projectId => ({
+      permission: rosProjectSpecificPermission(projectId),
+    }),
+  );
+
+  const decisions = await permissionsSvc.authorize(specificProjectRequests, {
+    credentials,
+  });
+
+  console.log('decisions', decisions);
+
+  return projectIds.filter(
+    (_, idx) => decisions[idx].result === AuthorizeResult.ALLOW,
+  );
+};
+
 /** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
   const router = Router();
   const permissionsIntegrationRouter = createPermissionIntegrationRouter({
-    permissions: rosListPermissions,
+    permissions: rosPluginPermissions,
   });
 
   router.use(express.json());
@@ -85,6 +160,7 @@ export async function createRouter(
 
   registerHealthRoutes(router, options);
   registerTokenRoutes(router, options);
+  registerAccessRoutes(router, options);
 
   return router;
 }

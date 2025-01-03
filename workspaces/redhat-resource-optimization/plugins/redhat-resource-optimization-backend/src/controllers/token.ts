@@ -16,33 +16,13 @@
 import assert from 'assert';
 import type { RequestHandler } from 'express';
 import type { GetTokenResponse } from '../models/token/GetTokenResponse';
-import { authorize, type RouterOptions } from '../service/router';
-import { rosListPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common';
-import { AuthorizeResult } from '@backstage/plugin-permission-common';
-import { UnauthorizedError } from '@backstage-community/plugin-rbac-common';
+import type { RouterOptions } from '../service/router';
 
 const DEFAULT_SSO_BASE_URL = 'https://sso.redhat.com';
 
 export const getToken: (options: RouterOptions) => RequestHandler =
   options => async (_, response) => {
-    console.log('Token API:', _.headers);
-    console.log('PW Options:', options);
-
-    const { logger, config, permissions, httpAuth } = options;
-
-    const decision = await authorize(
-      _,
-      rosListPermissions,
-      permissions,
-      httpAuth,
-    );
-
-    console.log('PW Final Decision:', decision);
-
-    if (decision.result === AuthorizeResult.DENY) {
-      const error = new UnauthorizedError();
-      throw error;
-    }
+    const { logger, config } = options;
 
     assert(typeof config !== 'undefined', 'Config is undefined');
 

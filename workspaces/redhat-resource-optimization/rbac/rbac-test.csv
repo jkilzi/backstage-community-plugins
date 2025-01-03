@@ -3,6 +3,7 @@ p, role:default/rosUser, ros.plugin, read, allow
 p, role:default/rosUser, ros.cluster.OpenShift on Azure, read, allow
 
 p, role:default/rosUser, ros.cluster.project.kube-system, read, allow
-p, role:default/rosUser, ros.cluster.project.banking, read, deny
+p, role:default/rosUser, ros.cluster.project.banking, read, allow
+
 
 g, user:default/preeti.exploring.life, role:default/rosUser

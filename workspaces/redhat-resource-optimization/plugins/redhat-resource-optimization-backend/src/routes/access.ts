@@ -13,23 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createPermission } from '@backstage/plugin-permission-common';
+import type { Router } from 'express';
+import type { RouterOptions } from '../service/router';
+import { getAccess } from '../controllers/access';
 
-export const rosPluginReadPermission = createPermission({
-  name: 'ros.plugin',
-  attributes: { action: 'read' },
-});
-
-export const rosClusterSpecificPermission = (clusterId: string) =>
-  createPermission({
-    name: `ros.cluster.${clusterId}`,
-    attributes: { action: 'read' },
-  });
-
-export const rosProjectSpecificPermission = (projectId: string) =>
-  createPermission({
-    name: `ros.cluster.project.${projectId}`,
-    attributes: { action: 'read' },
-  });
-
-export const rosPluginPermissions = [rosPluginReadPermission];
+export const registerAccessRoutes = (
+  router: Router,
+  options: RouterOptions,
+) => {
+  router.get('/access', getAccess(options));
+};

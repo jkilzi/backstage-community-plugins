@@ -23,6 +23,14 @@ export interface GetTokenResponse {
   accessToken: string;
   /** The Unix Epoch at which the token will expire  */
   expiresAt: number;
+  authorizeClusterIds: string[];
+  authorizeProjectIds: string[];
+}
+
+export interface GetAccessResponse {
+  decision: string;
+  authorizeClusterIds: string[];
+  authorizeProjectIds: string[];
 }
 
 export type {

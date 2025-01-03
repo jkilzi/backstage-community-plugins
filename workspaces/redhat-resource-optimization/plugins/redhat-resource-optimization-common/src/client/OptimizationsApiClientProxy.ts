@@ -31,8 +31,11 @@ import type {
   RecommendationBoxPlots,
   RecommendationList,
   GetTokenResponse,
+  GetAccessResponse,
 } from '../models/responses';
-import { snakeCase } from 'lodash';
+import { merge, snakeCase } from 'lodash';
+import { UnauthorizedError } from '@backstage-community/plugin-rbac-common';
+import { AuthorizeResult } from '@backstage/plugin-permission-common';
 
 /** @public */
 export type OptimizationsApi = Omit<
@@ -63,6 +66,8 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
   private readonly fetchApi: FetchApi;
   private readonly defaultClient: DefaultApiClient;
   private token?: string;
+  private clusterIds?: string[];
+  private projectIds?: string[];
 
   constructor(options: { discoveryApi: DiscoveryApi; fetchApi?: FetchApi }) {
     this.defaultClient = new DefaultApiClient({
@@ -136,6 +141,17 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
     const baseUrl = await this.discoveryApi.getBaseUrl(`${pluginId}`);
     const response = await this.fetchApi.fetch(`${baseUrl}/token`);
     const data = (await response.json()) as GetTokenResponse;
+    // eslint-disable-next-line no-console
+    console.log('PW Token Data:', data);
+    return data;
+  }
+
+  private async getAccess(): Promise<GetAccessResponse> {
+    const baseUrl = await this.discoveryApi.getBaseUrl(`${pluginId}`);
+    const response = await this.fetchApi.fetch(`${baseUrl}/access`);
+    const data = (await response.json()) as GetTokenResponse;
+    // eslint-disable-next-line no-console
+    console.log('PW Access Data:', data);
     return data;
   }
 
@@ -146,23 +162,50 @@ export class OptimizationsApiClientProxy implements OptimizationsApi {
     asyncOp: DefaultApiClientOpFunc<TRequest, TResponse>,
     request: TRequest,
   ): Promise<TypedResponse<TResponse>> {
-    if (!this.token) {
-      const { accessToken } = await this.getNewToken();
-      this.token = accessToken;
+    const accessAPIResponse = await this.getAccess();
+
+    if (accessAPIResponse.decision === AuthorizeResult.DENY) {
+      const error = new UnauthorizedError();
+      throw error;
     }
 
-    let response = await asyncOp.call(this.defaultClient, request, {
-      token: this.token,
-    });
+    if (!this.token) {
+      const { accessToken } = await this.getNewToken();
+      const { authorizeClusterIds, authorizeProjectIds } = accessAPIResponse;
+      this.token = accessToken;
+      // eslint-disable-next-line no-console
+      this.clusterIds = authorizeClusterIds;
+      this.projectIds = authorizeProjectIds;
+    }
+
+    const clusterParam = {
+      query: {
+        cluster: this.clusterIds,
+        project: this.projectIds,
+        limit: 1000,
+      },
+    };
+
+    let response = await asyncOp.call(
+      this.defaultClient,
+      merge({}, request, clusterParam),
+      {
+        token: this.token,
+      },
+    );
 
     if (!response.ok) {
       if (response.status === 401) {
         const { accessToken } = await this.getNewToken();
         this.token = accessToken;
 
-        response = await asyncOp.call(this.defaultClient, request, {
-          token: this.token,
-        });
+        response = await asyncOp.call(
+          this.defaultClient,
+          merge({}, request, clusterParam),
+          {
+            token: this.token,
+          },
+        );
       } else {
         throw new Error(response.statusText);
       }
