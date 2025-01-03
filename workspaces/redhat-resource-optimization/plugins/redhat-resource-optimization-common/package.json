@@ -9,6 +9,7 @@
     "role": "common-library"
   },
   "dependencies": {
+    "@backstage-community/plugin-rbac-common": "^1.12.3",
     "@backstage/plugin-permission-common": "^0.8.1",
     "@y0n1/json": "npm:@jsr/y0n1__json@2.0.0",
     "cross-fetch": "^4.0.0",
