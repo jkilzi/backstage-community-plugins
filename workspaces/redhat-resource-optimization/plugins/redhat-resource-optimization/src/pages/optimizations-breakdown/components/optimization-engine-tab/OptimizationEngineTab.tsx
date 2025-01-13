@@ -15,10 +15,10 @@
  */
 import React from 'react';
 import { Button, Grid } from '@material-ui/core';
-import { RecommendationType } from './charts/types/ChartEnums';
-import { ChartInfoCard } from './ChartInfoCard';
-import { CodeInfoCard } from './CodeInfoCard';
-import { ContainerInfoCard } from './ContainerInfoCard';
+import { RecommendationType } from '../../models/ChartEnums';
+import { ChartInfoCard } from './components/chart-info-card/ChartInfoCard';
+import { CodeInfoCard } from './components/CodeInfoCard';
+import { ContainerInfoCard } from './components/ContainerInfoCard';
 
 type ContainerInfoCardProps = Parameters<typeof ContainerInfoCard>[0];
 type CodeInfoCardProps = Parameters<typeof CodeInfoCard>[0];

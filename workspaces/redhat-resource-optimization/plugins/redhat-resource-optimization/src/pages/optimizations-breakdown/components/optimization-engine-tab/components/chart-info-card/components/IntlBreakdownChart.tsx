@@ -23,13 +23,13 @@ import {
   RecommendationType,
   ResourceType,
   UsageType,
-} from './types/ChartEnums';
+} from '../../../../../models/ChartEnums';
 import {
   createRecommendationDatum,
   createUsageDatum,
-} from './utils/chart-data-format';
-import { OptimizationsBreakdownChart } from './OptimizationsBreakdownChart';
-import messagesData from './i18n/data.json';
+} from './intl-breakdown-chart/components/optimizations-breakdown-chart/components/optimizations-breakdown-chart/utils/chart-data-format';
+import { OptimizationsBreakdownChart } from './intl-breakdown-chart/components/optimizations-breakdown-chart/components/optimizations-breakdown-chart/OptimizationsBreakdownChart';
+import messagesData from './intl-breakdown-chart/components/optimizations-breakdown-chart/components/optimizations-breakdown-chart/i18n/data.json';
 
 export const IntlBreakdownChart = (props: {
   usageType: UsageType;

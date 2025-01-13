@@ -24,7 +24,7 @@ import {
   InputLabel,
   makeStyles,
 } from '@material-ui/core';
-import { Interval } from './charts/types/ChartEnums';
+import { Interval } from '../../../models/ChartEnums';
 
 const useStyles = makeStyles(theme => ({
   value: {

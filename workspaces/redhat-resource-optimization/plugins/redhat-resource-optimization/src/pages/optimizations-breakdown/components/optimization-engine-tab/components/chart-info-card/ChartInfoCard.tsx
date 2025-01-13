@@ -21,9 +21,9 @@ import {
   RecommendationType,
   OptimizationType,
   Interval,
-} from './charts/types/ChartEnums';
-import { IntlBreakdownChart } from './charts/IntlBreakdownChart';
-import { InfoCardTitle } from './InfoCardTitle';
+} from '../../../../models/ChartEnums';
+import { InfoCardTitle } from '../../../../../../components/InfoCardTitle';
+import { IntlBreakdownChart } from './components/IntlBreakdownChart';
 
 interface ChartInfoCardProps {
   title: React.ReactNode;

@@ -18,10 +18,7 @@ import type {
   RecommendationBoxPlots,
   RecommendationsRecommendationsCurrent,
 } from '@backstage-community/plugin-redhat-resource-optimization-common';
-import {
-  Interval,
-  OptimizationType,
-} from '../components/charts/types/ChartEnums';
+import { Interval, OptimizationType } from './ChartEnums';
 
 export interface YamlCodeData {
   limits: {

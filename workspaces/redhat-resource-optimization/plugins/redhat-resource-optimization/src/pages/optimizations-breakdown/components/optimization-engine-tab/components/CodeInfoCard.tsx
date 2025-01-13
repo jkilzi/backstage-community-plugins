@@ -16,8 +16,8 @@
 import React, { useMemo } from 'react';
 import YAML from 'yaml';
 import { CodeSnippet, InfoCard } from '@backstage/core-components';
-import { YamlCodeData } from '../models/YamlCodeData';
-import { InfoCardTitle } from './InfoCardTitle';
+import { YamlCodeData } from '../../../models/YamlCodeData';
+import { InfoCardTitle } from '../../../../../components/InfoCardTitle';
 
 const generateYAMLCode = (yamlCodeData?: YamlCodeData) => {
   const yamlCode = {

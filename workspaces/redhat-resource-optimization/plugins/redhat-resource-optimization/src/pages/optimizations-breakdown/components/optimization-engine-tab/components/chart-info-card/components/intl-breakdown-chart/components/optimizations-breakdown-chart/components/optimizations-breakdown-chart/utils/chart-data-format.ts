@@ -25,7 +25,7 @@ import {
   RecommendationType,
   ResourceType,
   UsageType,
-} from '../types/ChartEnums';
+} from '../../../../../../../../../../../models/ChartEnums';
 import { format } from 'date-fns';
 
 export const getRecommendationTerm = (

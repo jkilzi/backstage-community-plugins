@@ -30,11 +30,8 @@ import {
 } from '@backstage-community/plugin-redhat-resource-optimization-common';
 import { getTimeFromNow } from '../../utils/dates';
 import { BasePage } from '../../components/BasePage';
-import {
-  type Interval,
-  OptimizationType,
-} from './components/charts/types/ChartEnums';
-import { OptimizationEngineTab } from './components/OptimizationEngineTab';
+import { type Interval, OptimizationType } from './models/ChartEnums';
+import { OptimizationEngineTab } from './components/optimization-engine-tab/OptimizationEngineTab';
 import {
   getCurrentYAMLCodeData,
   getRecommendedYAMLCodeData,
