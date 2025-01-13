@@ -325,7 +325,6 @@ const OptimizationsBreakdownChart: React.FC<
     return (
       <ChartLegend
         data={getLegendData(series, hiddenSeries)}
-        // height={25}
         gutter={20}
         name={`${name}-legend`}
         y={320}
