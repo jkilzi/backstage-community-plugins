@@ -51,6 +51,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { ResourceOptimizationPage } from '@backstage-community/plugin-redhat-resource-optimization';
+import { OrchestratorPage } from '@red-hat-developer-hub/backstage-plugin-orchestrator';
 import { useRhdhTheme } from './hooks/useRhdhTheme';
 
 const options: Parameters<typeof createApp>[0] = {
@@ -123,6 +124,7 @@ const routes = (
       path="/redhat-resource-optimization"
       element={<ResourceOptimizationPage />}
     />
+    <Route path="/orchestrator" element={<OrchestratorPage />} />
   </FlatRoutes>
 );
 
