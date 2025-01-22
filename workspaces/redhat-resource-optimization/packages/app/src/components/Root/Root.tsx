@@ -40,6 +40,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-redhat-resource-optimization';
+import { OrchestratorIcon } from '@red-hat-developer-hub/backstage-plugin-orchestrator';
 import { useRhdhTheme } from '../../hooks/useRhdhTheme';
 
 const useSidebarLogoStyles = makeStyles({
@@ -106,6 +107,11 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           icon={ResourceOptimizationIconOutlined}
           to="/redhat-resource-optimization"
           text="Optimizations"
+        />
+        <SidebarItem
+          icon={OrchestratorIcon}
+          to="orchestrator"
+          text="Orchestrator"
         />
       </SidebarGroup>
       <SidebarSpace />

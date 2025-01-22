@@ -33,8 +33,14 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./alpha": "./src/alpha.ts",
     "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "package.json": [
+        "package.json"
+      ]
+    }
   },
   "files": [
     "app-config.dynamic.yaml",
@@ -62,15 +68,5 @@
     "test": "backstage-cli package test"
   },
   "types": "src/index.ts",
-  "typesVersions": {
-    "*": {
-      "alpha": [
-        "src/alpha.ts"
-      ],
-      "package.json": [
-        "package.json"
-      ]
-    }
-  },
   "version": "1.1.0"
 }
