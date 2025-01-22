@@ -19,10 +19,15 @@ import {
   createRoutableExtension,
   discoveryApiRef,
   fetchApiRef,
+  identityApiRef,
 } from '@backstage/core-plugin-api';
-import { OptimizationsApiClient } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import {
+  optimizationsApiRef,
+  OptimizationsClient,
+  orchestratorSlimApiRef,
+  OrchestratorSlimClient,
+} from '@backstage-community/plugin-redhat-resource-optimization-common';
 import { optimizationsBreakdownRouteRef, rootRouteRef } from './routes';
-import { optimizationsApiRef } from './apis';
 
 /** @public */
 export const resourceOptimizationPlugin = createPlugin({
@@ -35,9 +40,24 @@ export const resourceOptimizationPlugin = createPlugin({
         fetchApi: fetchApiRef,
       },
       factory({ discoveryApi, fetchApi }) {
-        return new OptimizationsApiClient({
+        return new OptimizationsClient({
           discoveryApi,
           fetchApi,
+        });
+      },
+    }),
+    createApiFactory({
+      api: orchestratorSlimApiRef,
+      deps: {
+        discoveryApi: discoveryApiRef,
+        fetchApi: fetchApiRef,
+        identityApi: identityApiRef,
+      },
+      factory({ discoveryApi, fetchApi, identityApi }) {
+        return new OrchestratorSlimClient({
+          discoveryApi,
+          fetchApi,
+          identityApi,
         });
       },
     }),
@@ -52,7 +72,7 @@ export const resourceOptimizationPlugin = createPlugin({
 export const ResourceOptimizationPage = resourceOptimizationPlugin.provide(
   createRoutableExtension({
     name: 'ResourceOptimizationPage',
-    component: () => import('./pages/Router').then(m => m.Router),
+    component: () => import('./Router').then(m => m.Router),
     mountPoint: rootRouteRef,
   }),
 );
