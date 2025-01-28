@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
-import { deepMapKeys } from '@y0n1/json/deep-map-keys';
+import { deepMapKeys } from '@y0n1/json-utils';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
 import { pluginId } from '../../generated/pluginId';
@@ -28,9 +28,9 @@ import type {
   GetRecommendationListRequest,
 } from '../../models/requests';
 import type {
+  GetTokenResponse,
   RecommendationBoxPlots,
   RecommendationList,
-  GetTokenResponse,
 } from '../../models/responses';
 import { snakeCase } from 'lodash';
 import type { OptimizationsApi } from './OptimizationsApi';
@@ -59,7 +59,7 @@ export class OptimizationsClient implements OptimizationsApi {
   };
   private static responseKeysToSkip = {
     getRecommendationById: [
-      /recommendations\.recommendation_terms\.(long|medium|short)_term\.plots\.plots_data\."\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"$/,
+      /recommendations\.recommendation_terms\.(long|medium|short)_term\.plots\.plots_data\['\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z'\]$/,
     ],
   };
 
@@ -85,11 +85,10 @@ export class OptimizationsClient implements OptimizationsApi {
   public async getRecommendationById(
     request: GetRecommendationByIdRequest,
   ): Promise<TypedResponse<RecommendationBoxPlots>> {
-    const snakeCaseTransformedRequest = deepMapKeys(
-      request,
-      snakeCase,
-      OptimizationsClient.requestKeysToSkip.getRecommendationById,
-    ) as GetRecommendationByIdRequest;
+    const snakeCaseTransformedRequest = deepMapKeys(request, {
+      onVisitJsonObjectKey: snakeCase as (value: string | number) => string,
+      skipList: OptimizationsClient.requestKeysToSkip.getRecommendationById,
+    }) as GetRecommendationByIdRequest;
 
     const response = await this.fetchWithToken(
       this.defaultClient.getRecommendationById,
@@ -100,11 +99,11 @@ export class OptimizationsClient implements OptimizationsApi {
       ...response,
       json: async () => {
         const data = await response.json();
-        const camelCaseTransformedResponse = deepMapKeys(
-          data,
-          camelCase,
-          OptimizationsClient.responseKeysToSkip.getRecommendationById,
-        ) as RecommendationBoxPlots;
+        const camelCaseTransformedResponse = deepMapKeys(data, {
+          onVisitJsonObjectKey: camelCase as (value: string | number) => string,
+          skipList:
+            OptimizationsClient.responseKeysToSkip.getRecommendationById,
+        }) as RecommendationBoxPlots;
         return camelCaseTransformedResponse;
       },
     };
@@ -115,7 +114,7 @@ export class OptimizationsClient implements OptimizationsApi {
   ): Promise<TypedResponse<RecommendationList>> {
     const snakeCaseTransformedRequest = deepMapKeys(
       request,
-      snakeCase,
+      snakeCase as (value: string | number) => string,
     ) as GetRecommendationListRequest;
 
     const response = await this.fetchWithToken(
@@ -129,7 +128,7 @@ export class OptimizationsClient implements OptimizationsApi {
         const data = await response.json();
         const camelCaseTransformedResponse = deepMapKeys(
           data,
-          camelCase,
+          camelCase as (value: string | number) => string,
         ) as RecommendationList;
         return camelCaseTransformedResponse;
       },
