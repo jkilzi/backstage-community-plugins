@@ -1,8 +1,5 @@
-p, role:default/rosUser, ros.plugin, read, allow
 
-p, role:default/rosUser, ros.cluster.OpenShift on Azure, read, allow
-
-p, role:default/rosUser, ros.cluster.project.kube-system, read, allow
-p, role:default/rosUser, ros.cluster.project.banking, read, deny
+p, role:default/rosUser, ros.cluster.test_cost_iqe_ros_ocp_date_2025_01_20, read, allow
+p, role:default/rosUser, ros.cluster.test_cost_negative_iqe_ros_ocp_RplTvXURfD, read, allow
 
 g, user:default/preeti.exploring.life, role:default/rosUser

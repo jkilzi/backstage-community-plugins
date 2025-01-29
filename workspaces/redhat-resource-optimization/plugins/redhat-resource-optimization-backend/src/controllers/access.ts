@@ -15,15 +15,16 @@
  */
 import type { RequestHandler } from 'express';
 import type { RouterOptions } from '../service/router';
-import { GetAccessResponse } from '@backstage-community/plugin-redhat-resource-optimization-common';
 import {
   authorize,
   filterAuthorizedClusterIds,
+  filterAuthorizedClusterProjectIds,
   filterAuthorizedProjectIds,
 } from '../service/router';
-import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
 import { UnauthorizedError } from '@backstage-community/plugin-rbac-common';
+import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import { GetAccessResponse } from '@backstage-community/plugin-redhat-resource-optimization-common';
 
 export const getAccess: (options: RouterOptions) => RequestHandler =
   options => async (_, response) => {
@@ -46,6 +47,11 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
       permissions,
       httpAuth,
       [
+        'test_cost_negative_iqe_ros_ocp_FTiILSWFEE',
+        'test_cost_negative_iqe_ros_ocp_RplTvXURfD',
+        'test_cost_iqe_ros_ocp_YijQtYVLRU',
+        'test_cost_negative_iqe_ros_ocp_pafrgkkorn',
+        'test_cost_iqe_ros_ocp_date_2025_01_20',
         'OpenShift on GCP - Nise Populator',
         'OCP-OnPrem01',
         'OpenShift on Azure',
@@ -53,15 +59,39 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
       ],
     );
 
+    let finalDecision = decision.result;
+
+    if (authorizeClusterIds.length === 0) {
+      finalDecision = AuthorizeResult.DENY;
+    } else {
+      finalDecision = AuthorizeResult.ALLOW;
+    }
+
     const authorizeProjectIds: string[] = await filterAuthorizedProjectIds(
       _,
       permissions,
       httpAuth,
-      ['kube-system', 'Dubai', 'banking'],
+      ['project-ros-A1', 'kube-system', 'Dubai', 'banking'],
+    );
+
+    const authorizeResults: string[] = await filterAuthorizedClusterProjectIds(
+      _,
+      permissions,
+      httpAuth,
+      [
+        'test_cost_negative_iqe_ros_ocp_FTiILSWFEE',
+        'test_cost_iqe_ros_ocp_YijQtYVLRU',
+        'test_cost_negative_iqe_ros_ocp_pafrgkkorn',
+        'OpenShift on GCP - Nise Populator',
+        'OCP-OnPrem01',
+        'OpenShift on Azure',
+        'OpenShift on AWS',
+      ],
+      ['project-ros-A1', 'kube-system', 'Dubai', 'banking'],
     );
 
     const body: GetAccessResponse = {
-      decision: decision.result,
+      decision: finalDecision,
       authorizeClusterIds: authorizeClusterIds,
       authorizeProjectIds: authorizeProjectIds,
     };

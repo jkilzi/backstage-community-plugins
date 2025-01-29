@@ -1,9 +1,19 @@
 p, role:default/rosUser, ros.plugin, read, allow
+p, role:default/rosUser, ros.plugin, read, allow
 
 p, role:default/rosUser, ros.cluster.OpenShift on Azure, read, allow
+p, role:default/rosUser, ros.cluster.test_cost_negative_iqe_ros_ocp_pafrgkkorn, read, allow
 
 p, role:default/rosUser, ros.cluster.project.kube-system, read, allow
 p, role:default/rosUser, ros.cluster.project.banking, read, allow
+
+p, role:default/rosUser, ros.cluster.test_cost_negative_iqe_ros_ocp_FTiILSWFEE, read, allow
+p, role:default/rosUser, ros.cluster.test_cost_negative_iqe_ros_ocp_pafrgkkorn, read, deny
+
+p, role:default/rosUser, ros.cluster.project.project-ros-A1, read, allow
+p, role:default/rosUser, ros.cluster.project.banking, read, deny
+
+p, role:default/rosUser, ros.test_cost_negative_iqe_ros_ocp_FTiILSWFEE.project-ros-A1, read, allow
 
 
 g, user:default/preeti.exploring.life, role:default/rosUser

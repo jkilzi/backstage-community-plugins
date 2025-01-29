@@ -24,11 +24,6 @@ import Router from 'express-promise-router';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { registerHealthRoutes } from '../routes/health';
 import { registerTokenRoutes } from '../routes/token';
-import {
-  rosClusterSpecificPermission,
-  rosPluginPermissions,
-  rosProjectSpecificPermission,
-} from '@backstage-community/plugin-redhat-resource-optimization-common';
 import { Request as HttpRequest } from 'express-serve-static-core';
 import {
   AuthorizePermissionRequest,
@@ -37,6 +32,12 @@ import {
   BasicPermission,
 } from '@backstage/plugin-permission-common';
 import { registerAccessRoutes } from '../routes/access';
+import {
+  rosClusterProjectPermission,
+  rosClusterSpecificPermission,
+  rosPluginPermissions,
+  rosProjectSpecificPermission,
+} from '@backstage-community/plugin-redhat-resource-optimization-common';
 
 /** @public */
 export interface RouterOptions {
@@ -144,6 +145,47 @@ export const filterAuthorizedProjectIds = async (
   return projectIds.filter(
     (_, idx) => decisions[idx].result === AuthorizeResult.ALLOW,
   );
+};
+
+export const filterAuthorizedClusterProjectIds = async (
+  request: HttpRequest,
+  permissionsSvc: PermissionsService,
+  httpAuth: HttpAuthService,
+  clusterIds: string[],
+  projectIds: string[],
+): Promise<string[]> => {
+  const credentials = await httpAuth.credentials(request);
+
+  const specificClusterProjectRequests: AuthorizePermissionRequest[] = [];
+  const clusterProjectMap = [];
+
+  for (let i = 0; i < clusterIds.length; i++) {
+    for (let j = 0; j < projectIds.length; j++) {
+      specificClusterProjectRequests.push({
+        permission: rosClusterProjectPermission(clusterIds[i], projectIds[j]),
+      });
+      clusterProjectMap.push(`${clusterIds[i]} and ${projectIds[j]}`);
+    }
+  }
+
+  const decisions = await permissionsSvc.authorize(
+    specificClusterProjectRequests,
+    {
+      credentials,
+    },
+  );
+
+  const finalResult = clusterProjectMap.filter(
+    (_, idx) => decisions[idx].result === AuthorizeResult.ALLOW,
+  );
+
+  console.log('Cluster Project Decision:', decisions);
+  console.log('Final Result:', finalResult);
+
+  // return clusterIds.filter(
+  //   (_, idx) => decisions[idx].result === AuthorizeResult.ALLOW,
+  // );
+  return [];
 };
 
 /** @public */
