@@ -20,7 +20,7 @@ import RhdhLogoIcon from '../components/rhdh-logo/RhdhLogoIcon';
 /**
  * Change this value to `true` if you want to use the RHDH theme.
  */
-const ENABLE_RHDH_THEME = false;
+const ENABLE_RHDH_THEME = true;
 
 export function useRhdhTheme() {
   return ENABLE_RHDH_THEME
