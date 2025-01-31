@@ -54,6 +54,7 @@ import { ResourceOptimizationPage } from '@backstage-community/plugin-redhat-res
 import { OrchestratorPage } from '@red-hat-developer-hub/backstage-plugin-orchestrator';
 import { useRhdhTheme } from './hooks/useRhdhTheme';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { RbacPage } from '@backstage-community/plugin-rbac';
 
 const options: Parameters<typeof createApp>[0] = {
   apis,
@@ -139,6 +140,7 @@ const routes = (
       element={<ResourceOptimizationPage />}
     />
     <Route path="/orchestrator" element={<OrchestratorPage />} />
+    <Route path="/rbac" element={<RbacPage />} />;
   </FlatRoutes>
 );
 

@@ -42,6 +42,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { ResourceOptimizationIconOutlined } from '@backstage-community/plugin-redhat-resource-optimization';
 import { OrchestratorIcon } from '@red-hat-developer-hub/backstage-plugin-orchestrator';
 import { useRhdhTheme } from '../../hooks/useRhdhTheme';
+import { Administration } from '@backstage-community/plugin-rbac';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -116,6 +117,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
       </SidebarGroup>
       <SidebarSpace />
       <SidebarDivider />
+      <Administration />
       <SidebarGroup
         label="Settings"
         icon={<UserSettingsSignInAvatar />}
