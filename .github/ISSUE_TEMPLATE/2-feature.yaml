@@ -49,6 +49,7 @@ body:
         - git-release-manager
         - github-actions
         - github-deployments
+        - github-discussions
         - github-issues
         - github-pull-requests-board
         - gitops-profiles
