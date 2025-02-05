@@ -51,13 +51,14 @@ const server = setupServer(
 );
 
 // eslint-disable-next-line jest/no-disabled-tests
-describe.skip('OptimizationsApiClientProxy.ts', () => {
+describe('OptimizationsApiClientProxy.ts', () => {
   let client: OptimizationsClient;
 
   beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
   beforeEach(() => {
     client = new OptimizationsClient({
       discoveryApi: mockDiscoveryApi,
+      fetchApi: { fetch: globalThis.fetch },
     });
   });
   afterEach(() => server.resetHandlers());

@@ -17,6 +17,7 @@ import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { deepMapKeys } from '@y0n1/json-utils';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
+import snakeCase from 'lodash/snakeCase';
 import { pluginId } from '../../generated/pluginId';
 import {
   DefaultApiClient,
@@ -32,7 +33,6 @@ import type {
   RecommendationBoxPlots,
   RecommendationList,
 } from '../../models/responses';
-import { snakeCase } from 'lodash';
 import type { OptimizationsApi } from './OptimizationsApi';
 
 type DefaultApiClientOpFunc<
