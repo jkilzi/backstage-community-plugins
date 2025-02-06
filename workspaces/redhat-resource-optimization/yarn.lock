@@ -2778,6 +2778,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@backstage-community/plugin-redhat-resource-optimization-backend@workspace:plugins/redhat-resource-optimization-backend"
   dependencies:
+    "@backstage-community/plugin-redhat-resource-optimization-common": "workspace:^"
     "@backstage/backend-defaults": ^0.6.2
     "@backstage/backend-dynamic-feature-service": ^0.5.2
     "@backstage/backend-plugin-api": ^1.1.0
@@ -2787,6 +2788,8 @@ __metadata:
     "@backstage/plugin-auth-backend": ^0.24.1
     "@backstage/plugin-auth-backend-module-github-provider": ^0.2.4
     "@backstage/plugin-auth-backend-module-guest-provider": ^0.2.3
+    "@backstage/plugin-permission-common": ^0.8.3
+    "@backstage/plugin-permission-node": ^0.8.6
     "@backstage/plugin-proxy-backend": ^0.5.9
     "@types/express": "*"
     "@types/supertest": ^6.0.0
@@ -2804,8 +2807,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@backstage-community/plugin-redhat-resource-optimization-common@workspace:plugins/redhat-resource-optimization-common"
   dependencies:
+    "@backstage-community/plugin-rbac-common": ^1.12.2
     "@backstage/cli": ^0.29.4
     "@backstage/core-plugin-api": ^1.10.0
+    "@backstage/plugin-permission-common": ^0.8.3
     "@backstage/types": ^1.2.0
     "@testing-library/jest-dom": ^6.0.0
     "@types/lodash": ^4.17.5

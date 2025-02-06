@@ -34,6 +34,8 @@ import type {
   GetTokenResponse,
   OptimizationsApi,
 } from './types';
+import { UnauthorizedError } from '@backstage-community/plugin-rbac-common';
+import { AuthorizeResult } from '@backstage/plugin-permission-common';
 
 type DefaultApiClientOpFunc<
   TRequest = GetRecommendationByIdRequest | GetRecommendationListRequest,
@@ -135,6 +137,13 @@ export class OptimizationsClient implements OptimizationsApi {
     };
   }
 
+  private async getAccess(): Promise<GetAccessResponse> {
+    const baseUrl = await this.discoveryApi.getBaseUrl(`${pluginId}`);
+    const response = await this.fetchApi.fetch(`${baseUrl}/access`);
+    const data = (await response.json()) as GetAccessResponse;
+    return data;
+  }
+
   private async getNewToken(): Promise<GetTokenResponse> {
     const baseUrl = await this.discoveryApi.getBaseUrl(`${pluginId}`);
     const response = await this.fetchApi.fetch(`${baseUrl}/token`);
@@ -149,6 +158,13 @@ export class OptimizationsClient implements OptimizationsApi {
     asyncOp: DefaultApiClientOpFunc<TRequest, TResponse>,
     request: TRequest,
   ): Promise<TypedResponse<TResponse>> {
+    const accessAPIResponse = await this.getAccess();
+
+    if (accessAPIResponse.decision === AuthorizeResult.DENY) {
+      const error = new UnauthorizedError();
+      throw error;
+    }
+
     if (!this.token) {
       const { accessToken } = await this.getNewToken();
       this.token = accessToken;

@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type {
-  LoggerService,
-  RootConfigService,
-  HttpAuthService,
-  PermissionsService,
-} from '@backstage/backend-plugin-api';
+import { createPermission } from '@backstage/plugin-permission-common';
 
-/** @public */
-export interface RouterOptions {
-  logger: LoggerService;
-  config?: RootConfigService;
-  httpAuth: HttpAuthService;
-  permissions: PermissionsService;
-}
+export const rosPluginReadPermission = createPermission({
+  name: 'ros.plugin',
+  attributes: { action: 'read' },
+});
+
+export const rosPluginPermissions = [rosPluginReadPermission];
