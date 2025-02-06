@@ -2788,6 +2788,17 @@ __metadata:
   checksum: 10/ccf5399db1dcd6dd87b84a6f7bc8dd241e04a326f4f038c973c26ccb69cd360c8f2276603f584c58fd94da95229313060b27baceb0d9b18a435742d3f616afd1
   languageName: node
   linkType: hard
+
+"@backstage-community/plugin-rbac-common@npm:^1.12.2":
+  version: 1.12.3
+  resolution: "@backstage-community/plugin-rbac-common@npm:1.12.3"
+  peerDependencies:
+    "@backstage/errors": ^1.2.4
+    "@backstage/plugin-permission-common": ^0.8.1
+  checksum: 9e35cf5b09284d547542d14d90bfa0b3a269cc473be25d9e95059ccd2f7bb5fd12ac8a30ad640261a2cc512c31c04fde3d2bef1ae7b3cdf44df1de20d304b3d8
+  languageName: node
+  linkType: hard
+
 "@backstage-community/plugin-redhat-resource-optimization-backend@workspace:^, @backstage-community/plugin-redhat-resource-optimization-backend@workspace:plugins/redhat-resource-optimization-backend":
   version: 0.0.0-use.local
   resolution: "@backstage-community/plugin-redhat-resource-optimization-backend@workspace:plugins/redhat-resource-optimization-backend"
@@ -3426,7 +3437,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/catalog-model@npm:^1.7.2, @backstage/catalog-model@npm:^1.7.3":
+"@backstage/catalog-model@npm:^1.7.0, @backstage/catalog-model@npm:^1.7.1, @backstage/catalog-model@npm:^1.7.2, @backstage/catalog-model@npm:^1.7.3":
   version: 1.7.3
   resolution: "@backstage/catalog-model@npm:1.7.3"
   dependencies:
@@ -4042,7 +4053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/integration-react@npm:^1.2.2, @backstage/integration-react@npm:^1.2.3":
+"@backstage/integration-react@npm:^1.2.0, @backstage/integration-react@npm:^1.2.2, @backstage/integration-react@npm:^1.2.3":
   version: 1.2.3
   resolution: "@backstage/integration-react@npm:1.2.3"
   dependencies:
@@ -4063,7 +4074,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/integration@npm:^1.15.0, @backstage/integration@npm:^1.16.0, @backstage/integration@npm:^1.16.1":
+"@backstage/integration@npm:^1.14.0, @backstage/integration@npm:^1.15.0, @backstage/integration@npm:^1.15.1, @backstage/integration@npm:^1.15.2, @backstage/integration@npm:^1.16.0, @backstage/integration@npm:^1.16.1":
   version: 1.16.1
   resolution: "@backstage/integration@npm:1.16.1"
   dependencies:
@@ -4689,7 +4700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-catalog-react@npm:^1.15.0, @backstage/plugin-catalog-react@npm:^1.15.1":
+"@backstage/plugin-catalog-react@npm:^1.14.0, @backstage/plugin-catalog-react@npm:^1.15.0, @backstage/plugin-catalog-react@npm:^1.15.1":
   version: 1.15.1
   resolution: "@backstage/plugin-catalog-react@npm:1.15.1"
   dependencies:
