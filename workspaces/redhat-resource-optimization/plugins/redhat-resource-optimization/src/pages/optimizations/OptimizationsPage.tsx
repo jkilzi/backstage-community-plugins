@@ -22,11 +22,8 @@ import {
   Table,
   TableColumn,
 } from '@backstage/core-components';
-import {
-  optimizationsApiRef,
-  type GetRecommendationListRequest,
-  type Recommendations,
-} from '@backstage-community/plugin-redhat-resource-optimization-common';
+import type { Recommendations } from '@backstage-community/plugin-redhat-resource-optimization-common/models';
+import type { GetRecommendationListRequest } from '@backstage-community/plugin-redhat-resource-optimization-common/clients';
 import { useApi, useRouteRef } from '@backstage/core-plugin-api';
 import { PageLayout } from './components/PageLayout';
 import { TableToolbar } from './components/TableToolbar';
@@ -34,6 +31,7 @@ import { Filters } from './components/Filters';
 import { BasePage } from '../../components/BasePage';
 import { optimizationsBreakdownRouteRef } from '../../routes';
 import { getTimeFromNow } from '../../utils/dates';
+import { optimizationsApiRef } from '../../apis';
 
 export const DEFAULT_DEBOUNCE_INTERVAL: number = 700;
 export const DEFAULT_PAGE_SIZE_OPTIONS: number[] = [10, 20, 50, 100];

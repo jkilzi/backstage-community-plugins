@@ -18,7 +18,7 @@ import {
   MediumTermRecommendationBoxPlots,
   RecommendationBoxPlotsRecommendations,
   ShortTermRecommendationBoxPlots,
-} from '@backstage-community/plugin-redhat-resource-optimization-common';
+} from '@backstage-community/plugin-redhat-resource-optimization-common/models';
 import {
   Interval,
   OptimizationType,

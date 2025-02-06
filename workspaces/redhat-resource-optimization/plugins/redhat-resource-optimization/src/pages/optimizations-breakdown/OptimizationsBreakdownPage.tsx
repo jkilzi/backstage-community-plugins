@@ -23,11 +23,7 @@ import {
   ResponseErrorPanel,
 } from '@backstage/core-components';
 import { configApiRef, useApi } from '@backstage/core-plugin-api';
-import {
-  optimizationsApiRef,
-  orchestratorSlimApiRef,
-  type RecommendationBoxPlots,
-} from '@backstage-community/plugin-redhat-resource-optimization-common';
+import type { RecommendationBoxPlots } from '@backstage-community/plugin-redhat-resource-optimization-common/models';
 import { getTimeFromNow } from '../../utils/dates';
 import { BasePage } from '../../components/BasePage';
 import { type Interval, OptimizationType } from './models/ChartEnums';
@@ -37,6 +33,7 @@ import {
   getRecommendedYAMLCodeData,
 } from './models/YamlCodeData';
 import type { WorkflowDataSchema } from './models/WorkflowDataSchema';
+import { optimizationsApiRef, orchestratorSlimApiRef } from '../../apis';
 
 const getContainerData = (value: RecommendationBoxPlots) => [
   { key: 'Cluster', value: value?.clusterAlias },

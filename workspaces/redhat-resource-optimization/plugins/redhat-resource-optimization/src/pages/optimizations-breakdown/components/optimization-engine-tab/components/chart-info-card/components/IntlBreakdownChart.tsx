@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { RecommendationBoxPlots } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import { RecommendationBoxPlots } from '@backstage-community/plugin-redhat-resource-optimization-common/models';
 import {
   Interval,
   OptimizationType,

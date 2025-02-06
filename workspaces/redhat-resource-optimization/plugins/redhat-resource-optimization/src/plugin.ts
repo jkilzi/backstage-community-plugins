@@ -22,11 +22,10 @@ import {
   identityApiRef,
 } from '@backstage/core-plugin-api';
 import {
-  optimizationsApiRef,
   OptimizationsClient,
-  orchestratorSlimApiRef,
   OrchestratorSlimClient,
-} from '@backstage-community/plugin-redhat-resource-optimization-common';
+} from '@backstage-community/plugin-redhat-resource-optimization-common/clients';
+import { optimizationsApiRef, orchestratorSlimApiRef } from './apis';
 import { optimizationsBreakdownRouteRef, rootRouteRef } from './routes';
 
 /** @public */

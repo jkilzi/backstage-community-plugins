@@ -15,7 +15,7 @@
  */
 import React, { useMemo } from 'react';
 import { InfoCard } from '@backstage/core-components';
-import type { RecommendationBoxPlots } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import type { RecommendationBoxPlots } from '@backstage-community/plugin-redhat-resource-optimization-common/models';
 import {
   UsageType,
   RecommendationType,

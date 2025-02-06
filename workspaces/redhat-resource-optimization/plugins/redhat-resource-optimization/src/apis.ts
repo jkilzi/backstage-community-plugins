@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { createApiRef } from '@backstage/core-plugin-api';
+import type {
+  OptimizationsApi,
+  OrchestratorSlimApi,
+} from '@backstage-community/plugin-redhat-resource-optimization-common/clients';
 
-/**
- * This is a copy of GetTokenResponse, to avoid importing redhat-resource-optimization-backend.
- *
- * @public
- */
-export interface GetTokenResponse {
-  accessToken: string;
-  /** The Unix Epoch at which the token will expire  */
-  expiresAt: number;
-}
+/** @public */
+export const optimizationsApiRef = createApiRef<OptimizationsApi>({
+  id: 'plugin.redhat-resource-optimization.api',
+});
 
-export type {
-  RecommendationBoxPlots,
-  RecommendationList,
-} from '../generated/models';
+/** @public */
+export const orchestratorSlimApiRef = createApiRef<OrchestratorSlimApi>({
+  id: 'plugin.redhat-orchestrator-slim.api',
+});

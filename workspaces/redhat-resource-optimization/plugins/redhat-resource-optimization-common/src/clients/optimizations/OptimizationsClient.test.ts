@@ -18,8 +18,8 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { OptimizationsClient } from './OptimizationsClient';
 import { DiscoveryApi } from '../../generated/types/discovery';
-import { GetRecommendationByIdRequest } from '../../models/requests';
-import * as GetRecommendationByIdMockResponse from './fixtures/GetRecommendationByIdMockResponse.json';
+import { GetRecommendationByIdRequest } from './types';
+import RecommendationMockResponse from './fixtures/recommendation-mock.json' assert { type: 'json' };
 
 function makePlotsDataPropertyPathWithTerm(
   term: 'short' | 'medium' | 'long',
@@ -73,7 +73,7 @@ describe('OptimizationsApiClientProxy.ts', () => {
         server.use(
           http.get(
             `${MOCK_BASE_URL}/cost-management/v1/recommendations/openshift/:id`,
-            _info => HttpResponse.json(GetRecommendationByIdMockResponse),
+            _info => HttpResponse.json(RecommendationMockResponse),
           ),
         );
 
@@ -115,7 +115,7 @@ describe('OptimizationsApiClientProxy.ts', () => {
         server.use(
           http.get(
             `${MOCK_BASE_URL}/cost-management/v1/recommendations/openshift/:id`,
-            _info => HttpResponse.json(GetRecommendationByIdMockResponse),
+            _info => HttpResponse.json(RecommendationMockResponse),
           ),
         );
 
