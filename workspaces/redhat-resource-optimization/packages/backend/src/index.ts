@@ -125,10 +125,6 @@ backend.add(
 
 // permission plugin
 backend.add(import('@backstage-community/plugin-rbac-backend'));
-// backend.add(import('@backstage/plugin-permission-backend/alpha'));
-// backend.add(
-//   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
-// );
 
 // search plugin
 backend.add(import('@backstage/plugin-search-backend'));
