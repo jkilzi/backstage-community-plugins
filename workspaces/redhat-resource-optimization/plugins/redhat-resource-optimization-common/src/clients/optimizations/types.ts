@@ -33,14 +33,12 @@ export interface GetTokenResponse {
   expiresAt: number;
 }
 
-
 /**
  * @public
  */
 export interface GetAccessResponse {
   decision: string;
 }
-
 
 /** @public */
 export type GetRecommendationByIdRequest = Parameters<
