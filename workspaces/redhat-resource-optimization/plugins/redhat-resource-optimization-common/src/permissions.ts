@@ -15,9 +15,11 @@
  */
 import { createPermission } from '@backstage/plugin-permission-common';
 
+/** @public */
 export const rosPluginReadPermission = createPermission({
   name: 'ros.plugin',
   attributes: { action: 'read' },
 });
 
+/** @public */
 export const rosPluginPermissions = [rosPluginReadPermission];

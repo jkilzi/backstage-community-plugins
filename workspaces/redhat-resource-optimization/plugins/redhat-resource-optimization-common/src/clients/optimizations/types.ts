@@ -34,7 +34,9 @@ export interface GetTokenResponse {
 }
 
 
-/** @public */
+/**
+ * @public
+ */
 export interface GetAccessResponse {
   decision: string;
 }
