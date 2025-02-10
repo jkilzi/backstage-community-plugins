@@ -4,9 +4,9 @@ dynamicPlugins:
       appIcons:
         - name: resourceOptimizationIconOutlined
           importName: ResourceOptimizationIconOutlined
-      routeBindings:
-        targets:
-          - name: resourceOptimizationPlugin
+      # routeBindings:
+      #   targets:
+      #     - name: resourceOptimizationPlugin
       dynamicRoutes:
         - path: /redhat-resource-optimization
           importName: ResourceOptimizationPage
