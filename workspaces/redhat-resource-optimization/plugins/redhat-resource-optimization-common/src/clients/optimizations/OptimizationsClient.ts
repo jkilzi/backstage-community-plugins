@@ -33,6 +33,7 @@ import type {
   GetRecommendationListRequest,
   GetTokenResponse,
   OptimizationsApi,
+  GetAccessResponse,
 } from './types';
 import { UnauthorizedError } from '@backstage-community/plugin-rbac-common';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';

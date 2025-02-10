@@ -16,7 +16,7 @@
 import type { RequestHandler } from 'express';
 import type { RouterOptions } from '../models/RouterOptions';
 import { authorize } from '../service/router';
-import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common/permissions';
 
 export const getAccess: (options: RouterOptions) => RequestHandler =
   options => async (_, response) => {
