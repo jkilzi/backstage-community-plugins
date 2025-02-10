@@ -18,7 +18,7 @@ import Router from 'express-promise-router';
 import type { RouterOptions } from '../models/RouterOptions';
 import { getToken } from '../routes/token';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
-import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common';
+import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common/permissions';
 import { Request as HttpRequest } from 'express-serve-static-core';
 import {
   AuthorizePermissionResponse,
