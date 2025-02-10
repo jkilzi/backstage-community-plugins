@@ -48,6 +48,11 @@ const server = setupServer(
       expiresAt: 1234567890,
     }),
   ),
+  http.get(`${MOCK_BASE_URL}/access`, _info =>
+    HttpResponse.json({
+      decision: 'ALLOW',
+    }),
+  ),
 );
 
 // eslint-disable-next-line jest/no-disabled-tests

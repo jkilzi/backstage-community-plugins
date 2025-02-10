@@ -53,6 +53,8 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { ResourceOptimizationPage } from '@backstage-community/plugin-redhat-resource-optimization';
 import { OrchestratorPage } from '@red-hat-developer-hub/backstage-plugin-orchestrator';
 import { useRhdhTheme } from './hooks/useRhdhTheme';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { RbacPage } from '@backstage-community/plugin-rbac';
 
 const options: Parameters<typeof createApp>[0] = {
   apis,
@@ -74,7 +76,20 @@ const options: Parameters<typeof createApp>[0] = {
     });
   },
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        auto
+        providers={[
+          {
+            id: 'github',
+            title: 'Github',
+            message: 'Sign in with Github',
+            apiRef: githubAuthApiRef,
+          },
+        ]}
+      />
+    ),
   },
 };
 
@@ -125,6 +140,7 @@ const routes = (
       element={<ResourceOptimizationPage />}
     />
     <Route path="/orchestrator" element={<OrchestratorPage />} />
+    <Route path="/rbac" element={<RbacPage />} />;
   </FlatRoutes>
 );
 

@@ -9,6 +9,12 @@ import { IdentityApi } from '@backstage/core-plugin-api';
 import type { JsonObject } from '@backstage/types';
 
 // @public (undocumented)
+export interface GetAccessResponse {
+  // (undocumented)
+  decision: string;
+}
+
+// @public (undocumented)
 export type GetRecommendationByIdRequest = Parameters<
   OptimizationsApi['getRecommendationById']
 >[0];

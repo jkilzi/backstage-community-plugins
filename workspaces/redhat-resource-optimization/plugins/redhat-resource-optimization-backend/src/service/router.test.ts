@@ -25,6 +25,8 @@ describe('createRouter', () => {
   beforeAll(async () => {
     const router = await createRouter({
       logger: mockServices.rootLogger(),
+      httpAuth: mockServices.httpAuth(),
+      permissions: mockServices.permissions.mock(),
     });
     app = express().use(router);
   });
