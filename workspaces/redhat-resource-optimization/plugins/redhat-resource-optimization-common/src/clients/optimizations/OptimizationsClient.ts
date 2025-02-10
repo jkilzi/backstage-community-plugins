@@ -17,23 +17,23 @@ import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { deepMapKeys } from '@y0n1/json-utils';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
+import snakeCase from 'lodash/snakeCase';
 import { pluginId } from '../../generated/pluginId';
 import {
   DefaultApiClient,
-  RequestOptions,
-  TypedResponse,
+  type RequestOptions,
+  type TypedResponse,
 } from '../../generated/apis';
+import type {
+  RecommendationBoxPlots,
+  RecommendationList,
+} from '../../generated/models';
 import type {
   GetRecommendationByIdRequest,
   GetRecommendationListRequest,
-} from '../../models/requests';
-import type {
   GetTokenResponse,
-  RecommendationBoxPlots,
-  RecommendationList,
-} from '../../models/responses';
-import { snakeCase } from 'lodash';
-import type { OptimizationsApi } from './OptimizationsApi';
+  OptimizationsApi,
+} from './types';
 
 type DefaultApiClientOpFunc<
   TRequest = GetRecommendationByIdRequest | GetRecommendationListRequest,

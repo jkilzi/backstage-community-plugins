@@ -17,7 +17,7 @@ import { isEmpty } from 'lodash';
 import type {
   RecommendationBoxPlots,
   RecommendationsRecommendationsCurrent,
-} from '@backstage-community/plugin-redhat-resource-optimization-common';
+} from '@backstage-community/plugin-redhat-resource-optimization-common/models';
 import { Interval, OptimizationType } from './ChartEnums';
 
 export interface YamlCodeData {

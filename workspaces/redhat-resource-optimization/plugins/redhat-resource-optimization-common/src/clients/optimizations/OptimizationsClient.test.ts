@@ -18,8 +18,8 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { OptimizationsClient } from './OptimizationsClient';
 import { DiscoveryApi } from '../../generated/types/discovery';
-import { GetRecommendationByIdRequest } from '../../models/requests';
-import * as GetRecommendationByIdMockResponse from './fixtures/GetRecommendationByIdMockResponse.json';
+import { GetRecommendationByIdRequest } from './types';
+import RecommendationMockResponse from './fixtures/recommendation-mock.json' assert { type: 'json' };
 
 function makePlotsDataPropertyPathWithTerm(
   term: 'short' | 'medium' | 'long',
@@ -51,13 +51,14 @@ const server = setupServer(
 );
 
 // eslint-disable-next-line jest/no-disabled-tests
-describe.skip('OptimizationsApiClientProxy.ts', () => {
+describe('OptimizationsApiClientProxy.ts', () => {
   let client: OptimizationsClient;
 
   beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
   beforeEach(() => {
     client = new OptimizationsClient({
       discoveryApi: mockDiscoveryApi,
+      fetchApi: { fetch: globalThis.fetch },
     });
   });
   afterEach(() => server.resetHandlers());
@@ -72,7 +73,7 @@ describe.skip('OptimizationsApiClientProxy.ts', () => {
         server.use(
           http.get(
             `${MOCK_BASE_URL}/cost-management/v1/recommendations/openshift/:id`,
-            _info => HttpResponse.json(GetRecommendationByIdMockResponse),
+            _info => HttpResponse.json(RecommendationMockResponse),
           ),
         );
 
@@ -114,7 +115,7 @@ describe.skip('OptimizationsApiClientProxy.ts', () => {
         server.use(
           http.get(
             `${MOCK_BASE_URL}/cost-management/v1/recommendations/openshift/:id`,
-            _info => HttpResponse.json(GetRecommendationByIdMockResponse),
+            _info => HttpResponse.json(RecommendationMockResponse),
           ),
         );
 
