@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Backstage Authors
+ * Copyright 2025 The Backstage Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,3 +21,24 @@ export type OptimizationsApi = Omit<
   InstanceType<typeof DefaultApiClient>,
   'fetchApi' | 'discoveryApi'
 >;
+
+/**
+ * This is a copy of GetTokenResponse, to avoid importing redhat-resource-optimization-backend.
+ *
+ * @public
+ */
+export interface GetTokenResponse {
+  accessToken: string;
+  /** The Unix Epoch at which the token will expire  */
+  expiresAt: number;
+}
+
+/** @public */
+export type GetRecommendationByIdRequest = Parameters<
+  OptimizationsApi['getRecommendationById']
+>[0];
+
+/** @public */
+export type GetRecommendationListRequest = Parameters<
+  OptimizationsApi['getRecommendationList']
+>[0];

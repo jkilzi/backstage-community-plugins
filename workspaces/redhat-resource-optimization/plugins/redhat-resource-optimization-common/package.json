@@ -27,6 +27,8 @@
   },
   "exports": {
     ".": "./src/index.ts",
+    "./models": "./src/generated/models/index.ts",
+    "./clients": "./src/clients/index.ts",
     "./package.json": "./package.json"
   },
   "files": [
@@ -34,9 +36,7 @@
   ],
   "jest": {
     "testEnvironmentOptions": {
-      "customExportConditions": [
-        ""
-      ]
+      "customExportConditions": []
     }
   },
   "license": "Apache-2.0",
@@ -65,6 +65,12 @@
   "types": "src/index.ts",
   "typesVersions": {
     "*": {
+      "models": [
+        "src/generated/models/index.ts"
+      ],
+      "clients": [
+        "src/clients/index.ts"
+      ],
       "package.json": [
         "package.json"
       ]

@@ -1,7 +1,6 @@
 {
   "folders": [
     {
-      "name": "Red Hat - Resource Optimization",
       "path": "."
     }
   ],
@@ -9,10 +8,11 @@
     "recommendations": [
       "esbenp.prettier-vscode",
       "dbaeumer.vscode-eslint",
-      "orta.vscode-jest",
-    ],
+      "orta.vscode-jest"
+    ]
   },
   "settings": {
+    "window.title": "Resource Optimization Workspace",
     "jest.jestCommandLine": "node_modules/.bin/jest --config node_modules/@backstage/cli/config/jest.js",
     "jest.runMode": {
       "type": "on-demand"
@@ -20,6 +20,7 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay"
   },
   "launch": {
     "version": "0.2.0",
