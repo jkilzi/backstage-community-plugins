@@ -74,6 +74,9 @@
       "clients": [
         "src/clients/index.ts"
       ],
+      "permissions": [
+        "src/permissions.ts"
+      ],
       "package.json": [
         "package.json"
       ]
