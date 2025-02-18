@@ -35,15 +35,8 @@
     ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
-  "typesVersions": {
-    "*": {
-      "package.json": [
-        "package.json"
-      ]
-    }
-  },
   "files": [
-    "app-config.dynamic.yaml",
+    "app-config.janus-idp.yaml",
     "dist",
     "config.d.ts"
   ],
@@ -68,5 +61,12 @@
     "test": "backstage-cli package test"
   },
   "types": "src/index.ts",
+  "typesVersions": {
+    "*": {
+      "package.json": [
+        "package.json"
+      ]
+    }
+  },
   "version": "1.1.0"
 }
