@@ -16,10 +16,14 @@
 import type {
   LoggerService,
   RootConfigService,
+  HttpAuthService,
+  PermissionsService,
 } from '@backstage/backend-plugin-api';
 
 /** @public */
 export interface RouterOptions {
   logger: LoggerService;
   config?: RootConfigService;
+  httpAuth: HttpAuthService;
+  permissions: PermissionsService;
 }

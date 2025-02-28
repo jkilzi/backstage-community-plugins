@@ -241,6 +241,12 @@ export class DefaultApiClient {
 }
 
 // @public (undocumented)
+export interface GetAccessResponse {
+  // (undocumented)
+  decision: string;
+}
+
+// @public (undocumented)
 export type GetRecommendationByIdRequest = Parameters<
   OptimizationsApi['getRecommendationById']
 >[0];

@@ -32,11 +32,15 @@ export const resourceOptimizationPlugin = createBackendPlugin({
         httpRouter: coreServices.httpRouter,
         logger: coreServices.logger,
         config: coreServices.rootConfig,
+        httpAuth: coreServices.httpAuth,
+        permissions: coreServices.permissions,
       },
-      async init({ httpRouter, logger, config }) {
+      async init({ httpRouter, logger, config, httpAuth, permissions }) {
         const router = await createRouter({
           logger,
           config,
+          httpAuth,
+          permissions,
         });
         // @ts-ignore
         httpRouter.use(router);

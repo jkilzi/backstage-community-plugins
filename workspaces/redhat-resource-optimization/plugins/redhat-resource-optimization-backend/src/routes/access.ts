@@ -13,32 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import express from 'express';
-import Router from 'express-promise-router';
+import type { RequestHandler } from 'express';
 import type { RouterOptions } from '../models/RouterOptions';
-import { getToken } from '../routes/token';
-import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
+import { authorize } from '../util/checkPermissions';
 import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common/permissions';
-import { getAccess } from '../routes/access';
 
-/** @public */
-export async function createRouter(
-  options: RouterOptions,
-): Promise<express.Router> {
-  const router = Router();
-  const permissionsIntegrationRouter = createPermissionIntegrationRouter({
-    permissions: rosPluginPermissions,
-  });
+export const getAccess: (options: RouterOptions) => RequestHandler =
+  options => async (_, response) => {
+    const { logger, permissions, httpAuth } = options;
 
-  router.use(express.json());
-  router.use(permissionsIntegrationRouter);
+    const decision = await authorize(
+      _,
+      rosPluginPermissions,
+      permissions,
+      httpAuth,
+    );
 
-  router.get('/health', (_req, res) => {
-    res.json({ status: 'ok' });
-  });
-  router.get('/token', getToken(options));
+    logger.info(`Checking decision:`, decision);
 
-  router.get('/access', getAccess(options));
+    const body = {
+      decision: decision.result,
+    };
 
-  return router;
-}
+    response.json(body);
+  };
