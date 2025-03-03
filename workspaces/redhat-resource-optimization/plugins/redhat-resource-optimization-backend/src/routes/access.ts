@@ -17,10 +17,43 @@ import type { RequestHandler } from 'express';
 import type { RouterOptions } from '../models/RouterOptions';
 import { authorize } from '../util/checkPermissions';
 import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common/permissions';
+import { getTokenFromApi } from '../util/tokenUtil';
 
 export const getAccess: (options: RouterOptions) => RequestHandler =
   options => async (_, response) => {
-    const { logger, permissions, httpAuth } = options;
+    const { logger, permissions, httpAuth, optimizationApi } = options;
+
+    // token
+    const token = await getTokenFromApi(options);
+    console.log('Token at Access:', token);
+
+    // hit /optimization endpoint
+    const optimizationResponse = await optimizationApi.getRecommendationList(
+      {
+        query: {
+          limit: -1,
+          orderHow: 'desc',
+          orderBy: 'last_reported',
+        },
+      },
+      { token },
+    );
+
+    if (optimizationResponse.ok) {
+      const responseBody = await optimizationResponse.json();
+      const allProjects = [
+        ...new Set(
+          responseBody.data?.map(recommendation => recommendation.project),
+        ),
+      ];
+      const allClusters = [
+        ...new Set(
+          responseBody.data?.map(recommendation => recommendation.clusterAlias),
+        ),
+      ];
+    } else {
+      throw new Error(optimizationResponse.statusText);
+    }
 
     const decision = await authorize(
       _,

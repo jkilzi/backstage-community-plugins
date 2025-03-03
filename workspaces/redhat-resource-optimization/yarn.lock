@@ -2799,7 +2799,6 @@ __metadata:
     "@backstage/types": ^1.2.0
     "@testing-library/jest-dom": ^6.0.0
     "@types/lodash": ^4.17.5
-    "@y0n1/json-utils": "npm:@jsr/y0n1__json-utils@^1.1.1"
     cross-fetch: ^4.0.0
     lodash: ^4.17.21
     msw: ^2.3.4
@@ -17111,13 +17110,6 @@ __metadata:
   version: 4.2.2
   resolution: "@xtuc/long@npm:4.2.2"
   checksum: 8ed0d477ce3bc9c6fe2bf6a6a2cc316bb9c4127c5a7827bae947fa8ec34c7092395c5a283cc300c05b5fa01cbbfa1f938f410a7bf75db7c7846fea41949989ec
-  languageName: node
-  linkType: hard
-
-"@y0n1/json-utils@npm:@jsr/y0n1__json-utils@^1.1.1":
-  version: 1.1.1
-  resolution: "@jsr/y0n1__json-utils@npm:1.1.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fy0n1__json-utils%2F1.1.1.tgz"
-  checksum: 138084d0c2b0174afb41ab65e849ade0621dfe022571e76a75dab8a32a4a6b1d44600e3b94cc047699b7f3c4bb231df68c302ca17c5077569d766674c23b3830
   languageName: node
   linkType: hard
 

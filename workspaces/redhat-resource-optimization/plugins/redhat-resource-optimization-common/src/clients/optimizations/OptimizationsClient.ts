@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
-import { deepMapKeys } from '@y0n1/json-utils';
+import { deepMapKeys } from '../../util/mod';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
 import snakeCase from 'lodash/snakeCase';
