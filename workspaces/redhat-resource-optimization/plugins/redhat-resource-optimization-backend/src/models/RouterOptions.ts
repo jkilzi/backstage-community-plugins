@@ -19,6 +19,7 @@ import type {
   RootConfigService,
   HttpAuthService,
   PermissionsService,
+  CacheService,
 } from '@backstage/backend-plugin-api';
 
 /** @public */
@@ -27,5 +28,6 @@ export interface RouterOptions {
   config?: RootConfigService;
   httpAuth: HttpAuthService;
   permissions: PermissionsService;
+  cache: CacheService;
   optimizationApi: OptimizationsApi;
 }

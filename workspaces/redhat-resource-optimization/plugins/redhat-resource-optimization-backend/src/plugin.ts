@@ -35,6 +35,7 @@ export const resourceOptimizationPlugin = createBackendPlugin({
         config: coreServices.rootConfig,
         httpAuth: coreServices.httpAuth,
         permissions: coreServices.permissions,
+        cache: coreServices.cache,
         optimizationApi: optimizationServiceRef,
       },
       async init({
@@ -43,6 +44,7 @@ export const resourceOptimizationPlugin = createBackendPlugin({
         config,
         httpAuth,
         permissions,
+        cache,
         optimizationApi,
       }) {
         const router = await createRouter({
@@ -50,6 +52,7 @@ export const resourceOptimizationPlugin = createBackendPlugin({
           config,
           httpAuth,
           permissions,
+          cache,
           optimizationApi,
         });
         // @ts-ignore

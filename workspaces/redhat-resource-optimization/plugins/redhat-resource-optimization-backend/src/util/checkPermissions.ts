@@ -15,6 +15,7 @@
  */
 import { Request as HttpRequest } from 'express-serve-static-core';
 import {
+  AuthorizePermissionRequest,
   AuthorizePermissionResponse,
   AuthorizeResult,
   BasicPermission,
@@ -23,6 +24,15 @@ import {
   PermissionsService,
   HttpAuthService,
 } from '@backstage/backend-plugin-api';
+import {
+  rosClusterProjectPermission,
+  rosClusterSpecificPermission,
+} from '@backstage-community/plugin-redhat-resource-optimization-common/permissions';
+
+export interface ClusterProjectResult {
+  cluster: string;
+  project: string;
+}
 
 export const authorize = async (
   request: HttpRequest,
@@ -50,4 +60,66 @@ export const authorize = async (
       result: AuthorizeResult.DENY,
     }
   );
+};
+
+export const filterAuthorizedClusterIds = async (
+  request: HttpRequest,
+  permissionsSvc: PermissionsService,
+  httpAuth: HttpAuthService,
+  allClusters: string[],
+): Promise<string[]> => {
+  const credentials = await httpAuth.credentials(request);
+
+  const specificClusterRequests: AuthorizePermissionRequest[] = allClusters.map(
+    clusterId => ({
+      permission: rosClusterSpecificPermission(clusterId),
+    }),
+  );
+
+  const decisions = await permissionsSvc.authorize(specificClusterRequests, {
+    credentials,
+  });
+
+  return allClusters.filter(
+    (_, idx) => decisions[idx].result === AuthorizeResult.ALLOW,
+  );
+};
+
+export const filterAuthorizedClusterProjectIds = async (
+  request: HttpRequest,
+  permissionsSvc: PermissionsService,
+  httpAuth: HttpAuthService,
+  allClusters: string[],
+  allProjects: string[],
+): Promise<ClusterProjectResult[]> => {
+  const credentials = await httpAuth.credentials(request);
+
+  const specificClusterProjectRequests: AuthorizePermissionRequest[] = [];
+  const clusterProjectMap: ClusterProjectResult[] = [];
+
+  for (let i = 0; i < allClusters.length; i++) {
+    for (let j = 0; j < allProjects.length; j++) {
+      specificClusterProjectRequests.push({
+        permission: rosClusterProjectPermission(allClusters[i], allProjects[j]),
+      });
+
+      clusterProjectMap.push({
+        cluster: allClusters[i],
+        project: allProjects[j],
+      });
+    }
+  }
+
+  const decisions = await permissionsSvc.authorize(
+    specificClusterProjectRequests,
+    {
+      credentials,
+    },
+  );
+
+  const finalResult = clusterProjectMap.filter(
+    (_, idx) => decisions[idx].result === AuthorizeResult.ALLOW,
+  );
+
+  return finalResult;
 };

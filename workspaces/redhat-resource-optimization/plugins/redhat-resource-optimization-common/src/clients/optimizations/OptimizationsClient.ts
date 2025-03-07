@@ -18,6 +18,7 @@ import { deepMapKeys } from '../../util/mod';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
 import snakeCase from 'lodash/snakeCase';
+import merge from 'lodash/merge';
 import { pluginId } from '../../generated/pluginId';
 import {
   DefaultApiClient,
@@ -70,6 +71,8 @@ export class OptimizationsClient implements OptimizationsApi {
   private readonly fetchApi: FetchApi;
   private readonly defaultClient: DefaultApiClient;
   private token?: string;
+  private clusterIds?: string[];
+  private projectIds?: string[];
 
   constructor(options: { discoveryApi: DiscoveryApi; fetchApi?: FetchApi }) {
     this.defaultClient = new DefaultApiClient({
@@ -166,14 +169,29 @@ export class OptimizationsClient implements OptimizationsApi {
       throw error;
     }
 
+    const { authorizeClusterIds, authorizeProjectIds } = accessAPIResponse;
+    this.clusterIds = authorizeClusterIds;
+    this.projectIds = authorizeProjectIds;
+
+    const clusterProjectParams = {
+      query: {
+        cluster: this.clusterIds,
+        project: this.projectIds,
+      },
+    };
+
     if (!this.token) {
       const { accessToken } = await this.getNewToken();
       this.token = accessToken;
     }
 
-    let response = await asyncOp.call(this.defaultClient, request, {
-      token: this.token,
-    });
+    let response = await asyncOp.call(
+      this.defaultClient,
+      merge({}, request, clusterProjectParams),
+      {
+        token: this.token,
+      },
+    );
 
     if (!response.ok) {
       if (response.status === 401) {
