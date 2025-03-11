@@ -25,7 +25,7 @@ import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resourc
 import { getTokenFromApi } from '../util/tokenUtil';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
 import { deepMapKeys } from '@backstage-community/plugin-redhat-resource-optimization-common/json-utils';
-import camelCase from 'lodash';
+import camelCase from 'lodash/camelCase';
 import { RecommendationList } from '@backstage-community/plugin-redhat-resource-optimization-common';
 
 export const getAccess: (options: RouterOptions) => RequestHandler =
@@ -84,9 +84,9 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
       );
 
       if (optimizationResponse.ok) {
-        const responseBody = await optimizationResponse.json();
+        const data = await optimizationResponse.json();
         const camelCaseTransformedResponse = deepMapKeys(
-          responseBody,
+          data,
           camelCase as (value: string | number) => string,
         ) as RecommendationList;
 

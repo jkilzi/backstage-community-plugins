@@ -1,12 +1,5 @@
-p, role:default/rosUser, ros.plugin, read, allow
-
-p, role:default/rosUser, ros.demolab.costmanagement-metrics-operator, read, allow
-p, role:default/rosUser, ros.demolab.thanos, read, allow
-
-p, role:default/rosUser, ros.OpenShift on GCP - Nise Populator.openshift, read, allow
-p, role:default/rosUser, ros.OpenShift on GCP - Nise Populator.cost-management, read, allow
-p, role:default/rosUser, ros.OpenShift on GCP - Nise Populator.fall, read, allow
 
 
+p, role:default/rosUser, ros.demolab, read, allow
 
 g, user:default/preeti.exploring.life, role:default/rosUser
