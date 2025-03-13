@@ -34,6 +34,28 @@
     "./permissions": "./src/permissions.ts",
     "./package.json": "./package.json"
   },
+  "typesVersions": {
+    "*": {
+      "models": [
+        "src/generated/models/index.ts"
+      ],
+      "clients": [
+        "src/clients/index.ts"
+      ],
+      "DefaultApiClient": [
+        "src/generated/apis/index.ts"
+      ],
+      "json-utils": [
+        "src/util/mod.ts"
+      ],
+      "permissions": [
+        "src/permissions.ts"
+      ],
+      "package.json": [
+        "package.json"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
@@ -66,27 +88,5 @@
   },
   "sideEffects": false,
   "types": "src/index.ts",
-  "typesVersions": {
-    "*": {
-      "models": [
-        "src/generated/models/index.ts"
-      ],
-      "clients": [
-        "src/clients/index.ts"
-      ],
-      "DefaultApiClient": [
-        "./src/generated/apis/index.ts"
-      ],
-      "./json-utils": [
-        "./src/util/mod.ts"
-      ],
-      "permissions": [
-        "src/permissions.ts"
-      ],
-      "package.json": [
-        "package.json"
-      ]
-    }
-  },
   "version": "1.1.0"
 }
