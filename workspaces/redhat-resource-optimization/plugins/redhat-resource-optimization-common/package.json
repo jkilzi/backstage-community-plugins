@@ -11,7 +11,6 @@
   "dependencies": {
     "@backstage-community/plugin-rbac-common": "^1.12.2",
     "@backstage/core-plugin-api": "^1.10.0",
-    "@backstage/plugin-permission-common": "^0.8.3",
     "cross-fetch": "^4.0.0",
     "lodash": "^4.17.21",
     "uri-template": "^2.0.0"
