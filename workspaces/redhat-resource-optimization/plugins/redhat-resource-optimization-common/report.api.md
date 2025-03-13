@@ -385,6 +385,8 @@ export interface OrchestratorSlimApi {
   ): Promise<{
     id: string;
   }>;
+  // (undocumented)
+  isWorkflowAvailable(workflowId: string): Promise<boolean>;
 }
 
 // @public (undocumented)
@@ -401,6 +403,8 @@ export class OrchestratorSlimClient implements OrchestratorSlimApi {
   ): Promise<{
     id: string;
   }>;
+  // (undocumented)
+  isWorkflowAvailable(workflowId: string): Promise<boolean>;
 }
 
 // @public (undocumented)
