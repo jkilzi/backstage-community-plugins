@@ -72,7 +72,6 @@ export class OptimizationsClient implements OptimizationsApi {
   private readonly defaultClient: DefaultApiClient;
   private token?: string;
   private clusterIds?: string[];
-  private projectIds?: string[];
 
   constructor(options: { discoveryApi: DiscoveryApi; fetchApi?: FetchApi }) {
     this.defaultClient = new DefaultApiClient({
@@ -169,14 +168,12 @@ export class OptimizationsClient implements OptimizationsApi {
       throw error;
     }
 
-    const { authorizeClusterIds, authorizeProjectIds } = accessAPIResponse;
+    const { authorizeClusterIds } = accessAPIResponse;
     this.clusterIds = authorizeClusterIds;
-    this.projectIds = authorizeProjectIds;
 
-    const clusterProjectParams = {
+    const clusterParams = {
       query: {
         cluster: this.clusterIds,
-        project: this.projectIds,
       },
     };
 
@@ -187,7 +184,7 @@ export class OptimizationsClient implements OptimizationsApi {
 
     let response = await asyncOp.call(
       this.defaultClient,
-      merge({}, request, clusterProjectParams),
+      merge({}, request, clusterParams),
       {
         token: this.token,
       },

@@ -17,9 +17,7 @@ import type { RequestHandler } from 'express';
 import type { RouterOptions } from '../models/RouterOptions';
 import {
   authorize,
-  filterAuthorizedClusterProjectIds,
   filterAuthorizedClusterIds,
-  ClusterProjectResult,
 } from '../util/checkPermissions';
 import { rosPluginPermissions } from '@backstage-community/plugin-redhat-resource-optimization-common/permissions';
 import { getTokenFromApi } from '../util/tokenUtil';
@@ -50,23 +48,16 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
       const body = {
         decision: finalDecision,
         authorizeClusterIds: [],
-        authorizeProjectIds: [],
       };
       return response.json(body);
     }
 
     // Filtering logic
     const ALL_CLUSTERS_CACHE_KEY = 'all_clusters';
-    const ALL_PROJECTS_CACHE_KEY = 'all_projects';
     let allClusters: string[] = [];
-    let allProjects: string[] = [];
 
-    if (
-      (await cache.get(ALL_CLUSTERS_CACHE_KEY)) &&
-      (await cache.get(ALL_PROJECTS_CACHE_KEY))
-    ) {
+    if (await cache.get(ALL_CLUSTERS_CACHE_KEY)) {
       allClusters = (await cache.get(ALL_CLUSTERS_CACHE_KEY)) || [];
-      allProjects = (await cache.get(ALL_PROJECTS_CACHE_KEY)) || [];
     } else {
       // token
       const token = await getTokenFromApi(options);
@@ -100,19 +91,8 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
             ),
           ].filter(cluster => cluster !== undefined);
 
-          allProjects = [
-            ...new Set(
-              camelCaseTransformedResponse.data.map(
-                recommendation => recommendation.project,
-              ),
-            ),
-          ].filter(project => project !== undefined);
-
           // store it in Cache
           await cache.set(ALL_CLUSTERS_CACHE_KEY, allClusters, {
-            ttl: 15 * 60 * 1000,
-          });
-          await cache.set(ALL_PROJECTS_CACHE_KEY, allProjects, {
             ttl: 15 * 60 * 1000,
           });
         }
@@ -121,30 +101,11 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
       }
     }
 
-    let authorizeClusterIds: string[] = await filterAuthorizedClusterIds(
+    const authorizeClusterIds: string[] = await filterAuthorizedClusterIds(
       _,
       permissions,
       httpAuth,
       allClusters,
-    );
-
-    const authorizeClustersProjects: ClusterProjectResult[] =
-      await filterAuthorizedClusterProjectIds(
-        _,
-        permissions,
-        httpAuth,
-        allClusters,
-        allProjects,
-      );
-
-    authorizeClusterIds = [
-      ...new Set([
-        ...authorizeClusterIds,
-        ...authorizeClustersProjects.map(result => result.cluster),
-      ]),
-    ];
-    const authorizeProjectIds = authorizeClustersProjects.map(
-      result => result.project,
     );
 
     if (authorizeClusterIds.length > 0) {
@@ -156,7 +117,6 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
     const body = {
       decision: finalDecision,
       authorizeClusterIds,
-      authorizeProjectIds,
     };
 
     return response.json(body);
