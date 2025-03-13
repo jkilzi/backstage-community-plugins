@@ -83,13 +83,17 @@ export const getAccess: (options: RouterOptions) => RequestHandler =
 
         // retrive all clusters and project Ids from the API result
         if (camelCaseTransformedResponse.data) {
+          const clusterDataFromResponse = camelCaseTransformedResponse.data.map(
+            recommendation => recommendation.clusterAlias,
+          );
+
           allClusters = [
-            ...new Set(
-              camelCaseTransformedResponse.data?.map(
-                recommendation => recommendation.clusterAlias,
+            ...new Set<string>(
+              clusterDataFromResponse.filter(
+                (cluster): cluster is string => cluster !== undefined,
               ),
             ),
-          ].filter(cluster => cluster !== undefined);
+          ];
 
           // store it in Cache
           await cache.set(ALL_CLUSTERS_CACHE_KEY, allClusters, {
