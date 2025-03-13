@@ -25,9 +25,10 @@ import { JsonNode, type JsonNodeVisitorOptions } from './lib/json_node';
 /**
  * Recursively transforms the keys of JSON objects within the input value using the provided function.
  *
+ * @public
  * @param input - The input value to process. Must be a valid JSON value.
  * @param functionOrOptions - A function that can be used to change the keys in the provided input or a configuration object.
- * @throws {TypeError} If the input is not a valid JSON value.
+ * @throws \{TypeError\} If the input is not a valid JSON value.
  *
  * @returns The same value when the input is a JSON scalar, an empty array or empty object; otherwise a new reference value.
  */

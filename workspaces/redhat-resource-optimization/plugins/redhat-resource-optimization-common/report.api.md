@@ -243,6 +243,8 @@ export class DefaultApiClient {
 // @public (undocumented)
 export interface GetAccessResponse {
   // (undocumented)
+  authorizeClusterIds: string[];
+  // (undocumented)
   decision: string;
 }
 

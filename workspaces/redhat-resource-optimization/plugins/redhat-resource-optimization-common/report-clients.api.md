@@ -11,6 +11,8 @@ import type { JsonObject } from '@backstage/types';
 // @public (undocumented)
 export interface GetAccessResponse {
   // (undocumented)
+  authorizeClusterIds: string[];
+  // (undocumented)
   decision: string;
 }
 

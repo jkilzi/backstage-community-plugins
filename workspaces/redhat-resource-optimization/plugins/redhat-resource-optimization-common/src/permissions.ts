@@ -21,6 +21,7 @@ export const rosPluginReadPermission = createPermission({
   attributes: { action: 'read' },
 });
 
+/** @public */
 export const rosClusterSpecificPermission = (clusterId: string) =>
   createPermission({
     name: `ros.${clusterId}`,
