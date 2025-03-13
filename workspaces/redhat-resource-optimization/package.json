@@ -59,7 +59,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "@backstage/backend-plugin-api": "^1.1.0"
   },
   "prettier": "@backstage/cli/config/prettier",
   "lint-staged": {
