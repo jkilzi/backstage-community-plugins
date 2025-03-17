@@ -50,17 +50,23 @@ export const OptimizationsBreakdownPage = () => {
   const [recommendationTerm, setRecommendationTerm] =
     useState<Interval>('shortTerm');
   const loc = useLocation();
-
+  const { id } = useParams();
   const configApi = useApi(configApiRef);
   const workflowIdRef = useRef<string>(
     configApi.getOptionalString(
       'resourceOptimization.optimizationWorkflowId',
     ) ?? '',
   );
-
-  const { id } = useParams();
+  const orchestratorSlimApi = useApi(orchestratorSlimApiRef);
   const optimizationsApi = useApi(optimizationsApiRef);
   const { value, loading, error } = useAsync(async () => {
+    const isWorkflowAvailable = await orchestratorSlimApi.isWorkflowAvailable(
+      workflowIdRef.current,
+    );
+    if (!isWorkflowAvailable) {
+      workflowIdRef.current = '';
+    }
+
     const apiQuery = {
       path: {
         recommendationId: id!,
@@ -91,7 +97,6 @@ export const OptimizationsBreakdownPage = () => {
     [value],
   );
 
-  const orchestratorSlimApi = useApi(orchestratorSlimApiRef);
   const [_, applyRecommendation] = useAsyncFn(
     async (workflowId: string, workflowData: WorkflowDataSchema) => {
       const payload = await orchestratorSlimApi.executeWorkflow(workflowId, {
