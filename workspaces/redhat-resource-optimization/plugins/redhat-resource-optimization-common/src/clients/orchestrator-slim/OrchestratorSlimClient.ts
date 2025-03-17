@@ -38,6 +38,26 @@ export class OrchestratorSlimClient implements OrchestratorSlimApi {
     this.identityApi = options.identityApi;
   }
 
+  async isWorkflowAvailable(workflowId: string): Promise<boolean> {
+    if (!this.baseUrl) {
+      this.baseUrl = await this.discoveryApi.getBaseUrl('orchestrator');
+    }
+
+    const url = `${this.baseUrl}/v2/workflows/${encodeURIComponent(
+      workflowId,
+    )}/overview`;
+
+    let result = false;
+    try {
+      const response = await this.fetchApi.fetch(url, { method: 'GET' });
+      result = response.ok;
+    } catch {
+      // Carry on...
+    }
+
+    return result;
+  }
+
   /** @public */
   async executeWorkflow<D = JsonObject>(
     workflowId: string,
