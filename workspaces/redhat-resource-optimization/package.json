@@ -23,6 +23,7 @@
     "fix": "backstage-cli repo fix",
     "lint": "backstage-cli repo lint --since origin/main",
     "lint:all": "backstage-cli repo lint",
+    "lint:fix": "backstage-cli repo lint --fix",
     "format": "prettier --write .",
     "postinstall": "cd ../../ && yarn install",
     "prettier:check": "prettier --check .",
