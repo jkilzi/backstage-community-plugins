@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import useAsync from 'react-use/lib/useAsync';
 import snakeCase from 'lodash/snakeCase';
 import {
