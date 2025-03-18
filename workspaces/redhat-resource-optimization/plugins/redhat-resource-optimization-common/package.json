@@ -9,8 +9,9 @@
     "role": "common-library"
   },
   "dependencies": {
+    "@backstage-community/plugin-rbac-common": "^1.12.2",
     "@backstage/core-plugin-api": "^1.10.0",
-    "@y0n1/json-utils": "npm:@jsr/y0n1__json-utils@^1.1.1",
+    "@backstage/plugin-permission-common": "^0.8.4",
     "cross-fetch": "^4.0.0",
     "lodash": "^4.17.21",
     "uri-template": "^2.0.0"
@@ -29,7 +30,32 @@
     ".": "./src/index.ts",
     "./models": "./src/generated/models/index.ts",
     "./clients": "./src/clients/index.ts",
+    "./DefaultApiClient": "./src/generated/apis/index.ts",
+    "./json-utils": "./src/util/mod.ts",
+    "./permissions": "./src/permissions.ts",
     "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "models": [
+        "src/generated/models/index.ts"
+      ],
+      "clients": [
+        "src/clients/index.ts"
+      ],
+      "DefaultApiClient": [
+        "src/generated/apis/index.ts"
+      ],
+      "json-utils": [
+        "src/util/mod.ts"
+      ],
+      "permissions": [
+        "src/permissions.ts"
+      ],
+      "package.json": [
+        "package.json"
+      ]
+    }
   },
   "files": [
     "dist"
@@ -63,18 +89,5 @@
   },
   "sideEffects": false,
   "types": "src/index.ts",
-  "typesVersions": {
-    "*": {
-      "models": [
-        "src/generated/models/index.ts"
-      ],
-      "clients": [
-        "src/clients/index.ts"
-      ],
-      "package.json": [
-        "package.json"
-      ]
-    }
-  },
   "version": "1.1.0"
 }

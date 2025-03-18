@@ -25,6 +25,13 @@ describe('createRouter', () => {
   beforeAll(async () => {
     const router = await createRouter({
       logger: mockServices.rootLogger(),
+      httpAuth: mockServices.httpAuth(),
+      permissions: mockServices.permissions.mock(),
+      cache: mockServices.cache.mock(),
+      optimizationApi: {
+        getRecommendationList: jest.fn(),
+        getRecommendationById: jest.fn(),
+      },
     });
     app = express().use(router);
   });

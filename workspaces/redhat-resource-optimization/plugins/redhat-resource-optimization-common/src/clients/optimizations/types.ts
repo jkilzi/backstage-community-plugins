@@ -33,6 +33,14 @@ export interface GetTokenResponse {
   expiresAt: number;
 }
 
+/**
+ * @public
+ */
+export interface GetAccessResponse {
+  decision: string;
+  authorizeClusterIds: string[];
+}
+
 /** @public */
 export type GetRecommendationByIdRequest = Parameters<
   OptimizationsApi['getRecommendationById']

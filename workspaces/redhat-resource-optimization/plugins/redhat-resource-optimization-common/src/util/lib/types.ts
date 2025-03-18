@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Backstage Authors
+ * Copyright 2025 The Backstage Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { OptimizationsApi } from '@backstage-community/plugin-redhat-resource-optimization-common';
-import type {
-  LoggerService,
-  RootConfigService,
-  HttpAuthService,
-  PermissionsService,
-  CacheService,
-} from '@backstage/backend-plugin-api';
-
-/** @public */
-export interface RouterOptions {
-  logger: LoggerService;
-  config?: RootConfigService;
-  httpAuth: HttpAuthService;
-  permissions: PermissionsService;
-  cache: CacheService;
-  optimizationApi: OptimizationsApi;
-}
+export type { JsonArray, JsonObject, JsonScalar, JsonValue } from './json';
+export type { JsonNodeVisitorOptions } from './json_node';

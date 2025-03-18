@@ -18,6 +18,7 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './service/router';
+import { optimizationServiceRef } from './service/optimizationsService';
 
 /**
  * resourceOptimizationPlugin backend plugin
@@ -32,11 +33,27 @@ export const resourceOptimizationPlugin = createBackendPlugin({
         httpRouter: coreServices.httpRouter,
         logger: coreServices.logger,
         config: coreServices.rootConfig,
+        httpAuth: coreServices.httpAuth,
+        permissions: coreServices.permissions,
+        cache: coreServices.cache,
+        optimizationApi: optimizationServiceRef,
       },
-      async init({ httpRouter, logger, config }) {
+      async init({
+        httpRouter,
+        logger,
+        config,
+        httpAuth,
+        permissions,
+        cache,
+        optimizationApi,
+      }) {
         const router = await createRouter({
           logger,
           config,
+          httpAuth,
+          permissions,
+          cache,
+          optimizationApi,
         });
         // @ts-ignore
         httpRouter.use(router);

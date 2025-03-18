@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 import type { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
-import { deepMapKeys } from '@y0n1/json-utils';
+import { deepMapKeys } from '../../util/mod';
 import crossFetch from 'cross-fetch';
 import camelCase from 'lodash/camelCase';
 import snakeCase from 'lodash/snakeCase';
+import merge from 'lodash/merge';
 import { pluginId } from '../../generated/pluginId';
 import {
   DefaultApiClient,
@@ -33,7 +34,10 @@ import type {
   GetRecommendationListRequest,
   GetTokenResponse,
   OptimizationsApi,
+  GetAccessResponse,
 } from './types';
+import { UnauthorizedError } from '@backstage-community/plugin-rbac-common';
+import { AuthorizeResult } from '@backstage/plugin-permission-common';
 
 type DefaultApiClientOpFunc<
   TRequest = GetRecommendationByIdRequest | GetRecommendationListRequest,
@@ -67,6 +71,7 @@ export class OptimizationsClient implements OptimizationsApi {
   private readonly fetchApi: FetchApi;
   private readonly defaultClient: DefaultApiClient;
   private token?: string;
+  private clusterIds?: string[];
 
   constructor(options: { discoveryApi: DiscoveryApi; fetchApi?: FetchApi }) {
     this.defaultClient = new DefaultApiClient({
@@ -135,6 +140,13 @@ export class OptimizationsClient implements OptimizationsApi {
     };
   }
 
+  private async getAccess(): Promise<GetAccessResponse> {
+    const baseUrl = await this.discoveryApi.getBaseUrl(`${pluginId}`);
+    const response = await this.fetchApi.fetch(`${baseUrl}/access`);
+    const data = (await response.json()) as GetAccessResponse;
+    return data;
+  }
+
   private async getNewToken(): Promise<GetTokenResponse> {
     const baseUrl = await this.discoveryApi.getBaseUrl(`${pluginId}`);
     const response = await this.fetchApi.fetch(`${baseUrl}/token`);
@@ -149,14 +161,34 @@ export class OptimizationsClient implements OptimizationsApi {
     asyncOp: DefaultApiClientOpFunc<TRequest, TResponse>,
     request: TRequest,
   ): Promise<TypedResponse<TResponse>> {
+    const accessAPIResponse = await this.getAccess();
+
+    if (accessAPIResponse.decision === AuthorizeResult.DENY) {
+      const error = new UnauthorizedError();
+      throw error;
+    }
+
+    const { authorizeClusterIds } = accessAPIResponse;
+    this.clusterIds = authorizeClusterIds;
+
+    const clusterParams = {
+      query: {
+        cluster: this.clusterIds,
+      },
+    };
+
     if (!this.token) {
       const { accessToken } = await this.getNewToken();
       this.token = accessToken;
     }
 
-    let response = await asyncOp.call(this.defaultClient, request, {
-      token: this.token,
-    });
+    let response = await asyncOp.call(
+      this.defaultClient,
+      merge({}, request, clusterParams),
+      {
+        token: this.token,
+      },
+    );
 
     if (!response.ok) {
       if (response.status === 401) {
