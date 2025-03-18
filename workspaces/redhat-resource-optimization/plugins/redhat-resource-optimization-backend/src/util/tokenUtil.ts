@@ -55,7 +55,6 @@ export const getTokenFromApi = async (options: RouterOptions) => {
   if (rhSsoResponse.ok) {
     const { access_token } = await rhSsoResponse.json();
     accessToken = access_token;
-    // console.log("RH SSO Response:", accessToken)
   } else {
     throw new Error(rhSsoResponse.statusText);
   }
