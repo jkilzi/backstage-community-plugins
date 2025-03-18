@@ -69,48 +69,12 @@ const availableFilteringOptionsInitialState: AvailableFilteringOptions = {
 /** @public */
 export function OptimizationsPage() {
   const [currentPage, setCurrentPage] = useState<number>(0); // First page starts from 0
-  const [availableFilteringOptions, setAvailableFilteringOptions] =
-    useState<AvailableFilteringOptions>(availableFilteringOptionsInitialState);
   const [queryState, setQueryState] = useState<QueryState>(initialQueryState);
   const api = useApi(optimizationsApiRef);
   const { value, error, loading } = useAsync(async () => {
     const response = await api.getRecommendationList({ query: queryState });
     return response.json();
   }, [queryState]);
-
-  useEffect(() => {
-    const uniqueClusterOptions = new Set<string>();
-    const uniqueProjectOptions = new Set<string>();
-    const uniqueWorkloadOptions = new Set<string>();
-    const uniqueWorkloadTypeOptions = new Set<string>();
-    for (const {
-      clusterAlias,
-      project,
-      workload,
-      workloadType,
-    } of value?.data ?? []) {
-      if (clusterAlias) {
-        uniqueClusterOptions.add(clusterAlias);
-      }
-      if (project) {
-        uniqueProjectOptions.add(project);
-      }
-      if (workload) {
-        uniqueWorkloadOptions.add(workload);
-      }
-      if (workloadType) {
-        uniqueWorkloadTypeOptions.add(workloadType);
-      }
-    }
-    const nextAvailableFilteringOptions: AvailableFilteringOptions = {
-      cluster: Array.from(uniqueClusterOptions),
-      project: Array.from(uniqueProjectOptions),
-      workload: Array.from(uniqueWorkloadOptions),
-      workloadType: Array.from(uniqueWorkloadTypeOptions),
-    };
-
-    setAvailableFilteringOptions(nextAvailableFilteringOptions);
-  }, [value?.data]);
 
   const columns = useMemo<TableColumn<Recommendations>[]>(
     () => [
@@ -246,19 +210,19 @@ export function OptimizationsPage() {
         <PageLayout.Filters>
           <Filters
             cluster={{
-              options: availableFilteringOptions.cluster ?? [],
+              options: [],
               label: 'CLUSTERS',
             }}
             project={{
-              options: availableFilteringOptions.project ?? [],
+              options: [],
               label: 'PROJECTS',
             }}
             workload={{
-              options: availableFilteringOptions.workload ?? [],
+              options: [],
               label: 'WORKLOADS',
             }}
             workloadType={{
-              options: availableFilteringOptions.workloadType ?? [],
+              options: [],
               label: 'TYPES',
             }}
             onFiltersChange={handleFiltersChange}
@@ -282,6 +246,11 @@ export function OptimizationsPage() {
               search: true,
               sorting: true,
               thirdSortClick: false,
+            }}
+            localization={{
+              toolbar: {
+                searchPlaceholder: 'Search Container',
+              },
             }}
             data={data}
             columns={columns}
