@@ -1,6 +1,0 @@
-p, role:default/rosUser, ros.plugin, read, deny
-
-p, role:default/rosUser, ros.OpenShift on AWS, read, allow
-p, role:default/rosUser, ros.demolab, read, allow
-
-g, user:default/preeti.exploring.life, role:default/rosUser

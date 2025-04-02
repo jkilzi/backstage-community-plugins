@@ -11,9 +11,18 @@ The user is permitted to do an action if either the generic permission or the sp
 
 ## Defining Policy File
 
-To get started with policies, we recommend defining roles and assigning them to groups or users.
+To get started with policies, we recommend defining roles and assigning them to groups or users in a dedicated CSV file.
 
-As an example, check the following [policy file](../rbac/rbac-policy.csv)
+Here is an example policy file:
+
+```csv
+p, role:default/rosUser, ros.plugin, read, deny
+
+p, role:default/rosUser, ros.OpenShift on AWS, read, allow
+p, role:default/rosUser, ros.demolab, read, allow
+
+g, user:default/preeti.exploring.life, role:default/rosUser
+```
 
 ### ros.plugin Permission
 

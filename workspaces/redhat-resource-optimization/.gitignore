@@ -61,3 +61,6 @@ site
 
 # E2E test reports
 e2e-test-report/
+
+# RBAC Policies
+*policy.local.csv
