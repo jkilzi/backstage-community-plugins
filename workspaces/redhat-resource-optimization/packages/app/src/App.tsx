@@ -81,6 +81,7 @@ const options: Parameters<typeof createApp>[0] = {
         {...props}
         auto
         providers={[
+          'guest',
           {
             id: 'github',
             title: 'Github',
