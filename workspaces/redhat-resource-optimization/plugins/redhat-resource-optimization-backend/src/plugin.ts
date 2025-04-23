@@ -65,6 +65,10 @@ export const resourceOptimizationPlugin = createBackendPlugin({
           path: '/token',
           allow: 'user-cookie',
         });
+        httpRouter.addAuthPolicy({
+          path: '/access',
+          allow: 'user-cookie',
+        });
       },
     });
   },
