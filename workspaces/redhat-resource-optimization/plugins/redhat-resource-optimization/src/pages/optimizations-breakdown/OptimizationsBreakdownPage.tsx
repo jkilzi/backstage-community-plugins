@@ -32,8 +32,8 @@ import {
   getCurrentYAMLCodeData,
   getRecommendedYAMLCodeData,
 } from './models/YamlCodeData';
-import type { WorkflowDataSchema } from './models/WorkflowDataSchema';
 import { optimizationsApiRef, orchestratorSlimApiRef } from '../../apis';
+import { WorkflowDataSchema } from './models/WorkflowDataSchema';
 
 const getContainerData = (value: RecommendationBoxPlots) => [
   { key: 'Cluster', value: value?.clusterAlias },
@@ -49,7 +49,7 @@ const getContainerData = (value: RecommendationBoxPlots) => [
 export const OptimizationsBreakdownPage = () => {
   const [recommendationTerm, setRecommendationTerm] =
     useState<Interval>('shortTerm');
-  const loc = useLocation();
+  const location = useLocation();
   const { id } = useParams();
   const configApi = useApi(configApiRef);
   const workflowIdRef = useRef<string>(
@@ -80,16 +80,16 @@ export const OptimizationsBreakdownPage = () => {
     return payload;
   }, []);
 
+  const optimizationType = useMemo(() => {
+    return location.pathname.endsWith('performance')
+      ? OptimizationType.performance
+      : OptimizationType.cost;
+  }, [location.pathname]);
+
   const recommendedConfiguration = useMemo(
     () =>
-      getRecommendedYAMLCodeData(
-        value!,
-        recommendationTerm,
-        loc.pathname.endsWith('performance')
-          ? OptimizationType.performance
-          : OptimizationType.cost,
-      ),
-    [recommendationTerm, loc.pathname, value],
+      getRecommendedYAMLCodeData(value!, recommendationTerm, optimizationType),
+    [value, recommendationTerm, optimizationType],
   );
 
   const currentConfiguration = useMemo(
@@ -98,15 +98,14 @@ export const OptimizationsBreakdownPage = () => {
   );
 
   const [_, applyRecommendation] = useAsyncFn(
-    async (workflowId: string, workflowData: WorkflowDataSchema) => {
-      const payload = await orchestratorSlimApi.executeWorkflow(workflowId, {
-        inputData: {
-          ...workflowData,
-        },
-      });
+    async (workflowId: string, data: WorkflowDataSchema) => {
+      const payload = await orchestratorSlimApi.executeWorkflow(
+        workflowId,
+        data,
+      );
       return payload;
     },
-    [recommendedConfiguration],
+    [],
   );
 
   const navigate = useNavigate();
@@ -115,15 +114,43 @@ export const OptimizationsBreakdownPage = () => {
 
     applyRecommendation(workflowId, {
       clusterName: value!.clusterAlias!,
-      clusterUuid: value!.clusterUuid!,
-      project: value!.project!,
-      workload: value!.workload!,
-      container: value!.container!,
-      ...recommendedConfiguration,
+      resourceNamespace: value!.project!,
+      resourceType:
+        value?.workloadType?.toLocaleLowerCase() as WorkflowDataSchema['resourceType'],
+      resourceName: value!.workload!,
+      containerName: value!.container!,
+      containerResources: {
+        limits: {
+          cpu:
+            value?.recommendations?.recommendationTerms?.[recommendationTerm]
+              ?.recommendationEngines?.[optimizationType]?.config?.limits?.cpu
+              ?.amount ?? 0,
+          memory:
+            value?.recommendations?.recommendationTerms?.[recommendationTerm]
+              ?.recommendationEngines?.[optimizationType]?.config?.limits
+              ?.memory?.amount ?? 0,
+        },
+        requests: {
+          cpu:
+            value?.recommendations?.recommendationTerms?.[recommendationTerm]
+              ?.recommendationEngines?.[optimizationType]?.config?.requests?.cpu
+              ?.amount ?? 0,
+          memory:
+            value?.recommendations?.recommendationTerms?.[recommendationTerm]
+              ?.recommendationEngines?.[optimizationType]?.config?.requests
+              ?.memory?.amount ?? 0,
+        },
+      },
     }).then(response => {
       navigate(`/orchestrator/instances/${response.id}`);
     });
-  }, [applyRecommendation, navigate, recommendedConfiguration, value]);
+  }, [
+    applyRecommendation,
+    navigate,
+    optimizationType,
+    recommendationTerm,
+    value,
+  ]);
 
   const handleRecommendationTermChange = useCallback((event: any) => {
     setRecommendationTerm(event.target.value);
