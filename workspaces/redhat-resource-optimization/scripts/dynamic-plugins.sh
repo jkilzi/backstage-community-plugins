@@ -17,7 +17,7 @@ function _usage {
   cat <<EOF
 Usage: 
   $script_name clean
-  VERSION=<semver> $script_name [publish|pack]
+  VERSION=<semver> $script_name [publish|export]
 
 Environment variables:
   VERSION         Required. The new plugin version. This values is reflected in every package.json and other manifest files.
