@@ -16,7 +16,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useAsync from 'react-use/esm/useAsync';
-import useAsyncFn from 'react-use/esm/useAsyncFn';
 import {
   TabbedLayout,
   Progress,
@@ -33,7 +32,7 @@ import {
   getRecommendedYAMLCodeData,
 } from './models/YamlCodeData';
 import { optimizationsApiRef, orchestratorSlimApiRef } from '../../apis';
-import { WorkflowDataSchema } from './models/WorkflowDataSchema';
+import type { WorkflowInputDataSchema } from './models/WorkflowInputDataSchema';
 
 const getContainerData = (value: RecommendationBoxPlots) => [
   { key: 'Cluster', value: value?.clusterAlias },
@@ -46,10 +45,96 @@ const getContainerData = (value: RecommendationBoxPlots) => [
   },
 ];
 
+/**
+ * Adapts recommendation data into the input schema required for the optimization workflow.
+ *
+ * This function extracts and transforms resource recommendations (CPU/memory, limits/requests)
+ * from the provided `RecommendationBoxPlots` data structure, mapping them into a
+ * `WorkflowInputDataSchema` object suitable for workflow consumption.
+ *
+ * - Converts memory values from mebibytes to bytes where necessary.
+ * - Populates cluster, namespace, workload, and container information if available.
+ * - Handles both `limits` and `requests` for CPU and memory resources.
+ *
+ * @param recommendationData - The recommendation data containing resource suggestions and metadata.
+ * @param timeRange - The interval term for which recommendations are being adapted.
+ * @param optimizationType - The type of optimization engine to use for extracting recommendations.
+ * @param type - Specifies the 'limits' or 'requests' resource values.
+ * @param resource - Specifies the resource type, either 'cpu' or 'memory'.
+ * @returns A `WorkflowInputDataSchema` object populated with the adapted recommendation data.
+ */
+const adaptRecommendationsDataToWorkflowInputData = (
+  recommendationData: RecommendationBoxPlots,
+  timeRange: Interval,
+  optimizationType: OptimizationType,
+): WorkflowInputDataSchema => {
+  if (
+    !recommendationData.clusterAlias ||
+    !recommendationData.project ||
+    !recommendationData.workloadType ||
+    !recommendationData.workload ||
+    !recommendationData.container
+  ) {
+    throw new Error('Invalid recommendation data');
+  }
+
+  const workflowInputData: WorkflowInputDataSchema = {
+    clusterName: recommendationData.clusterAlias,
+    resourceType: recommendationData.workloadType.toLocaleLowerCase(
+      'en-US',
+    ) as WorkflowInputDataSchema['resourceType'],
+    resourceNamespace: recommendationData.project,
+    resourceName: recommendationData.workload,
+    containerName: recommendationData.container,
+    containerResources: {},
+  };
+
+  const config =
+    recommendationData.recommendations?.recommendationTerms?.[timeRange]
+      ?.recommendationEngines?.[optimizationType]?.config;
+
+  if (config && config.limits) {
+    workflowInputData.containerResources.limits = {};
+    if (config.limits.cpu) {
+      workflowInputData.containerResources.limits.cpu =
+        config.limits.cpu.amount;
+    }
+
+    if (
+      config.limits.memory &&
+      typeof config.limits.memory.amount === 'number'
+    ) {
+      workflowInputData.containerResources.limits.memory = Math.round(
+        config.limits.memory.amount * 1024 * 1024,
+      );
+    }
+  }
+
+  if (config && config.requests) {
+    workflowInputData.containerResources.requests = {};
+    if (config.requests.cpu) {
+      workflowInputData.containerResources.requests.cpu =
+        config.requests.cpu.amount;
+    }
+
+    if (
+      config.requests.memory &&
+      typeof config.requests.memory.amount === 'number'
+    ) {
+      workflowInputData.containerResources.requests.memory = Math.round(
+        config.requests.memory.amount * 1024 * 1024,
+      );
+    }
+  }
+
+  return workflowInputData;
+};
+
 export const OptimizationsBreakdownPage = () => {
   const [recommendationTerm, setRecommendationTerm] =
     useState<Interval>('shortTerm');
   const location = useLocation();
+  const navigate = useNavigate();
   const { id } = useParams();
   const configApi = useApi(configApiRef);
   const workflowIdRef = useRef<string>(
@@ -59,7 +144,11 @@ export const OptimizationsBreakdownPage = () => {
   );
   const orchestratorSlimApi = useApi(orchestratorSlimApiRef);
   const optimizationsApi = useApi(optimizationsApiRef);
-  const { value, loading, error } = useAsync(async () => {
+  const {
+    value: recommendationsData,
+    loading,
+    error,
+  } = useAsync(async () => {
     const isWorkflowAvailable = await orchestratorSlimApi.isWorkflowAvailable(
       workflowIdRef.current,
     );
@@ -75,9 +164,7 @@ export const OptimizationsBreakdownPage = () => {
     };
 
     const response = await optimizationsApi.getRecommendationById(apiQuery);
-    const payload = await response.json();
-
-    return payload;
+    return await response.json();
   }, []);
 
   const optimizationType = useMemo(() => {
@@ -88,73 +175,61 @@ export const OptimizationsBreakdownPage = () => {
 
   const recommendedConfiguration = useMemo(
     () =>
-      getRecommendedYAMLCodeData(value!, recommendationTerm, optimizationType),
-    [value, recommendationTerm, optimizationType],
+      getRecommendedYAMLCodeData(
+        recommendationsData!,
+        recommendationTerm,
+        optimizationType,
+      ),
+    [recommendationsData, recommendationTerm, optimizationType],
   );
 
   const currentConfiguration = useMemo(
-    () => getCurrentYAMLCodeData(value!),
-    [value],
+    () => getCurrentYAMLCodeData(recommendationsData!),
+    [recommendationsData],
   );
 
-  const [_, applyRecommendation] = useAsyncFn(
-    async (workflowId: string, data: WorkflowDataSchema) => {
-      const payload = await orchestratorSlimApi.executeWorkflow(
-        workflowId,
-        data,
+  const handleApplyRecommendation = useCallback(() => {
+    if (!recommendationsData) {
+      return;
+    }
+
+    try {
+      const workflowId = workflowIdRef.current;
+      const data = adaptRecommendationsDataToWorkflowInputData(
+        recommendationsData,
+        recommendationTerm,
+        optimizationType,
       );
-      return payload;
+      orchestratorSlimApi.executeWorkflow(workflowId, data).then(response => {
+        navigate(`/orchestrator/instances/${response.id}`);
+      });
+    } catch {
+      return;
+    }
+  }, [
+    navigate,
+    optimizationType,
+    orchestratorSlimApi,
+    recommendationTerm,
+    recommendationsData,
+  ]);
+
+  const handleRecommendationTermChange = useCallback(
+    (
+      event: React.ChangeEvent<{
+        name?: string;
+        value: unknown;
+      }>,
+    ) => {
+      setRecommendationTerm(event.target.value as Interval);
     },
     [],
   );
 
-  const navigate = useNavigate();
-  const handleApplyRecommendation = useCallback(() => {
-    const workflowId = workflowIdRef.current;
-
-    applyRecommendation(workflowId, {
-      clusterName: value!.clusterAlias!,
-      resourceNamespace: value!.project!,
-      resourceType:
-        value?.workloadType?.toLocaleLowerCase() as WorkflowDataSchema['resourceType'],
-      resourceName: value!.workload!,
-      containerName: value!.container!,
-      containerResources: {
-        limits: {
-          cpu: value?.recommendations?.recommendationTerms?.[recommendationTerm]
-            ?.recommendationEngines?.[optimizationType]?.config?.limits?.cpu
-            ?.amount,
-          memory:
-            value?.recommendations?.recommendationTerms?.[recommendationTerm]
-              ?.recommendationEngines?.[optimizationType]?.config?.limits
-              ?.memory?.amount,
-        },
-        requests: {
-          cpu: value?.recommendations?.recommendationTerms?.[recommendationTerm]
-            ?.recommendationEngines?.[optimizationType]?.config?.requests?.cpu
-            ?.amount,
-          memory:
-            value?.recommendations?.recommendationTerms?.[recommendationTerm]
-              ?.recommendationEngines?.[optimizationType]?.config?.requests
-              ?.memory?.amount,
-        },
-      },
-    }).then(response => {
-      navigate(`/orchestrator/instances/${response.id}`);
-    });
-  }, [
-    applyRecommendation,
-    navigate,
-    optimizationType,
-    recommendationTerm,
-    value,
-  ]);
-
-  const handleRecommendationTermChange = useCallback((event: any) => {
-    setRecommendationTerm(event.target.value);
-  }, []);
-
-  const containerData = useMemo(() => getContainerData(value!), [value]);
+  const containerData = useMemo(
+    () => getContainerData(recommendationsData!),
+    [recommendationsData],
+  );
 
   if (loading) {
     return <Progress />;
@@ -167,7 +242,7 @@ export const OptimizationsBreakdownPage = () => {
   return (
     <BasePage
       pageThemeId="tool"
-      pageTitle={value!.container!}
+      pageTitle={recommendationsData!.container!}
       pageType="Optimizations"
       pageTypeLink="/redhat-resource-optimization"
     >
@@ -175,7 +250,7 @@ export const OptimizationsBreakdownPage = () => {
         <TabbedLayout.Route path="/cost?" title="Cost optimizations">
           <OptimizationEngineTab
             optimizationType={OptimizationType.cost}
-            chartData={value!}
+            chartData={recommendationsData!}
             containerData={containerData}
             recommendationTerm={recommendationTerm}
             currentConfiguration={currentConfiguration}
@@ -192,7 +267,7 @@ export const OptimizationsBreakdownPage = () => {
         >
           <OptimizationEngineTab
             optimizationType={OptimizationType.performance}
-            chartData={value!}
+            chartData={recommendationsData!}
             containerData={containerData}
             recommendationTerm={recommendationTerm}
             currentConfiguration={currentConfiguration}

@@ -31,6 +31,13 @@
         "type": "chrome",
         "url": "http://localhost:3000/redhat-resource-optimization",
         "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "Launch Chrome (with Charles Proxy)",
+        "request": "launch",
+        "type": "chrome",
+        "url": "http://localhost.charlesproxy.com:3000/redhat-resource-optimization",
+        "webRoot": "${workspaceFolder}"
       }
     ]
   }

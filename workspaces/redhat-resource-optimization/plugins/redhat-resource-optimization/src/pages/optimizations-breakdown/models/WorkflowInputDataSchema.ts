@@ -15,7 +15,7 @@
  */
 
 // Automatically generated from: https://raw.githubusercontent.com/ydayagi/serverless-workflows/refs/heads/flpath2204/workflows/patch-k8s-resource/schemas/patch-k8s-resource.json
-export interface WorkflowDataSchema {
+export interface WorkflowInputDataSchema {
   clusterName: string;
   resourceType:
     | 'deployment'
