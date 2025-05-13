@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Backstage Authors
+ * Copyright 2025 The Backstage Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { YamlCodeData } from './YamlCodeData';
 
-export type WorkflowDataSchema = {
+// Automatically generated from: https://raw.githubusercontent.com/ydayagi/serverless-workflows/refs/heads/flpath2204/workflows/patch-k8s-resource/schemas/patch-k8s-resource.json
+export interface WorkflowDataSchema {
   clusterName: string;
-  clusterUuid: string;
-  project: string;
-  workload: string;
-  container: string;
-} & YamlCodeData;
+  resourceType:
+    | 'deployment'
+    | 'replicaset'
+    | 'daemonset'
+    | 'statefulset'
+    | 'deploymentconfig'
+    | 'replicationcontroller';
+  resourceNamespace: string;
+  resourceName: string;
+  containerName: string;
+  containerResources: {
+    limits?: {
+      cpu?: number;
+      memory?: number;
+    };
+    requests?: {
+      cpu?: number;
+      memory?: number;
+    };
+  };
+}
