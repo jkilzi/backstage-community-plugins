@@ -121,24 +121,22 @@ export const OptimizationsBreakdownPage = () => {
       containerName: value!.container!,
       containerResources: {
         limits: {
-          cpu:
-            value?.recommendations?.recommendationTerms?.[recommendationTerm]
-              ?.recommendationEngines?.[optimizationType]?.config?.limits?.cpu
-              ?.amount ?? 0,
+          cpu: value?.recommendations?.recommendationTerms?.[recommendationTerm]
+            ?.recommendationEngines?.[optimizationType]?.config?.limits?.cpu
+            ?.amount,
           memory:
             value?.recommendations?.recommendationTerms?.[recommendationTerm]
               ?.recommendationEngines?.[optimizationType]?.config?.limits
-              ?.memory?.amount ?? 0,
+              ?.memory?.amount,
         },
         requests: {
-          cpu:
-            value?.recommendations?.recommendationTerms?.[recommendationTerm]
-              ?.recommendationEngines?.[optimizationType]?.config?.requests?.cpu
-              ?.amount ?? 0,
+          cpu: value?.recommendations?.recommendationTerms?.[recommendationTerm]
+            ?.recommendationEngines?.[optimizationType]?.config?.requests?.cpu
+            ?.amount,
           memory:
             value?.recommendations?.recommendationTerms?.[recommendationTerm]
               ?.recommendationEngines?.[optimizationType]?.config?.requests
-              ?.memory?.amount ?? 0,
+              ?.memory?.amount,
         },
       },
     }).then(response => {
