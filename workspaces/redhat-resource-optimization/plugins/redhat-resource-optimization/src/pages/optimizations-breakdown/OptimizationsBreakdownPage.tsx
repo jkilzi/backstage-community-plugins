@@ -200,9 +200,13 @@ export const OptimizationsBreakdownPage = () => {
         recommendationTerm,
         optimizationType,
       );
-      orchestratorSlimApi.executeWorkflow(workflowId, data).then(response => {
-        navigate(`/orchestrator/instances/${response.id}`);
-      });
+      orchestratorSlimApi
+        .executeWorkflow(workflowId, { inputData: data })
+        .then(response => {
+          navigate(`/orchestrator/instances/${response.id}`);
+        })
+        // eslint-disable-next-line no-console
+        .catch(console.error);
     } catch {
       return;
     }
