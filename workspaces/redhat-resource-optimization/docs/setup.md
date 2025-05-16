@@ -191,9 +191,3 @@ The Resource Optimization plugin is dependent on [Orchestrator plugin](https://w
 
 - [Install as a static plugin for local development](https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/orchestrator#install-as-a-static-plugin)
 - [Install Orchestrator plugin on exisiting RHDH instance](https://www.rhdhorchestrator.io/main/docs/installation/)
-
-### Contributing
-
-- [License Apache 2.0](../../LICENSE.md)
-- [DCO](../../DCO.md)
-- Find more details in the [Resource Optimization back-end](../redhat-resource-optimization-backend/README.md) part of this plugin.
