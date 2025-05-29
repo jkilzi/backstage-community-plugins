@@ -123,28 +123,18 @@ You can follow one of these options depending on your environment and how you ch
 
 [Follow this link](./docs/dynamic-plugin.md) for installing plugin as Dynamic Plugin
 
-#### Dependency on Orchestrator plugin and Workflow details
+### Dependency on Orchestrator plugin and Workflow details
 
 The Resource Optimization plugin is dependent on [Orchestrator plugin](https://www.rhdhorchestrator.io/main/docs/) to run the workflow for applying the recommendation. Make sure you have installed the [Orchestrator plugin](https://www.rhdhorchestrator.io/main/docs/) by following one of these options depending on your environment:
 
 - [Install as a static plugin for local development](https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/orchestrator#install-as-a-static-plugin)
 - [Install Orchestrator plugin on exisiting RHDH instance](https://www.rhdhorchestrator.io/main/docs/installation/)
 
-[Here is the link to the workflow](https://github.com/rhdhorchestrator/serverless-workflows/tree/main/workflows/patch-k8s-resource) which is being used for applying the recommendation.
+[Here is the link to the workflow](https://github.com/rhdhorchestrator/serverless-workflows/tree/main/workflows/patch-k8s-resource) which is being used for manually applying the recommendation from the redhat-resource-optimization plugin.
 
-#### RBAC Permissions
+### RBAC Permissions
 
 The HTTP endpoints exposed by the redhat-resource-optimization-backend can enforce authorization if the [RBAC plugin](https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins) is deployed. Please refer the RBAC plugin documentation for the setup steps (mind they rely on the [Backstage authentication and identity](https://backstage.io/docs/auth/)).
 
 - More detailed info about redhat-resource-optimization permissions can be found in [docs/rbac.md](./docs/rbac.md)
-- More detailed info about Orcestrator plugin RBAC for setting up permission for workflow can be [found here](https://github.com/redhat-developer/rhdh-plugins/tree/ed334ce38125cea34b2c889f8463cb40a8228044/workspaces/orchestrator#setting-up-permissions).
-
-#### Demo
-
-[Refer to this link](./docs/demo.md) for checking demo of different features of Redhat Resource Optimization plugin
-
-### Contributing
-
-- [License Apache 2.0](../../LICENSE.md)
-- [DCO](../../DCO.md)
-- Find more details in the [Resource Optimization back-end](../redhat-resource-optimization-backend/README.md) part of this plugin.
+- More detailed info about Orcestrator plugin RBAC for setting up permission for workflow can be [found here](https://github.com/redhat-developer/rhdh-plugins/blob/main/workspaces/orchestrator/docs/Permissions.md).
