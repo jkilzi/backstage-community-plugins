@@ -25,8 +25,12 @@ You can follow one of these options depending on your environment and how you ch
 
 The Resource Optimization plugin is dependent on [Orchestrator plugin](https://www.rhdhorchestrator.io/main/docs/) to run the workflow for applying the recommendation. Make sure you have installed the [Orchestrator plugin](https://www.rhdhorchestrator.io/main/docs/) by following one of these options depending on your environment:
 
+- [Install Orchestrator plugin on an exisiting RHDH instance](https://www.rhdhorchestrator.io/main/docs/installation/installation-on-existing-rhdh/)
+- [Install Orchestrator plugin with an RHDH instance](https://www.rhdhorchestrator.io/main/docs/installation/orchestrator/)
+
+This method requires vanilla backstage to be used:
+
 - [Install as a static plugin for local development](https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/orchestrator#install-as-a-static-plugin)
-- [Install Orchestrator plugin on existing RHDH instance](https://www.rhdhorchestrator.io/main/docs/installation/)
 
 [Here is the link to the workflow](https://github.com/rhdhorchestrator/serverless-workflows/tree/main/workflows/patch-k8s-resource) which is being used for manually applying the recommendation from the redhat-resource-optimization plugin.
 
