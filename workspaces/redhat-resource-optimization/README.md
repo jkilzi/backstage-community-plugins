@@ -42,7 +42,7 @@ This method requires vanilla backstage to be used:
 
 - [Install as a static plugin for local development](https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/orchestrator#install-as-a-static-plugin)
 
-**Workflow details** : [Here is the link to the workflow](https://github.com/rhdhorchestrator/serverless-workflows/tree/main/workflows/patch-k8s-resource) which is being used for manually applying the recommendation from the redhat-resource-optimization plugin.
+**Workflow details** : [Here is the link to the workflow](https://github.com/rhdhorchestrator/serverless-workflows/tree/main/workflows/patch-k8s-resource) which is being used for manually applying the recommendation from the Resource Optimization plugin.
 
 ### Option 2: Static plugin - on Vanilla Backstage
 
@@ -150,5 +150,5 @@ This method requires vanilla backstage to be used:
 
 The HTTP endpoints exposed by the redhat-resource-optimization-backend can enforce authorization if the [RBAC plugin](https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins) is deployed. Please refer the RBAC plugin documentation for the setup steps (mind they rely on the [Backstage authentication and identity](https://backstage.io/docs/auth/)).
 
-- More detailed info about redhat-resource-optimization permissions can be found in [docs/rbac.md](./docs/rbac.md)
+- More detailed info about Resource Optimization plugin RBAC permissions can be found in [docs/rbac.md](./docs/rbac.md)
 - More detailed info about Orcestrator plugin RBAC for setting up permission for workflow can be [found here](https://github.com/redhat-developer/rhdh-plugins/blob/main/workspaces/orchestrator/docs/Permissions.md).
