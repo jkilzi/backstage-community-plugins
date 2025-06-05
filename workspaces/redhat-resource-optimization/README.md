@@ -1,6 +1,6 @@
 # Welcome to the Resource Optimization plugin workspace
 
-# Resource Optimization
+## Resource Optimization
 
 Welcome to the Resource Optimization plugin!
 
@@ -10,18 +10,28 @@ Resource Optimization plugin allows users to visualize usage trends and receive 
 
 ### Prerequisite
 
-The plugin consumes services from [Red Hat Hybrid Cloud Console](https://console.redhat.com/openshift/cost-management/optimizations), therefore your clusters [must be configured to receive optimization recommendations](https://docs.redhat.com/en/documentation/cost_management_service/1-latest/html-single/getting_started_with_resource_optimization_for_openshift/index).  
-To get started, [create a service account](https://console.redhat.com/application-services/service-accounts) and assign it the `Cost OpenShift Viewer` role from the Red Hat Hybrid Cloud Console.
+The plugin consumes services from [Red Hat Hybrid Cloud Console](https://console.redhat.com/openshift/cost-management/optimizations), therefore your clusters [must be configured to receive optimization recommendations](https://docs.redhat.com/en/documentation/cost_management_service/1-latest/html-single/getting_started_with_resource_optimization_for_openshift/index).
 
-### Setup
+#### Service Account Details
 
-You can follow one of these options depending on your environment and how you choose to deploy Backstage.
+You will need to two service accounts from Red Hat Hybrid Cloud Console.
 
-#### Option 1: Dynamic plugin
+- [Use this link](https://console.redhat.com/iam/service-accounts/) to create service accounts
+
+- [please go through this guide](https://docs.redhat.com/en/documentation/cost_management_service/1-latest/html/limiting_access_to_cost_management_resources/assembly-limiting-access-cost-resources-rbac) and assign below roles to your `service accounts`
+
+1. Service account with `Cloud Administrator` role for configuring `Cost Management Metrics Operator`
+2. Service account with `Cost OpenShift Viewer` role for viewing the optimization data in the RHDH Resource Optimization plugin
+
+## Setup
+
+You can follow one of these options for installing `Resource Optimization` depending on your environment.
+
+### Option 1: Dynamic plugin - on a Red Hat Developer Hub(RHDH) instance
 
 [Follow this link](./docs/dynamic-plugin.md) for installing plugin as Dynamic Plugin
 
-### Dependency on Orchestrator plugin and Workflow details
+#### Dependency on Orchestrator plugin and Workflow details
 
 The Resource Optimization plugin is dependent on [Orchestrator plugin](https://www.rhdhorchestrator.io/main/docs/) to run the workflow for applying the recommendation. Make sure you have installed the [Orchestrator plugin](https://www.rhdhorchestrator.io/main/docs/) by following one of these options depending on your environment:
 
@@ -32,11 +42,9 @@ This method requires vanilla backstage to be used:
 
 - [Install as a static plugin for local development](https://github.com/redhat-developer/rhdh-plugins/tree/main/workspaces/orchestrator#install-as-a-static-plugin)
 
-[Here is the link to the workflow](https://github.com/rhdhorchestrator/serverless-workflows/tree/main/workflows/patch-k8s-resource) which is being used for manually applying the recommendation from the redhat-resource-optimization plugin.
+**Workflow details** : [Here is the link to the workflow](https://github.com/rhdhorchestrator/serverless-workflows/tree/main/workflows/patch-k8s-resource) which is being used for manually applying the recommendation from the redhat-resource-optimization plugin.
 
-#### Option 2: Static plugin
-
-This method requires vanilla backstage to be used.
+### Option 2: Static plugin - on Vanilla Backstage
 
 1. Add the dependencies
 
@@ -138,7 +146,7 @@ This method requires vanilla backstage to be used.
    );
    ```
 
-### RBAC Permissions
+## RBAC Permissions
 
 The HTTP endpoints exposed by the redhat-resource-optimization-backend can enforce authorization if the [RBAC plugin](https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins) is deployed. Please refer the RBAC plugin documentation for the setup steps (mind they rely on the [Backstage authentication and identity](https://backstage.io/docs/auth/)).
 
