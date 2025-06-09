@@ -4,7 +4,8 @@
 
 Welcome to the Resource Optimization plugin!
 
-Resource Optimization plugin allows users to visualize usage trends and receive optimization recommendations for workloads running on OpenShift clusters.
+Resource Optimization plugin allows users to visualize usage trends and receive optimization recommendations for workloads running on OpenShift clusters.  
+There is also an option to automatically apply recommendations. Refer to [Optimizer App](#optimizer-app) section
 
 ## Getting started
 
@@ -152,3 +153,7 @@ The HTTP endpoints exposed by the redhat-resource-optimization-backend can enfor
 
 - More detailed info about Resource Optimization plugin RBAC permissions can be found in [docs/rbac.md](./docs/rbac.md)
 - More detailed info about Orcestrator plugin RBAC for setting up permission for workflow can be [found here](https://github.com/redhat-developer/rhdh-plugins/blob/main/workspaces/orchestrator/docs/Permissions.md).
+
+## Optimizer App
+
+An application for applying the recommendations automatically. The application makes use of OSL (OpenShift Serverless Logic, a.k.a. SonataFlow) which is part of the Orchestrator installation. If you already have the [Orchestrator plugin and the workflow](#dependency-on-orchestrator-plugin-and-workflow-details) installed then you are ready for installing the Optimizer application. Follow the [application instructions](https://github.com/rhdhorchestrator/optimizer/tree/main) for installing and configuring it.
