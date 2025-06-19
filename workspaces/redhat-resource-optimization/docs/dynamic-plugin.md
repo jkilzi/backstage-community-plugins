@@ -43,7 +43,7 @@ The procedure involves the following steps:
    ```yaml
    # Add to dynamic-plugins-rhdh ConfigMap
 
-   - package: oci://quay.io/redhat-resource-optimization/dynamic-plugins:1.1.0-rc.7!backstage-community-plugin-redhat-resource-optimization
+   - package: oci://quay.io/redhat-resource-optimization/dynamic-plugins:1.1.0!backstage-community-plugin-redhat-resource-optimization
       disabled: false
       pluginConfig:
         dynamicPlugins:
@@ -58,7 +58,7 @@ The procedure involves the following steps:
                   menuItem:
                     icon: resourceOptimizationIconOutlined
                     text: Optimizations
-    - package: oci://quay.io/redhat-resource-optimization/dynamic-plugins:1.1.0-rc.7!backstage-community-plugin-redhat-resource-optimization-backend
+    - package: oci://quay.io/redhat-resource-optimization/dynamic-plugins:1.1.0!backstage-community-plugin-redhat-resource-optimization-backend
       disabled: false
       pluginConfig:
         proxy:
